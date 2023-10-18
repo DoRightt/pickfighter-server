@@ -1,4 +1,4 @@
 .env
 config.yaml
 
-./logger/logs/log.json
+/logger/logs/log.json
