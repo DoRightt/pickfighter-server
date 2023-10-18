@@ -1,0 +1,2 @@
+{"level":"INFO","ts":"2023-10-18T11:43:07.550+0400","caller":"fb-server/main.go:20","msg":"This is an info log message"}
+{"level":"ERROR","ts":"2023-10-18T11:43:07.550+0400","caller":"fb-server/main.go:21","msg":"This is an error log message","error":"test"}
