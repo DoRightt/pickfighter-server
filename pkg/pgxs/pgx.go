@@ -3,6 +3,7 @@ package pgxs
 import (
 	"fmt"
 
+	"github.com/jackc/pgx/v4/pgxpool"
 	"go.uber.org/zap"
 )
 
@@ -33,6 +34,14 @@ func (c *Config) GetConnString() string {
 }
 
 type Repo struct {
-	Logger *zap.Logger `json:"-" yaml:"-"`
-	Config *Config     `json:"-" yaml:"-"`
+	Logger *zap.SugaredLogger `json:"-" yaml:"-"`
+	Pool   *pgxpool.Pool
+	Config *Config `json:"-" yaml:"-"`
+}
+
+func (db *Repo) GracefulShutdown() {
+	if db.Pool != nil {
+		db.Pool.Close()
+		db.Logger.Infof("Successfully closed postgreSQL connection pool")
+	}
 }

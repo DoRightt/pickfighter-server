@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func ViperPostgress() *pgxs.Config {
+func ViperPostgres() *pgxs.Config {
 	return &pgxs.Config{
 		DataDir:  viper.GetString("postgres.data_dir"),
 		DbUri:    viper.GetString("postgres.url"),
