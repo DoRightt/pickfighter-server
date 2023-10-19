@@ -1,13 +1,14 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
+	"log"
 	"os"
-	"projects/fb-server/logger"
+	lg "projects/fb-server/logger"
 	"projects/fb-server/pkg/version"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -15,7 +16,7 @@ import (
 
 var (
 	cfgPath string
-	lg      *zap.Logger
+	logger  *zap.SugaredLogger
 )
 
 var rootCmd = &cobra.Command{
@@ -34,14 +35,22 @@ var rootCmd = &cobra.Command{
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		lg.Fatal(err.Error())
+		logger.Fatal(err.Error())
 	}
 }
 
 func init() {
+	if err := godotenv.Load(".env"); err != nil {
+		log.Print("Error loading .env file")
+	}
+
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgPath, "config", "", "Config file path (default is $HOME/go/src/projects/fb-server/config.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgPath, "config", "", "Config file path (default is ./config.yaml)")
+	rootCmd.PersistentFlags().String("name", version.Name, "Application name label")
+
+	bindViperPersistentFlag(rootCmd, "config_path", "config")
+	bindViperPersistentFlag(rootCmd, "app.name", "name")
 
 	rootCmd.Flags().BoolP("version", "v", false, "Shows app version")
 
@@ -52,23 +61,20 @@ func initZapLogger() {
 	logLevel := "info"
 	logFilePath := "logger/logs/log.json"
 
-	if err := logger.Initialize(logLevel, logFilePath); err != nil {
+	if err := lg.Initialize(logLevel, logFilePath); err != nil {
 		panic("Failed to initialize logger: " + err.Error())
 	}
 
-	lg = logger.Get()
-
-	lg.Info("This is an info log message")
-	lg.Error("This is an error log message", zap.Error(errors.New("test")))
+	logger = lg.Get().Sugar()
 }
 
 func initConfig() {
 	setConfigDefaults()
+
 	if cfgPath != "" {
 		viper.SetConfigFile(cfgPath)
 	} else {
-		viper.AddConfigPath(os.Getenv("HOME"))
-		viper.AddConfigPath(os.Getenv("ENGINE_APP_HOME"))
+		viper.AddConfigPath(".")
 		viper.SetConfigName("config")
 	}
 
@@ -87,6 +93,10 @@ func setConfigDefaults() {
 	viper.SetDefault("app.build_date", version.BuildDate)
 	viper.SetDefault("app.run_date", time.Unix(version.RunDate, 0).Format(time.RFC1123))
 
+	// http server
+	viper.SetDefault("http.addr", "127.0.0.1:9090")
+	viper.SetDefault("http.ssl.enabled", false)
+
 	// auth config
 	viper.SetDefault("auth.cookie_name", "fb_api_token")
 
@@ -97,4 +107,16 @@ func setConfigDefaults() {
 	viper.SetDefault("postgres.name", "postgres")
 	viper.SetDefault("postgres.user", "postgres")
 	viper.SetDefault("postgres.password", "")
+}
+
+func bindViperFlag(cmd *cobra.Command, viperVal, flagName string) {
+	if err := viper.BindPFlag(viperVal, cmd.Flags().Lookup(flagName)); err != nil {
+		log.Printf("Failed to bind viper flag: %s", err)
+	}
+}
+
+func bindViperPersistentFlag(cmd *cobra.Command, viperVal, flagName string) {
+	if err := viper.BindPFlag(viperVal, cmd.PersistentFlags().Lookup(flagName)); err != nil {
+		log.Printf("Failed to bind viper flag: %s", err)
+	}
 }
