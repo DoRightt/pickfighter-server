@@ -68,8 +68,6 @@ var serveCmd = &cobra.Command{
 				app.Logger.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
 			})
 
-			fmt.Println("TEST sig", signal)
-
 			app.GracefulShutdown(ctx, signal.String())
 		})
 
