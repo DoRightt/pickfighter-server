@@ -1,5 +1,5 @@
 package model
 
 const (
-	AuthService      = "auth"
+	AuthService = "auth"
 )
