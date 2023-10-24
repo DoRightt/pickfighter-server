@@ -3,7 +3,16 @@ package httplib
 import (
 	"encoding/json"
 	"net/http"
+	internalErr "projects/fb-server/errors"
 )
+
+func makeError(internalCode internalErr.InternalCode, err error) *ApiError {
+	return NewApiError(int(internalCode), err.Error())
+}
+
+func ErrorResponseJSON(w http.ResponseWriter, httpCode int, internalCode internalErr.InternalCode, err error) {
+	writeJSON(w, httpCode, makeError(internalCode, err))
+}
 
 func ResponseJSON(w http.ResponseWriter, v any) {
 	writeJSON(w, http.StatusOK, v)
