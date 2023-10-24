@@ -11,11 +11,19 @@ import (
 	"go.uber.org/zap"
 )
 
+type ApiService interface {
+	Init(ctx context.Context) error
+	ApplyRoutes()
+	Shutdown(ctx context.Context, sig string)
+}
+
 type ApiHandler struct {
 	ServiceName string
 	Router      *mux.Router
 	Logger      *zap.SugaredLogger
 	Repo        *pgxs.Repo
+
+	Services map[string]ApiService `json:"-" yaml:"-"`
 }
 
 func New(lg *zap.SugaredLogger, name string) *ApiHandler {
@@ -23,6 +31,7 @@ func New(lg *zap.SugaredLogger, name string) *ApiHandler {
 		ServiceName: name,
 		Logger:      lg,
 		Router:      mux.NewRouter(),
+		Services:    make(map[string]ApiService),
 	}
 
 	return h
@@ -40,7 +49,20 @@ func (h *ApiHandler) Init(ctx context.Context) error {
 }
 
 func (h *ApiHandler) Run(ctx context.Context) error {
+	for name := range h.Services {
+		srv, ok := h.Services[name]
+		if ok {
+			if err := srv.Init(ctx); err != nil {
+				return err
+			}
+		}
+	}
+
 	return h.RunHTTPServer(ctx)
+}
+
+func (h *ApiHandler) AddService(name string, srv ApiService) {
+	h.Services[name] = srv
 }
 
 func (h *ApiHandler) GracefulShutdown(ctx context.Context, sig string) {
