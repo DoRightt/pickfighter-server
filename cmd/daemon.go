@@ -7,10 +7,12 @@ import (
 	"projects/fb-server/pkg/model"
 	"projects/fb-server/pkg/sigx"
 	"projects/fb-server/services"
+	"projects/fb-server/services/auth"
 	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var allowedApiRoutes = []string{
@@ -35,7 +37,6 @@ var serveCmd = &cobra.Command{
 	Long:             ``,
 	TraverseChildren: true,
 	Args: func(cmd *cobra.Command, args []string) error {
-		fmt.Println(len(args))
 		if len(args) != 1 {
 			return errEmptyApiRoute
 		}
@@ -73,6 +74,15 @@ var serveCmd = &cobra.Command{
 
 		if err := app.Init(ctx); err != nil {
 			app.GracefulShutdown(ctx, err.Error())
+		}
+
+		viper.Set("api.route", route)
+		switch route {
+		case model.AuthService:
+			app.AddService(model.AuthService, auth.New(app))
+			break
+		default:
+			app.GracefulShutdown(ctx, "invalid service route")
 		}
 
 		if err := app.Run(ctx); err != nil {
