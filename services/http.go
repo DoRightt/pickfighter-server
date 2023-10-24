@@ -32,12 +32,27 @@ var allowedMethods = []string{
 func (h *ApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
+	if origin := r.Header.Get("Origin"); origin != "" {
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
+		w.Header().Set("Access-Control-Allow-Methods", strings.Join(allowedMethods, ","))
+		w.Header().Set("Access-Control-Allow-Headers", strings.Join(allowedHeaders, ","))
+	}
+
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	h.Logger.Infow("Handling request", "method", r.Method, "path", r.URL.Path, "query", r.URL.RawQuery)
+
 	h.Router.ServeHTTP(w, r.WithContext(ctx))
 }
 
 func (h *ApiHandler) RunHTTPServer(ctx context.Context) error {
 	httplib.SetCookieName(viper.GetString("auth.cookie_name"))
 
+	// sys routes
 	h.Router.HandleFunc("/health", h.HealthCheck).Methods(http.MethodGet)
 
 	srvAddr := viper.GetString("http.addr")
