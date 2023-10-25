@@ -39,6 +39,15 @@ type Repo struct {
 	Config *Config `json:"-" yaml:"-"`
 }
 
+func (db *Repo) GetPoolConfig() (*pgxpool.Config, error) {
+	c, err := pgxpool.ParseConfig(db.Config.GetConnString())
+	if err != nil {
+		return nil, fmt.Errorf("pgxs: unable to parse pgx config: %s", err)
+	}
+
+	return c, nil
+}
+
 func (db *Repo) GracefulShutdown() {
 	if db.Pool != nil {
 		db.Pool.Close()
