@@ -11,6 +11,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+// Register is a handler method for /register path
 func (s *service) Register(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -35,6 +36,11 @@ func (s *service) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	credentials, err := s.createUserCredentials(ctx, tx, &req)
+	if err != nil {
+		credErr := err.(httplib.ApiError)
+		httplib.ErrorResponseJSON(w, credErr.HttpStatus, credErr.ErrorCode, err)
+		return
+	}
 
 	if txErr := tx.Commit(ctx); txErr != nil {
 		s.Logger.Errorf("Unable to commit transaction: %s", txErr)
