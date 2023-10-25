@@ -17,6 +17,7 @@ type service struct {
 func New(h *services.ApiHandler) services.ApiService {
 	return service{
 		ApiHandler: h,
+		Repo:       authRepo.New(h.Repo),
 	}
 }
 

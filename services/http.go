@@ -55,6 +55,15 @@ func (h *ApiHandler) RunHTTPServer(ctx context.Context) error {
 	// sys routes
 	h.Router.HandleFunc("/health", h.HealthCheck).Methods(http.MethodGet)
 
+	for name := range h.Services {
+		srv, ok := h.Services[name]
+		if ok {
+			h.Logger.Infof("Adding '%s' service routes", name)
+			srv.ApplyRoutes()
+			// h.Services[name] = srv
+		}
+	}
+
 	srvAddr := viper.GetString("http.addr")
 	if len(srvAddr) < 1 || strings.Index(srvAddr, ":") < 0 {
 		return fmt.Errorf("'%s' service address not specified", h.ServiceName)
