@@ -1,12 +1,10 @@
 package internalErr
 
-type InternalCode int
-
 const (
-	Tx          InternalCode = 10
-	TxCommit                 = 11
-	TxNotUnique              = 12
-	TxUnknown                = 19
+	Tx          int = 10
+	TxCommit        = 11
+	TxNotUnique     = 12
+	TxUnknown       = 19
 
 	Auth                    = 200
 	AuthDecode              = 210
@@ -17,7 +15,7 @@ const (
 )
 
 type InternalError struct {
-	Code    InternalCode
+	Code    int
 	Message string
 }
 
@@ -25,7 +23,7 @@ func (e *InternalError) GetCode() int {
 	return int(e.Code)
 }
 
-func New(code InternalCode) *InternalError {
+func New(code int) *InternalError {
 	switch code {
 	case Tx:
 		return &InternalError{Code: code, Message: "[Transaction] Failed transaction"}
