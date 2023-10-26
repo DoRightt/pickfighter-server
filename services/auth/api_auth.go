@@ -48,6 +48,15 @@ func (s *service) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	go s.HandleEmailEvent(ctx, &model.EmailData{
+		Subject: model.EmailRegistration,
+		Recipient: model.EmailAddrSpec{
+			Email: req.Email,
+			Name:  req.Name,
+		},
+		Token: credentials.Token,
+	})
+
 	result := httplib.SuccessfulResult()
 	result.Id = credentials.UserId
 
