@@ -106,7 +106,11 @@ func setConfigDefaults() {
 	viper.SetDefault("postgres.port", "5432")
 	viper.SetDefault("postgres.name", "postgres")
 	viper.SetDefault("postgres.user", "postgres")
-	viper.SetDefault("postgres.password", "")
+
+	// mailservice
+	viper.SetDefault("sendgrid.api_key", os.Getenv("SENDGRID_API_KEY"))
+	viper.SetDefault("sendgrid.sender_address", os.Getenv("SEND_FROM_ADDRESS"))
+	viper.SetDefault("sendgrid.sender_name", os.Getenv("SEND_FROM_NAME"))
 }
 
 func bindViperFlag(cmd *cobra.Command, viperVal, flagName string) {
