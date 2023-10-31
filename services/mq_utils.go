@@ -6,32 +6,23 @@ import (
 	"log"
 	"projects/fb-server/pkg/model"
 
-	"github.com/sendgrid/sendgrid-go"
-	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"github.com/spf13/viper"
+	"gopkg.in/gomail.v2"
 )
 
 func (h *ApiHandler) HandleEmailEvent(ctx context.Context, data *model.EmailData) {
-	apiKey := viper.GetString("sendgrid.api_key")
-	senderName := viper.GetString("sendgrid.sender_name")
-	senderAddr := viper.GetString("sendgrid.sender_address")
+	d := gomail.NewDialer("smtp.gmail.com", 587, viper.GetString("mail.sender_address"), viper.GetString("mail.app_password"))
+	m := gomail.NewMessage()
+	text := fmt.Sprintf("Hello, here is your verification token: %s", data.Token)
 
-	from := mail.NewEmail(senderName, senderAddr)
-	subject := "Please, Verificate your email."
-	to := mail.NewEmail(data.Recipient.Name, data.Recipient.Email)
-	plainTextContent := "Here is your AMAZING email!"
-	htmlContent := "Here is your <strong>AMAZING</strong> email!"
-	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	m.SetHeader("From", viper.GetString("mail.sender_address"))
+	m.SetHeader("To", data.Recipient.Email)
+	m.SetHeader("Subject", "Please, Verify your email.")
 
-	client := sendgrid.NewSendClient(apiKey)
-	response, err := client.Send(message)
-	if err != nil {
+	m.SetBody("text/plain", text)
+
+	if err := d.DialAndSend(m); err != nil {
 		fmt.Println("Unable to send your email")
 		log.Fatal(err)
-	}
-
-	statusCode := response.StatusCode
-	if statusCode == 200 || statusCode == 201 || statusCode == 202 {
-		fmt.Println("Email sent!")
 	}
 }

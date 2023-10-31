@@ -108,9 +108,10 @@ func setConfigDefaults() {
 	viper.SetDefault("postgres.user", "postgres")
 
 	// mailservice
-	viper.SetDefault("sendgrid.api_key", os.Getenv("SENDGRID_API_KEY"))
-	viper.SetDefault("sendgrid.sender_address", os.Getenv("SEND_FROM_ADDRESS"))
-	viper.SetDefault("sendgrid.sender_name", os.Getenv("SEND_FROM_NAME"))
+	viper.SetDefault("mail.api_key", os.Getenv("MAILCHIMP_API_KEY"))
+	viper.SetDefault("mail.sender_address", os.Getenv("SEND_FROM_ADDRESS"))
+	viper.SetDefault("mail.sender_name", os.Getenv("SEND_FROM_NAME"))
+	viper.SetDefault("mail.app_password", os.Getenv("MAIL_APP_PASSWORD"))
 }
 
 func bindViperFlag(cmd *cobra.Command, viperVal, flagName string) {
