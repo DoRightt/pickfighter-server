@@ -112,6 +112,10 @@ func setConfigDefaults() {
 	viper.SetDefault("mail.sender_address", os.Getenv("SEND_FROM_ADDRESS"))
 	viper.SetDefault("mail.sender_name", os.Getenv("SEND_FROM_NAME"))
 	viper.SetDefault("mail.app_password", os.Getenv("MAIL_APP_PASSWORD"))
+
+	// web
+	viper.SetDefault("web.host", os.Getenv("FRONT_HOST"))
+	viper.SetDefault("web.port", os.Getenv("FRONT_PORT"))
 }
 
 func bindViperFlag(cmd *cobra.Command, viperVal, flagName string) {
