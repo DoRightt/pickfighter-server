@@ -12,6 +12,15 @@ const (
 	AuthFormEmailEmpty      = 221
 	AuthFormEmailInvalid    = 222
 	AuthFormPasswordInvalid = 223
+
+	QueryParams      = 300
+	QueryParamsToken = 301
+
+	UserCredentials      = 400
+	UserCredentialsToken = 401
+
+	Token        = 500
+	TokenExpired = 501
 )
 
 type InternalError struct {
@@ -41,6 +50,14 @@ func New(code int) *InternalError {
 		return &InternalError{Code: code, Message: "[Auth]: Email address is invalid"}
 	case AuthFormPasswordInvalid:
 		return &InternalError{Code: code, Message: "[Auth]: Password is empty or less than 6 symbols"}
+	case QueryParamsToken:
+		return &InternalError{Code: code, Message: "[Query Params]: Query parameter 'token' should be specified"}
+	case UserCredentials:
+		return &InternalError{Code: code, Message: "[User Credentials]: Failed to get user credentials"}
+	case UserCredentialsToken:
+		return &InternalError{Code: code, Message: "[User Credentials]: User credentials with specified token does not exists"}
+	case TokenExpired:
+		return &InternalError{Code: code, Message: "[Token]: Token expired, try to reset password"}
 	default:
 		return &InternalError{
 			Code:    1001,
