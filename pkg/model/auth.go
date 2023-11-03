@@ -19,3 +19,11 @@ type UserCredentials struct {
 	TokenExpire int64  `json:"token_expire"`
 	Active      bool   `json:"active"`
 }
+
+type UserCredentialsRequest struct {
+	UserId    int32  `json:"user_id"`
+	Email     string `json:"email"`
+	Token     string `json:"token"`
+	TokenType string `json:"token_type"`
+	IsActive  int32  `json:"is_active"`
+}
