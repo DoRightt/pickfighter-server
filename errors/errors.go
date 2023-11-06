@@ -12,15 +12,22 @@ const (
 	AuthFormEmailEmpty      = 221
 	AuthFormEmailInvalid    = 222
 	AuthFormPasswordInvalid = 223
+	AuthFormPasswordWrong   = 224
 
 	QueryParams      = 300
 	QueryParamsToken = 301
 
-	UserCredentials      = 400
-	UserCredentialsToken = 401
+	UserCredentials            = 400
+	UserCredentialsNotExists   = 401
+	UserCredentialsToken       = 402
+	UserCredentialsIsNotActive = 403
 
 	Token        = 500
 	TokenExpired = 501
+
+	JSON        = 600
+	JSONDecoder = 601
+	JSONEncoder = 602
 )
 
 type InternalError struct {
@@ -44,20 +51,30 @@ func New(code int) *InternalError {
 		return &InternalError{Code: code, Message: "[Auth] Error"}
 	case AuthDecode:
 		return &InternalError{Code: code, Message: "[Auth]: Decode Error"}
+	case AuthForm:
+		return &InternalError{Code: code, Message: "[Auth]: Form data is invalid"}
 	case AuthFormEmailEmpty:
 		return &InternalError{Code: code, Message: "[Auth]: Email is empty"}
 	case AuthFormEmailInvalid:
 		return &InternalError{Code: code, Message: "[Auth]: Email address is invalid"}
 	case AuthFormPasswordInvalid:
 		return &InternalError{Code: code, Message: "[Auth]: Password is empty or less than 6 symbols"}
+	case AuthFormPasswordWrong:
+		return &InternalError{Code: code, Message: "[Auth]: Wrong Password"}
 	case QueryParamsToken:
 		return &InternalError{Code: code, Message: "[Query Params]: Query parameter 'token' should be specified"}
 	case UserCredentials:
 		return &InternalError{Code: code, Message: "[User Credentials]: Failed to get user credentials"}
 	case UserCredentialsToken:
 		return &InternalError{Code: code, Message: "[User Credentials]: User credentials with specified token does not exists"}
+	case UserCredentialsIsNotActive:
+		return &InternalError{Code: code, Message: "[User Credentials]: User is not activated"}
 	case TokenExpired:
 		return &InternalError{Code: code, Message: "[Token]: Token expired, try to reset password"}
+	case JSON:
+		return &InternalError{Code: code, Message: "[JSON]: JSON unknown error"}
+	case JSONDecoder:
+		return &InternalError{Code: code, Message: "[JSON]: Decoder error"}
 	default:
 		return &InternalError{
 			Code:    1001,
