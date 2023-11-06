@@ -1,5 +1,7 @@
 package model
 
+import "time"
+
 type RegisterRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -7,6 +9,31 @@ type RegisterRequest struct {
 	TermsOk  bool   `json:"terms_ok"`
 
 	Token string `json:"token"`
+}
+
+type LoginRequest struct {
+}
+
+type AuthenticateRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+
+	RememberMe bool   `json:"remember_me"`
+	UserAgent  string `json:"user_agent"`
+	IpAddress  string `json:"ip_address"`
+
+	Subject   string `json:"subject"`
+	ExpiresIn int64  `json:"expires_in"`
+
+	Method int `json:"method"`
+}
+
+type AuthenticateResult struct {
+	UserId         int32     `json:"user_id" yaml:"user_id"`
+	TokenId        string    `json:"token_id" yaml:"token_id"`
+	Code           string    `json:"code" yaml:"code"`
+	AccessToken    string    `json:"access_token" yaml:"access_token"`
+	ExpirationTime time.Time `json:"expiration_time" yaml:"expiration_time"`
 }
 
 type UserCredentials struct {
