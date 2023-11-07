@@ -2,3 +2,5 @@
 config.yaml
 
 /logger/logs/log.json
+
+/hack
