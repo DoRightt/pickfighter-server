@@ -2,6 +2,7 @@ package pgxs
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v5"
@@ -24,4 +25,14 @@ func (db *Repo) DebugLogSqlErr(q string, err error) error {
 	}
 
 	return err
+}
+
+func (db *Repo) SanitizeString(s string) string {
+	return QuoteString(s)
+}
+
+func QuoteString(str string) string {
+	str = strings.Replace(str, "'", "", -1)
+	str = strings.Replace(str, "%", "", -1)
+	return str
 }
