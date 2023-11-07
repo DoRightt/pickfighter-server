@@ -43,7 +43,13 @@ func (h *ApiHandler) Init(ctx context.Context) error {
 		h.Logger.Errorf("Unable to start postgresql connection: %s", err)
 		return err
 	}
+
 	h.Repo = db
+
+	if err := h.loadJwtCerts(); err != nil {
+		h.Logger.Errorf("Unable to load JWT certificates: %s", err)
+		return err
+	}
 
 	return nil
 }
