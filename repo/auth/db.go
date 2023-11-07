@@ -2,6 +2,8 @@ package repo
 
 import "projects/fb-server/pkg/pgxs"
 
+const sep = ` AND `
+
 type AuthRepo struct {
 	*pgxs.Repo
 }
