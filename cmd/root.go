@@ -99,6 +99,8 @@ func setConfigDefaults() {
 
 	// auth config
 	viper.SetDefault("auth.cookie_name", "fb_api_token")
+	viper.SetDefault("auth.jwt.cert", "")
+	viper.SetDefault("auth.jwt.key", "")
 
 	// postgres
 	viper.SetDefault("postgres.url", os.Getenv("POSTGRES_URL"))
