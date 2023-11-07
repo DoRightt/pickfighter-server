@@ -28,6 +28,9 @@ const (
 	JSON        = 600
 	JSONDecoder = 601
 	JSONEncoder = 602
+
+	DB        = 700
+	DBGetUser = 701
 )
 
 type InternalError struct {
@@ -75,6 +78,8 @@ func New(code int) *InternalError {
 		return &InternalError{Code: code, Message: "[JSON]: JSON unknown error"}
 	case JSONDecoder:
 		return &InternalError{Code: code, Message: "[JSON]: Decoder error"}
+	case DBGetUser:
+		return &InternalError{Code: code, Message: "[DB]: Failed to get user"}
 	default:
 		return &InternalError{
 			Code:    1001,
