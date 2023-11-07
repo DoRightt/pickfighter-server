@@ -22,8 +22,9 @@ type AuthenticateRequest struct {
 	UserAgent  string `json:"user_agent"`
 	IpAddress  string `json:"ip_address"`
 
-	Subject   string `json:"subject"`
-	ExpiresIn int64  `json:"expires_in"`
+	Subject   string   `json:"subject"`
+	ExpiresIn int64    `json:"expires_in"`
+	Audience  []string `json:"audience"`
 
 	Method int `json:"method"`
 }
