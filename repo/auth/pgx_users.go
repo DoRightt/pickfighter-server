@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	searchUsersQuery = `SELECT u.user_id, u.name, u.rank, u.flags, u.created_at, u.updated_at
+	searchUsersQuery = `SELECT u.user_id, u.name, u.claim, u.rank, u.flags, u.created_at, u.updated_at
 	FROM public.fb_users AS u`
 )
 
@@ -62,13 +62,12 @@ func (r *AuthRepo) SearchUsers(ctx context.Context, req *model.UsersRequest) ([]
 	for rows.Next() {
 		var u model.User
 		var flags, updatedAt pgtype.Int8
-		var thumbnail, rootClaim, rank pgtype.Varchar
+		var rootClaim, rank pgtype.Varchar
 
-		if err := rows.Scan(&u.UserId, &rootClaim, &u.Name, &thumbnail, &rank, &flags, &u.CreatedAt, &updatedAt); err != nil {
+		if err := rows.Scan(&u.UserId, &u.Name, &rootClaim, &rank, &flags, &u.CreatedAt, &updatedAt); err != nil {
 			return nil, r.DebugLogSqlErr(q, err)
 		}
 		u.Rank = rank.String
-		u.Thumbnail = thumbnail.String
 		u.Claim = rootClaim.String
 		u.Flags = uint64(flags.Int)
 		u.UpdatedAt = updatedAt.Int

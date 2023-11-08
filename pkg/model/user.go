@@ -8,7 +8,6 @@ type User struct {
 	Claim     string `json:"claim,omitempty" yaml:"claim,omitempty"`
 	Roles     uint64 `json:"roles,omitempty" yaml:"roles,omitempty"`
 	Flags     uint64 `json:"flags,omitempty" yaml:"flags,omitempty"`
-	Thumbnail string `json:"thumbnail,omitempty" yaml:"thumbnail,omitempty"`
 	CreatedAt int64  `json:"created_at,omitempty" yaml:"created_at,omitempty"`
 	UpdatedAt int64  `json:"updated_at,omitempty" yaml:"updated_at,omitempty"`
 }
