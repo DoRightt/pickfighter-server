@@ -36,5 +36,10 @@ func (s service) Name() string {
 func (s service) ApplyRoutes() {
 	// authentication
 	s.Router.HandleFunc("/register", s.Register).Methods(http.MethodPost)
+	s.Router.HandleFunc("/register/confirm", s.ConfirmRegistration).Methods(http.MethodPost)
 	s.Router.HandleFunc("/login", s.Login).Methods(http.MethodPost)
+	s.Router.HandleFunc("/logout", s.IfLoggedIn(s.Logout)).Methods(http.MethodGet)
+
+	// profile
+	s.Router.Handle("/profile", s.IfLoggedIn(s.GetCurrentUser)).Methods(http.MethodGet)
 }
