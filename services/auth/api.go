@@ -39,6 +39,8 @@ func (s service) ApplyRoutes() {
 	s.Router.HandleFunc("/register/confirm", s.ConfirmRegistration).Methods(http.MethodPost)
 	s.Router.HandleFunc("/login", s.Login).Methods(http.MethodPost)
 	s.Router.HandleFunc("/logout", s.IfLoggedIn(s.Logout)).Methods(http.MethodGet)
+	s.Router.HandleFunc("/password/reset", s.ResetPassword).Methods(http.MethodPost)
+	s.Router.HandleFunc("/password/recover", s.RecoverPassword).Methods(http.MethodPost)
 
 	// profile
 	s.Router.Handle("/profile", s.IfLoggedIn(s.GetCurrentUser)).Methods(http.MethodGet)
