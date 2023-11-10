@@ -6,13 +6,14 @@ const (
 	TxNotUnique     = 12
 	TxUnknown       = 19
 
-	Auth                    = 200
-	AuthDecode              = 210
-	AuthForm                = 220
-	AuthFormEmailEmpty      = 221
-	AuthFormEmailInvalid    = 222
-	AuthFormPasswordInvalid = 223
-	AuthFormPasswordWrong   = 224
+	Auth                      = 200
+	AuthDecode                = 210
+	AuthForm                  = 220
+	AuthFormEmailEmpty        = 221
+	AuthFormEmailInvalid      = 222
+	AuthFormPasswordInvalid   = 223
+	AuthFormPasswordWrong     = 224
+	AuthFormPasswordsMismatch = 225
 
 	QueryParams      = 300
 	QueryParamsToken = 301
@@ -21,16 +22,20 @@ const (
 	UserCredentialsNotExists   = 401
 	UserCredentialsToken       = 402
 	UserCredentialsIsNotActive = 403
+	UserCredentialsReset       = 404
 
-	Token        = 500
-	TokenExpired = 501
+	Profile = 500
 
-	JSON        = 600
-	JSONDecoder = 601
-	JSONEncoder = 602
+	Token        = 600
+	TokenEmpty   = 601
+	TokenExpired = 602
 
-	DB        = 700
-	DBGetUser = 701
+	JSON        = 700
+	JSONDecoder = 701
+	JSONEncoder = 702
+
+	DB        = 800
+	DBGetUser = 801
 )
 
 type InternalError struct {
@@ -46,6 +51,8 @@ func New(code int) *InternalError {
 	switch code {
 	case Tx:
 		return &InternalError{Code: code, Message: "[Transaction] Failed transaction"}
+	case TxCommit:
+		return &InternalError{Code: code, Message: "[Transaction] Failed to commit registration transaction"}
 	case TxNotUnique:
 		return &InternalError{Code: code, Message: "[Transaction] Email already exists"}
 	case TxUnknown:
@@ -64,6 +71,8 @@ func New(code int) *InternalError {
 		return &InternalError{Code: code, Message: "[Auth]: Password is empty or less than 6 symbols"}
 	case AuthFormPasswordWrong:
 		return &InternalError{Code: code, Message: "[Auth]: Wrong Password"}
+	case AuthFormPasswordsMismatch:
+		return &InternalError{Code: code, Message: "[Auth]: Passwords mismatch"}
 	case QueryParamsToken:
 		return &InternalError{Code: code, Message: "[Query Params]: Query parameter 'token' should be specified"}
 	case UserCredentials:
@@ -72,6 +81,14 @@ func New(code int) *InternalError {
 		return &InternalError{Code: code, Message: "[User Credentials]: User credentials with specified token does not exists"}
 	case UserCredentialsIsNotActive:
 		return &InternalError{Code: code, Message: "[User Credentials]: User is not activated"}
+	case UserCredentialsReset:
+		return &InternalError{Code: code, Message: "[User Credentials]: Failed to update user password"}
+	case Profile:
+		return &InternalError{Code: code, Message: "[Profile]: Failed to find user profile"}
+	case Token:
+		return &InternalError{Code: code, Message: "[Token]: Token unknown error"}
+	case TokenEmpty:
+		return &InternalError{Code: code, Message: "[Token]: Token is empty"}
 	case TokenExpired:
 		return &InternalError{Code: code, Message: "[Token]: Token expired, try to reset password"}
 	case JSON:
