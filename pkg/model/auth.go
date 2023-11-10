@@ -55,3 +55,19 @@ type UserCredentialsRequest struct {
 	TokenType string `json:"token_type"`
 	IsActive  int32  `json:"is_active"`
 }
+
+type ResetPasswordRequest struct {
+	Email string `json:"email"`
+}
+
+type RecoverPasswordRequest struct {
+	Token           string `json:"token"`
+	Password        string `json:"password"`
+	ConfirmPassword string `json:"confirm_password"`
+}
+
+type ChangePasswordRequest struct {
+	OldPassword    string `json:"old_password"`
+	NewPassword    string `json:"new_password"`
+	RepeatPassword string `json:"repeat_password"`
+}
