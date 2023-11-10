@@ -89,3 +89,35 @@ func (r *AuthRepo) ConfirmCredentialsToken(ctx context.Context, tx pgx.Tx, req m
 
 	return nil
 }
+
+func (r *AuthRepo) ResetPassword(ctx context.Context, req *model.UserCredentials) error {
+	q := `UPDATE public.user_credentials
+		SET active = false, token = $2, token_type = $3, token_expire = $4
+		WHERE user_id = $1`
+
+	if _, err := r.Pool.Exec(ctx, q, req.UserId, req.Token, req.TokenType, req.TokenExpire); err != nil {
+		return r.DebugLogSqlErr(q, err)
+	}
+
+	return nil
+}
+
+func (r *AuthRepo) UpdatePassword(ctx context.Context, tx pgx.Tx, req model.UserCredentials) error {
+	q := `UPDATE public.user_credentials
+		SET password = $2, salt = $3
+		WHERE user_id = $1`
+
+	if tx != nil {
+		if _, err := tx.Exec(ctx, q, req.UserId,
+			req.Password, req.Salt); err != nil {
+			return r.DebugLogSqlErr(q, err)
+		}
+	} else {
+		if _, err := r.Pool.Exec(ctx, q, req.UserId,
+			req.Password, req.Salt); err != nil {
+			return r.DebugLogSqlErr(q, err)
+		}
+	}
+
+	return nil
+}
