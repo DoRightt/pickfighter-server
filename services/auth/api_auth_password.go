@@ -105,11 +105,6 @@ func (s *service) RecoverPassword(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var req model.RecoverPasswordRequest
 	if err := decoder.Decode(&req); err != nil {
-		httplib.ErrorResponseJSON(w, http.StatusBadRequest, 240, err)
-		return
-	}
-
-	if err := decoder.Decode(&req); err != nil {
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.AuthDecode, err)
 		return
 	}
