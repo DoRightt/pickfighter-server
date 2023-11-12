@@ -91,7 +91,7 @@ func (r *AuthRepo) ConfirmCredentialsToken(ctx context.Context, tx pgx.Tx, req m
 }
 
 func (r *AuthRepo) ResetPassword(ctx context.Context, req *model.UserCredentials) error {
-	q := `UPDATE public.user_credentials
+	q := `UPDATE public.fb_user_credentials
 		SET active = false, token = $2, token_type = $3, token_expire = $4
 		WHERE user_id = $1`
 
@@ -103,8 +103,8 @@ func (r *AuthRepo) ResetPassword(ctx context.Context, req *model.UserCredentials
 }
 
 func (r *AuthRepo) UpdatePassword(ctx context.Context, tx pgx.Tx, req model.UserCredentials) error {
-	q := `UPDATE public.user_credentials
-		SET password = $2, salt = $3
+	q := `UPDATE public.fb_user_credentials
+		SET password_hash = $2, salt = $3
 		WHERE user_id = $1`
 
 	if tx != nil {
