@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 var (
@@ -47,25 +48,20 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgPath, "config", "", "Config file path (default is ./config.yaml)")
+	rootCmd.PersistentFlags().Bool("log_json", false, "Enable JSON formatted logs output")
+	rootCmd.PersistentFlags().Int("log_level", int(zapcore.DebugLevel), "Log level")
 	rootCmd.PersistentFlags().String("name", version.Name, "Application name label")
 
 	bindViperPersistentFlag(rootCmd, "config_path", "config")
 	bindViperPersistentFlag(rootCmd, "app.name", "name")
+	bindViperPersistentFlag(rootCmd, "log_json", "log_json")
+	bindViperPersistentFlag(rootCmd, "log_level", "log_level")
 
 	rootCmd.Flags().BoolP("version", "v", false, "Shows app version")
-
-	initZapLogger()
 }
 
 func initZapLogger() {
-	logLevel := "info"
-	logFilePath := "logger/logs/log.json"
-
-	if err := lg.Initialize(logLevel, logFilePath); err != nil {
-		panic("Failed to initialize logger: " + err.Error())
-	}
-
-	logger = lg.Get().Sugar()
+	logger = lg.NewSugared()
 }
 
 func initConfig() {
@@ -82,6 +78,7 @@ func initConfig() {
 
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		initZapLogger()
 	}
 }
 
@@ -109,8 +106,7 @@ func setConfigDefaults() {
 	viper.SetDefault("postgres.name", "postgres")
 	viper.SetDefault("postgres.user", "postgres")
 
-	// mailservice
-	viper.SetDefault("mail.api_key", os.Getenv("MAILCHIMP_API_KEY"))
+	// email
 	viper.SetDefault("mail.sender_address", os.Getenv("SEND_FROM_ADDRESS"))
 	viper.SetDefault("mail.sender_name", os.Getenv("SEND_FROM_NAME"))
 	viper.SetDefault("mail.app_password", os.Getenv("MAIL_APP_PASSWORD"))

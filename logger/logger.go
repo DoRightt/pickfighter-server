@@ -1,6 +1,9 @@
 package logger
 
 import (
+	"log"
+
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -45,4 +48,42 @@ func Initialize(logLevel string, logFilePath string) error {
 // GetLogger returns the logger instance to use in other packages
 func Get() *zap.Logger {
 	return logger
+}
+
+func New() *zap.Logger {
+	config := zap.NewDevelopmentConfig()
+
+	if logJson := viper.GetBool("log_json"); logJson {
+		config.Encoding = "json"
+		config.OutputPaths = []string{"logger/logs/log.json"}
+		config.EncoderConfig = zapcore.EncoderConfig{
+			LevelKey:     "level",
+			TimeKey:      "timestamp",
+			CallerKey:    "caller",
+			MessageKey:   "message",
+			EncodeLevel:  zapcore.CapitalLevelEncoder,
+			EncodeTime:   zapcore.ISO8601TimeEncoder,
+			EncodeCaller: zapcore.ShortCallerEncoder,
+		}
+	} else {
+		config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+		config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	}
+
+	logLevel, ok := viper.Get("log_level").(int)
+	if !ok {
+		logLevel = int(zapcore.DebugLevel)
+	}
+
+	config.Level = zap.NewAtomicLevelAt(zapcore.Level(logLevel))
+	l, err := config.Build()
+	if err != nil {
+		log.Fatalf("Failed to run zap logger: %s", err)
+	}
+
+	return l
+}
+
+func NewSugared() *zap.SugaredLogger {
+	return New().Sugar()
 }
