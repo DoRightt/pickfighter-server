@@ -2,6 +2,7 @@ package logger
 
 import (
 	"log"
+	"os"
 
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -82,6 +83,41 @@ func New() *zap.Logger {
 	}
 
 	return l
+}
+
+func ScraperLogger() (*zap.SugaredLogger, error) {
+	config := zap.NewDevelopmentConfig()
+
+	config.Encoding = "json"
+	config.OutputPaths = []string{"logger/logs/scraper-log.json"}
+	config.EncoderConfig = zapcore.EncoderConfig{
+		LevelKey:     "level",
+		TimeKey:      "timestamp",
+		CallerKey:    "caller",
+		MessageKey:   "message",
+		EncodeLevel:  zapcore.CapitalLevelEncoder,
+		EncodeTime:   zapcore.ISO8601TimeEncoder,
+		EncodeCaller: zapcore.ShortCallerEncoder,
+	}
+
+	logLevel := int(zapcore.DebugLevel)
+
+	config.Level = zap.NewAtomicLevelAt(zapcore.Level(logLevel))
+
+	file, err := os.OpenFile("logger/logs/scraper-log.json", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		log.Fatalf("Failed to open log file: %s", err)
+		return nil, err
+	}
+	defer file.Close()
+
+	l, err := config.Build()
+	if err != nil {
+		log.Fatalf("Failed to run zap logger: %s", err)
+		return nil, err
+	}
+
+	return l.Sugar(), nil
 }
 
 func NewSugared() *zap.SugaredLogger {
