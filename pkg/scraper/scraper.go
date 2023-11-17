@@ -246,7 +246,7 @@ func parseSpecialStats(f *Fighter, fighterEl *goquery.Selection) {
 			if err != nil {
 				l.Error("Total Sig. Strikes Landed conversion error:", err)
 			} else {
-				f.Stats.TotalSigStrLandned = v
+				f.Stats.TotalSigStrLanded = v
 			}
 		case "Sig. Strikes Attempted":
 			v, err := strconv.Atoi(fieldValue)
@@ -279,7 +279,7 @@ func parseSpecialStats(f *Fighter, fighterEl *goquery.Selection) {
 	}
 
 	if f.Stats.TotalSigStrAttempted != 0 {
-		f.Stats.StrAccuracy = int(float64(f.Stats.TotalSigStrLandned) / float64(f.Stats.TotalSigStrAttempted) * 100)
+		f.Stats.StrAccuracy = int(float64(f.Stats.TotalSigStrLanded) / float64(f.Stats.TotalSigStrAttempted) * 100)
 	}
 }
 

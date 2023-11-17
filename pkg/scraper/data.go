@@ -58,7 +58,7 @@ type FightersCollection struct {
 }
 
 type FighterStats struct {
-	TotalSigStrLandned   int     `json:"totalSigStrLandned"`
+	TotalSigStrLanded   int     `json:"totalSigStrLandned"`
 	TotalSigStrAttempted int     `json:"totalSigStrAttempted"`
 	StrAccuracy          int     `json:"strAccuracy"`
 	TotalTkdLanded       int     `json:"totalTkdLanded"`
