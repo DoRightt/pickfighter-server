@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"projects/fb-server/logger"
+	"projects/fb-server/pkg/model"
 	"regexp"
 	"strconv"
 	"strings"
@@ -19,7 +20,7 @@ import (
 
 var gc *colly.Collector
 var detailsCollector *colly.Collector
-var collection = FightersCollection{}
+var collection = model.FightersCollection{}
 var wg sync.WaitGroup
 var l *zap.SugaredLogger
 
@@ -75,29 +76,29 @@ func getData(e *colly.HTMLElement) {
 	profileEl := fighterEl.Find("div.hero-profile-wrap")
 	statString := profileEl.Find("p.hero-profile__division-body").Text()
 
-	fighter := Fighter{
+	fighter := model.Fighter{
 		Name:       profileEl.Find("h1.hero-profile__name").Text(),
 		NickName:   profileEl.Find("p.hero-profile__nickname").Text(),
 		FighterUrl: e.Request.URL.String(),
 		ImageUrl:   profileEl.Find(".hero-profile__image-wrap img").AttrOr("src", ""),
 	}
 
-	fighter.SetDivision(profileEl.Find("p.hero-profile__division-title").Text())
-	fighter.SetStatistic(statString)
+	SetDivision(&fighter, profileEl.Find("p.hero-profile__division-title").Text())
+	SetStatistic(&fighter, statString)
 
 	parseData(&fighter, fighterEl)
 
 	collection.Fighters = append(collection.Fighters, fighter)
 }
 
-func parseData(f *Fighter, fighterEl *goquery.Selection) {
+func parseData(f *model.Fighter, fighterEl *goquery.Selection) {
 	parseBioFields(f, fighterEl)
 	parseMainStats(f, fighterEl)
 	parseSpecialStats(f, fighterEl)
 	parseWinMethodStats(f, fighterEl)
 }
 
-func parseBioFields(f *Fighter, fighterEl *goquery.Selection) {
+func parseBioFields(f *model.Fighter, fighterEl *goquery.Selection) {
 	fields := fighterEl.Find("div.c-bio__info-details")
 	fields.Find("div.c-bio__info-details .c-bio__field").Each(func(index int, bioField *goquery.Selection) {
 		fieldLabel := bioField.Find(".c-bio__label").Text()
@@ -154,7 +155,7 @@ func parseBioFields(f *Fighter, fighterEl *goquery.Selection) {
 	})
 }
 
-func parseMainStats(f *Fighter, fighterEl *goquery.Selection) {
+func parseMainStats(f *model.Fighter, fighterEl *goquery.Selection) {
 	reg := regexp.MustCompile("[^0-9]+")
 	fields := fighterEl.Find("div.stats-records-inner-wrap")
 	fields.Find("div.c-stat-compare__group").Each(func(index int, bioField *goquery.Selection) {
@@ -233,7 +234,7 @@ func parseMainStats(f *Fighter, fighterEl *goquery.Selection) {
 	})
 }
 
-func parseSpecialStats(f *Fighter, fighterEl *goquery.Selection) {
+func parseSpecialStats(f *model.Fighter, fighterEl *goquery.Selection) {
 	fields := fighterEl.Find("div.stats-records-inner-wrap")
 
 	fields.Find("div.c-overlap__inner .c-overlap__stats").Each(func(index int, bioField *goquery.Selection) {
@@ -283,7 +284,7 @@ func parseSpecialStats(f *Fighter, fighterEl *goquery.Selection) {
 	}
 }
 
-func parseWinMethodStats(f *Fighter, el *goquery.Selection) {
+func parseWinMethodStats(f *model.Fighter, el *goquery.Selection) {
 	fields := el.Find("div.stats-records-inner-wrap")
 
 	fields.Find("div.stats-records:last-of-type div.stats-records-inner .c-stat-3bar__group").Each(func(index int, bioField *goquery.Selection) {
@@ -326,7 +327,7 @@ func moveNextPage(e *colly.HTMLElement) {
 	e.Request.Visit(nextUrl)
 }
 
-func saveToJSON(c FightersCollection) {
+func saveToJSON(c model.FightersCollection) {
 	jsonData, err := json.Marshal(c)
 	if err != nil {
 		l.Error("Error while marshalling:", err)
