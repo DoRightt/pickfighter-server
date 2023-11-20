@@ -1,6 +1,7 @@
 package pgxs
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -53,4 +54,11 @@ func (db *Repo) GracefulShutdown() {
 		db.Pool.Close()
 		db.Logger.Infof("Successfully closed postgreSQL connection pool")
 	}
+}
+
+func (db *Repo) DeleteRecords(ctx context.Context, tableName string) error {
+	query := fmt.Sprintf("DELETE FROM %s.%s", "public", tableName)
+
+	_, err := db.Pool.Exec(ctx, query)
+	return err
 }
