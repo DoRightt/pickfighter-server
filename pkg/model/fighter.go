@@ -94,3 +94,13 @@ type Fighter struct {
 	ImageUrl       string       `json:"imageUrl"`
 	Stats          FighterStats `json:"stats"`
 }
+
+type FighterReq struct {
+	FighterId int32 `json:"fighter_id"`
+	*Fighter
+}
+
+type FighterStatsReq struct {
+	FighterId int32 `json:"fighter_id"`
+	*FighterStats
+}
