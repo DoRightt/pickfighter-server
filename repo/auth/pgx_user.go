@@ -2,7 +2,6 @@ package repo
 
 import (
 	"context"
-	"fmt"
 	"projects/fb-server/pkg/model"
 	"time"
 
@@ -28,12 +27,10 @@ func (r *AuthRepo) TxCreateUser(ctx context.Context, tx pgx.Tx, u model.User) (i
 	var userId int32
 	if tx != nil {
 		if err := tx.QueryRow(ctx, query, args...).Scan(&userId); err != nil {
-			fmt.Println("ERROR", "1")
 			return 0, r.DebugLogSqlErr(query, err)
 		}
 	} else {
 		if err := r.Pool.QueryRow(ctx, query, args...).Scan(&userId); err != nil {
-			fmt.Println("ERROR", "2")
 			return 0, r.DebugLogSqlErr(query, err)
 		}
 	}
