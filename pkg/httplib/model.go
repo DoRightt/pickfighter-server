@@ -62,6 +62,11 @@ type CreatedObjectId struct {
 	UUID any `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 
+type ListResult struct {
+	Results any   `json:"results,omitempty" yaml:"results,omitempty"`
+	Count   int32 `json:"count" yaml:"count"`
+}
+
 type Response struct {
 	Success   bool   `json:"success" yaml:"success"`
 	Timestamp string `json:"timestamp,omitempty" yaml:"timestamp,omitempty"`
