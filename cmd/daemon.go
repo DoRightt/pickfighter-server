@@ -8,6 +8,7 @@ import (
 	"projects/fb-server/pkg/sigx"
 	"projects/fb-server/services"
 	"projects/fb-server/services/auth"
+	"projects/fb-server/services/common"
 	"strings"
 	"time"
 
@@ -17,6 +18,7 @@ import (
 
 var allowedApiRoutes = []string{
 	model.AuthService,
+	model.CommonService,
 }
 
 var errEmptyApiRoute = fmt.Errorf("one of the api routes (%s) should be specified", strings.Join(allowedApiRoutes, ","))
@@ -81,6 +83,8 @@ var serveCmd = &cobra.Command{
 		case model.AuthService:
 			app.AddService(model.AuthService, auth.New(app))
 			break
+		case model.CommonService:
+			app.AddService(model.CommonService, common.New(app))
 		default:
 			app.GracefulShutdown(ctx, "invalid service route")
 		}

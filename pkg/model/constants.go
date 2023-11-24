@@ -1,7 +1,8 @@
 package model
 
 const (
-	AuthService = "auth"
+	AuthService   = "auth"
+	CommonService = "common"
 )
 const (
 	ContextUserId          = "user_id"
