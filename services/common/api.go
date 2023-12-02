@@ -29,9 +29,9 @@ func (s *service) Init(ctx context.Context) error {
 }
 
 func (s *service) ApplyRoutes() {
-	s.Router.HandleFunc("/fighters", s.SearchFighters).Methods(http.MethodGet)
+	s.Router.HandleFunc("/fighters", s.CheckIsAdmin(s.SearchFighters)).Methods(http.MethodGet)
 
-	s.Router.HandleFunc("/create/event", s.CreateEvent).Methods(http.MethodPost)
+	s.Router.HandleFunc("/create/event", s.CheckIsAdmin(s.CreateEvent)).Methods(http.MethodPost)
 
-	s.Router.HandleFunc("/create/bet", s.CreateBet).Methods(http.MethodPost)
+	s.Router.HandleFunc("/create/bet", s.CheckIsAdmin(s.CreateBet)).Methods(http.MethodPost)
 }
