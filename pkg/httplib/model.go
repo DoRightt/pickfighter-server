@@ -43,7 +43,7 @@ func NewApiError(code int, msg string) *ApiError {
 func NewApiErrFromInternalErr(e *internalErr.InternalError, code ...int) *ApiError {
 	var status int
 
-	if code[0] > 0 {
+	if len(code) > 0 {
 		status = code[0]
 	} else {
 		status = http.StatusBadRequest
