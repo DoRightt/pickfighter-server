@@ -36,6 +36,8 @@ const (
 
 	DB        = 800
 	DBGetUser = 801
+
+	Events = 900
 )
 
 type InternalError struct {
@@ -54,7 +56,7 @@ func New(code int) *InternalError {
 	case TxCommit:
 		return &InternalError{Code: code, Message: "[Transaction] Failed to commit registration transaction"}
 	case TxNotUnique:
-		return &InternalError{Code: code, Message: "[Transaction] Email already exists"}
+		return &InternalError{Code: code, Message: "[Transaction] Value already exists"}
 	case TxUnknown:
 		return &InternalError{Code: code, Message: "[Transaction] Failed transaction"}
 	case Auth:
@@ -97,6 +99,8 @@ func New(code int) *InternalError {
 		return &InternalError{Code: code, Message: "[JSON]: Decoder error"}
 	case DBGetUser:
 		return &InternalError{Code: code, Message: "[DB]: Failed to get user"}
+	case Events:
+		return &InternalError{Code: code, Message: "[Events]: Decode error"}
 	default:
 		return &InternalError{
 			Code:    1001,
