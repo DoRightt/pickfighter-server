@@ -3,6 +3,7 @@ module projects/fb-server
 go 1.21.0
 
 require (
+	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/ethereum/go-ethereum v1.13.4
 	github.com/gocolly/colly v1.2.0
 	github.com/gofrs/uuid v4.4.0+incompatible
@@ -21,7 +22,6 @@ require (
 )
 
 require (
-	github.com/PuerkitoBio/goquery v1.8.1 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/antchfx/htmlquery v1.3.0 // indirect
 	github.com/antchfx/xmlquery v1.3.18 // indirect
