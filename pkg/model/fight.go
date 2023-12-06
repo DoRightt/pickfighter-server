@@ -1,0 +1,13 @@
+package model
+
+type Fight struct {
+	FightId       int32 `json:"fight_id"`
+	EventId       int32 `json:"event_id"`
+	FighterRedId  int32 `json:"fighter_red_id"`
+	FighterBlueId int32 `json:"fighter_blue_id"`
+	IsDone        bool  `json:"is_done"`
+	IsCanceled    bool  `json:"is_canceled"`
+	Result        int32 `json:"result"`
+	CreatedAt     int64 `json:"created_at"`
+	FightDate     int   `json:"fight_date"`
+}
