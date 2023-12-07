@@ -175,7 +175,7 @@ func (s *service) RecoverPassword(w http.ResponseWriter, r *http.Request) {
 
 	if err := s.Repo.UpdatePassword(ctx, tx, credentials); err != nil {
 		s.Logger.Errorf("Failed to update user password: %s", err)
-		httplib.ErrorResponseJSON(w, http.StatusInternalServerError, 142, err)
+		httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.UserCredentialsReset, err)
 		return
 	}
 

@@ -2,6 +2,7 @@ package common
 
 import (
 	"net/http"
+	internalErr "projects/fb-server/errors"
 	"projects/fb-server/pkg/httplib"
 	"projects/fb-server/pkg/model"
 )
@@ -18,7 +19,7 @@ func (s *service) SearchFighters(w http.ResponseWriter, r *http.Request) {
 	count, err := s.Repo.SearchCommentsCount(ctx, req)
 	if err != nil {
 		s.Logger.Errorf("Failed to get fighters count: %s", err)
-		httplib.ErrorResponseJSON(w, http.StatusInternalServerError, 142, err)
+		httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.CountFighters, err)
 		return
 	}
 	if count == 0 {
@@ -29,7 +30,7 @@ func (s *service) SearchFighters(w http.ResponseWriter, r *http.Request) {
 	fighters, err := s.Repo.SearchFighters(ctx, req)
 	if err != nil {
 		s.Logger.Errorf("Failed to find fighters: %s", err)
-		httplib.ErrorResponseJSON(w, http.StatusInternalServerError, 143, err) // TODO error
+		httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.Fighters, err)
 		return
 	}
 

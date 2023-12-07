@@ -38,6 +38,12 @@ const (
 	DBGetUser = 801
 
 	Events = 900
+
+	Count         = 1000
+	CountFighters = 1001
+	CountEvents   = 1002
+
+	Fighters = 1100
 )
 
 type InternalError struct {
@@ -101,6 +107,14 @@ func New(code int) *InternalError {
 		return &InternalError{Code: code, Message: "[DB]: Failed to get user"}
 	case Events:
 		return &InternalError{Code: code, Message: "[Events]: Decode error"}
+	case Count:
+		return &InternalError{Code: code, Message: "[Count]: Failed to get items count"}
+	case CountFighters:
+		return &InternalError{Code: code, Message: "[Count]: Failed to get fighters count"}
+	case CountEvents:
+		return &InternalError{Code: code, Message: "[Count]: Failed to get events count"}
+	case Fighters:
+		return &InternalError{Code: code, Message: "[Fighters]: Failed to find fighters"}
 	default:
 		return &InternalError{
 			Code:    1001,
