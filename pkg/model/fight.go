@@ -11,3 +11,15 @@ type Fight struct {
 	CreatedAt     int64 `json:"created_at"`
 	FightDate     int   `json:"fight_date"`
 }
+
+type FightResponse struct {
+	FightId     int32      `json:"fight_id"`
+	EventId     int32      `json:"event_id,omitempty"`
+	IsDone      bool       `json:"is_done"`
+	IsCanceled  bool       `json:"is_canceled"`
+	Result      int32      `json:"result"`
+	CreatedAt   int64      `json:"created_at"`
+	FightDate   int        `json:"fight_date,omitempty"`
+	FighterRed  FighterReq `json:"fighter_red"`
+	FighterBlue FighterReq `json:"fighter_blue"`
+}
