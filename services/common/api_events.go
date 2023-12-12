@@ -43,3 +43,30 @@ func (s *service) HandleNewEvent(w http.ResponseWriter, r *http.Request) {
 
 	httplib.ResponseJSON(w, result)
 }
+
+func (s *service) GetEvents(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	count, err := s.Repo.SearchEventsCount(ctx)
+	if err != nil {
+		s.Logger.Errorf("Failed to get events count: %s", err)
+		httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.CountEvents, err)
+		return
+	}
+	if count == 0 {
+		httplib.ResponseJSON(w, httplib.ListResult{})
+		return
+	}
+
+	events, err := s.Repo.SearchEvents(ctx)
+	if err != nil {
+		s.Logger.Errorf("Failed to find events: %s", err)
+		httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.Events, err)
+		return
+	}
+
+	httplib.ResponseJSON(w, httplib.ListResult{
+		Results: events,
+		Count:   count,
+	})
+}
