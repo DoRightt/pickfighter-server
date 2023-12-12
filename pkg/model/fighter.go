@@ -53,20 +53,20 @@ type FightersCollection struct {
 }
 
 type FighterStats struct {
-	TotalSigStrLanded    int     `json:"totalSigStrLandned"`
-	TotalSigStrAttempted int     `json:"totalSigStrAttempted"`
-	StrAccuracy          int     `json:"strAccuracy"`
-	TotalTkdLanded       int     `json:"totalTkdLanded"`
-	TotalTkdAttempted    int     `json:"totalTkdAttempted"`
-	TkdAccuracy          int     `json:"tkdAccuracy"`
-	SigStrLanded         float32 `json:"sigStrLanded"`
-	SigStrAbs            float32 `json:"sigStrAbs"`
-	SigStrDefense        int8    `json:"sigStrDefense"`
-	TakedownDefense      int8    `json:"takedownDefense"`
-	TakedownAvg          float32 `json:"takedownAvg"`
-	SubmissionAvg        float32 `json:"submissionAvg"`
-	KnockdownAvg         float32 `json:"knockdownAvg"`
-	AvgFightTime         string  `json:"avgFightTime"`
+	TotalSigStrLanded    int     `json:"totalSigStrLandned,omitempty"`
+	TotalSigStrAttempted int     `json:"totalSigStrAttempted,omitempty"`
+	StrAccuracy          int     `json:"strAccuracy,omitempty"`
+	TotalTkdLanded       int     `json:"totalTkdLanded,omitempty"`
+	TotalTkdAttempted    int     `json:"totalTkdAttempted,omitempty"`
+	TkdAccuracy          int     `json:"tkdAccuracy,omitempty"`
+	SigStrLanded         float32 `json:"sigStrLanded,omitempty"`
+	SigStrAbs            float32 `json:"sigStrAbs,omitempty"`
+	SigStrDefense        int8    `json:"sigStrDefense,omitempty"`
+	TakedownDefense      int8    `json:"takedownDefense,omitempty"`
+	TakedownAvg          float32 `json:"takedownAvg,omitempty"`
+	SubmissionAvg        float32 `json:"submissionAvg,omitempty"`
+	KnockdownAvg         float32 `json:"knockdownAvg,omitempty"`
+	AvgFightTime         string  `json:"avgFightTime,omitempty"`
 	WinByKO              int     `json:"winByKO"`
 	WinBySub             int     `json:"winBySub"`
 	WinByDec             int     `json:"winByDec"`
