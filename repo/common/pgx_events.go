@@ -78,10 +78,10 @@ func (r *CommonRepo) SearchEvents(ctx context.Context) ([]*model.FullEventRespon
 		e.event_id, e.name, e.is_done AS is_event_done, f.fight_id, f.is_done AS is_fight_done,
 		f.is_canceled, f.created_at, f.fight_date, f.result,
 		f.fighter_red_id, red.name AS red_fighter_name, red.nickname AS red_fighter_nickname, red.division AS red_fighter_division, red.fighter_url AS red_fighter_url,
-		red.wins AS red_fighter_wins, red.loses AS red_fighter_loses, red.draw AS red_fighter_draw,
+		red.image_url AS red_fighter_image, red.wins AS red_fighter_wins, red.loses AS red_fighter_loses, red.draw AS red_fighter_draw,
 		red_stats.win_by_ko AS red_fighter_ko_wins, red_stats.win_by_sub AS red_fighter_sub_wins, red_stats.win_by_dec AS red_fighter_dec_wins,
 		f.fighter_blue_id, blue.name AS blue_fighter_name, blue.nickname AS blue_fighter_nickname, blue.division AS blue_fighter_division, blue.fighter_url AS blue_fighter_url,
-		blue.wins AS blue_fighter_wins, blue.loses AS blue_fighter_loses, blue.draw AS blue_fighter_draw,
+		blue.image_url AS blue_fighter_image, blue.wins AS blue_fighter_wins, blue.loses AS blue_fighter_loses, blue.draw AS blue_fighter_draw,
 		blue_stats.win_by_ko AS blue_fighter_ko_wins, blue_stats.win_by_sub AS blue_fighter_sub_wins, blue_stats.win_by_dec AS blue_fighter_dec_wins
 	FROM
 		filtered_events e
@@ -121,10 +121,10 @@ func (r *CommonRepo) SearchEvents(ctx context.Context) ([]*model.FullEventRespon
 			&event.EventId, &event.Name, &event.IsDone, &fight.FightId, &fight.IsDone,
 			&fight.IsCanceled, &fight.CreatedAt, &fight.FightDate, &fight.Result,
 			&redFighterReq.FighterId, &redFighter.Name, &redFighter.NickName, &redFighter.Division, &redFighter.FighterUrl,
-			&redFighter.Wins, &redFighter.Loses, &redFighter.Draw,
+			&redFighter.ImageUrl, &redFighter.Wins, &redFighter.Loses, &redFighter.Draw,
 			&redFighterStats.WinByKO, &redFighterStats.WinBySub, &redFighterStats.WinByDec,
 			&blueFighterReq.FighterId, &blueFighter.Name, &blueFighter.NickName, &blueFighter.Division, &blueFighter.FighterUrl,
-			&blueFighter.Wins, &blueFighter.Loses, &blueFighter.Draw,
+			&blueFighter.ImageUrl, &blueFighter.Wins, &blueFighter.Loses, &blueFighter.Draw,
 			&blueFighterStats.WinByKO, &blueFighterStats.WinBySub, &blueFighterStats.WinByDec,
 		); err != nil {
 			return nil, r.DebugLogSqlErr(q, err)
