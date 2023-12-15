@@ -28,3 +28,25 @@ func (r *CommonRepo) TxCreateEventFight(ctx context.Context, tx pgx.Tx, f model.
 
 	return nil
 }
+
+func (r *CommonRepo) SetFightResult(ctx context.Context, tx pgx.Tx, fr *model.FightResultRequest) error {
+	q := `UPDATE fb_fights
+	SET result = $1, is_done = true
+	WHERE fight_id = $2;`
+
+	args := []any{
+		fr.WinnerId, fr.FightId,
+	}
+
+	if tx != nil {
+		if _, err := tx.Exec(ctx, q, args...); err != nil {
+			return r.DebugLogSqlErr(q, err)
+		}
+	} else {
+		if _, err := r.Pool.Exec(ctx, q, args...); err != nil {
+			return r.DebugLogSqlErr(q, err)
+		}
+	}
+
+	return nil
+}
