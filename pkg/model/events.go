@@ -18,3 +18,9 @@ type FullEventResponse struct {
 	Fights  []FightResponse `json:"fights"`
 	IsDone  bool            `json:"is_done"`
 }
+
+type FightResultRequest struct {
+	FightId    int32 `json:"fight_id"`
+	WinnerId   int32 `json:"winner_id"`
+	NotContest bool  `json:"not_contest"`
+}
