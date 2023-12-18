@@ -32,6 +32,8 @@ func (s *service) AddResult(w http.ResponseWriter, r *http.Request) {
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.EventsFightResult, err)
 	}
 
+	err = s.CheckEventIsDone(ctx, tx, req.FightId)
+
 	if txErr := tx.Commit(ctx); txErr != nil {
 		s.Logger.Errorf("Unable to commit transaction: %s", txErr)
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.TxCommit, txErr)

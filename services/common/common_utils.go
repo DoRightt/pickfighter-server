@@ -63,6 +63,27 @@ func (s *service) CreateEvent(ctx context.Context, tx pgx.Tx, req *model.EventsR
 	return &event, err
 }
 
+func (s *service) CheckEventIsDone(ctx context.Context, tx pgx.Tx, fightId int32) error {
+	eventId, err := s.Repo.GetEventId(ctx, tx, fightId)
+	if err != nil {
+		return err
+	}
+
+	count, err := s.Repo.GetUndoneFights(ctx, tx, eventId)
+	if err != nil {
+		return err
+	}
+
+	if count == 0 {
+		err = s.Repo.SetEventDone(ctx, tx, eventId)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func capitalize(s string) string {
 	if len(s) == 0 {
 		return s
