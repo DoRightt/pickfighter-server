@@ -163,3 +163,42 @@ func (r *CommonRepo) SearchEvents(ctx context.Context) ([]*model.FullEventRespon
 
 	return events, nil
 }
+
+func (r *CommonRepo) GetEventId(ctx context.Context, tx pgx.Tx, fightId int32) (int32, error) {
+	q := "SELECT event_id FROM fb_fights WHERE fight_id = $1"
+
+	var eventId int32
+	if tx != nil {
+		if err := tx.QueryRow(ctx, q, fightId).Scan(&eventId); err != nil {
+			return -1, r.DebugLogSqlErr(q, err)
+		}
+	} else {
+		if err := r.Pool.QueryRow(ctx, q, fightId).Scan(&eventId); err != nil {
+			return -1, r.DebugLogSqlErr(q, err)
+		}
+	}
+
+	return eventId, nil
+}
+
+func (r *CommonRepo) GetUndoneFights(ctx context.Context, tx pgx.Tx, eventId int32) (int, error) {
+	q := "SELECT COUNT(*) FROM fb_fights WHERE event_id = $1 AND is_done = false"
+	var count int
+	err := tx.QueryRow(ctx, q, eventId).Scan(&count)
+	if err != nil {
+		return -1, err
+	}
+
+	return count, nil
+}
+
+func (r *CommonRepo) SetEventDone(ctx context.Context, tx pgx.Tx, eventId int32) error {
+	q := "UPDATE fb_events SET is_done = true WHERE event_id = $1"
+
+	_, err := tx.Exec(ctx, q, eventId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
