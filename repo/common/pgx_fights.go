@@ -31,11 +31,11 @@ func (r *CommonRepo) TxCreateEventFight(ctx context.Context, tx pgx.Tx, f model.
 
 func (r *CommonRepo) SetFightResult(ctx context.Context, tx pgx.Tx, fr *model.FightResultRequest) error {
 	q := `UPDATE fb_fights
-	SET result = $1, is_done = true
-	WHERE fight_id = $2;`
+	SET result = $1, not_contest = $2, is_done = true
+	WHERE fight_id = $3;`
 
 	args := []any{
-		fr.WinnerId, fr.FightId,
+		fr.WinnerId, fr.NotContest, fr.FightId,
 	}
 
 	if tx != nil {
