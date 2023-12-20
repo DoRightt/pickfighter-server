@@ -76,7 +76,7 @@ func (r *CommonRepo) SearchEvents(ctx context.Context) ([]*model.FullEventRespon
 	)
 	SELECT
 		e.event_id, e.name, e.is_done AS is_event_done, f.fight_id, f.is_done AS is_fight_done,
-		f.is_canceled, f.created_at, f.fight_date, f.result,
+		f.not_contest, f.created_at, f.fight_date, f.result,
 		f.fighter_red_id, red.name AS red_fighter_name, red.nickname AS red_fighter_nickname, red.division AS red_fighter_division, red.fighter_url AS red_fighter_url,
 		red.image_url AS red_fighter_image, red.wins AS red_fighter_wins, red.loses AS red_fighter_loses, red.draw AS red_fighter_draw,
 		red_stats.win_by_ko AS red_fighter_ko_wins, red_stats.win_by_sub AS red_fighter_sub_wins, red_stats.win_by_dec AS red_fighter_dec_wins,
@@ -119,7 +119,7 @@ func (r *CommonRepo) SearchEvents(ctx context.Context) ([]*model.FullEventRespon
 
 		if err := rows.Scan(
 			&event.EventId, &event.Name, &event.IsDone, &fight.FightId, &fight.IsDone,
-			&fight.IsCanceled, &fight.CreatedAt, &fight.FightDate, &fight.Result,
+			&fight.NotContest, &fight.CreatedAt, &fight.FightDate, &fight.Result,
 			&redFighterReq.FighterId, &redFighter.Name, &redFighter.NickName, &redFighter.Division, &redFighter.FighterUrl,
 			&redFighter.ImageUrl, &redFighter.Wins, &redFighter.Loses, &redFighter.Draw,
 			&redFighterStats.WinByKO, &redFighterStats.WinBySub, &redFighterStats.WinByDec,
