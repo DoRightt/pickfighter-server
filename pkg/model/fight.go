@@ -7,6 +7,7 @@ type Fight struct {
 	FighterBlueId int32 `json:"fighter_blue_id"`
 	IsDone        bool  `json:"is_done"`
 	IsCanceled    bool  `json:"is_canceled"`
+	NotContest    bool  `json:"not_contest"`
 	Result        int32 `json:"result"`
 	CreatedAt     int64 `json:"created_at"`
 	FightDate     int   `json:"fight_date"`
@@ -17,6 +18,7 @@ type FightResponse struct {
 	EventId     int32      `json:"event_id,omitempty"`
 	IsDone      bool       `json:"is_done"`
 	IsCanceled  bool       `json:"is_canceled"`
+	NotContest  bool       `json:"not_contest"`
 	Result      int32      `json:"result"`
 	CreatedAt   int64      `json:"created_at"`
 	FightDate   int        `json:"fight_date,omitempty"`
