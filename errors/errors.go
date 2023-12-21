@@ -45,6 +45,8 @@ const (
 	CountEvents   = 1002
 
 	Fighters = 1100
+
+	Bets = 1200
 )
 
 type InternalError struct {
@@ -118,6 +120,8 @@ func New(code int) *InternalError {
 		return &InternalError{Code: code, Message: "[Count]: Failed to get events count"}
 	case Fighters:
 		return &InternalError{Code: code, Message: "[Fighters]: Failed to find fighters"}
+	case Bets:
+		return &InternalError{Code: code, Message: "[Bets]: Error"}
 	default:
 		return &InternalError{
 			Code:    1001,
