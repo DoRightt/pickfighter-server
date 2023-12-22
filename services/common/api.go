@@ -35,6 +35,7 @@ func (s *service) ApplyRoutes() {
 	s.Router.HandleFunc("/events", s.GetEvents).Methods(http.MethodGet)
 
 	s.Router.HandleFunc("/create/bet", s.IfLoggedIn(s.CreateBet)).Methods(http.MethodPost)
+	s.Router.HandleFunc("/bets", s.IfLoggedIn(s.GetBets)).Methods(http.MethodGet)
 
 	s.Router.HandleFunc("/create/result", s.CheckIsAdmin(s.AddResult)).Methods(http.MethodPost)
 }
