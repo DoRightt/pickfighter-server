@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"projects/fb-server/pkg/scraper"
+	"projects/fb-server/internal/scraper"
 
 	"github.com/spf13/cobra"
 )

@@ -3,9 +3,9 @@ package common
 import (
 	"context"
 	"net/http"
-	authRepo "projects/fb-server/repo/auth"
-	commonRepo "projects/fb-server/repo/common"
-	"projects/fb-server/services"
+	authRepo "projects/fb-server/internal/repo/auth"
+	commonRepo "projects/fb-server/internal/repo/common"
+	"projects/fb-server/internal/services"
 )
 
 type service struct {

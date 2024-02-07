@@ -3,10 +3,10 @@ package cmd
 import (
 	"context"
 	"fmt"
-	lg "projects/fb-server/logger"
+	lg "projects/fb-server/pkg/logger"
 	"projects/fb-server/pkg/cfg"
 	"projects/fb-server/pkg/pgxs"
-	"projects/fb-server/pkg/scraper"
+	"projects/fb-server/internal/scraper"
 	"sync"
 
 	"github.com/spf13/cobra"

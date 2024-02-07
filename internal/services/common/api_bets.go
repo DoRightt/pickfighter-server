@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	internalErr "projects/fb-server/errors"
+	internalErr "projects/fb-server/pkg/errors"
 	"projects/fb-server/pkg/httplib"
 	"projects/fb-server/pkg/model"
 

@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 	"projects/fb-server/pkg/model"
-	authRepo "projects/fb-server/repo/auth"
-	"projects/fb-server/services"
+	authRepo "projects/fb-server/internal/repo/auth"
+	"projects/fb-server/internal/services"
 )
 
 type service struct {

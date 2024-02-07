@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"projects/fb-server/logger"
+	"projects/fb-server/pkg/logger"
 	"projects/fb-server/pkg/model"
 	"regexp"
 	"strconv"

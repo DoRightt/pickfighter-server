@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	lg "projects/fb-server/logger"
+	lg "projects/fb-server/pkg/logger"
 	"projects/fb-server/pkg/version"
 	"time"
 
