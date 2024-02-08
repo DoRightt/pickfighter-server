@@ -3,22 +3,24 @@ package common
 import (
 	"context"
 	"net/http"
-	authRepo "projects/fb-server/internal/repo/auth"
+
+	// authRepo "projects/fb-server/internal/repo/auth"
 	commonRepo "projects/fb-server/internal/repo/common"
 	"projects/fb-server/internal/services"
 )
 
 type service struct {
 	*services.ApiHandler
-	Repo     *commonRepo.CommonRepo `json:"-" yaml:"-"`
-	AuthRepo *authRepo.AuthRepo     `json:"-" yaml:"-"`
+
+	Repo *commonRepo.CommonRepo `json:"-" yaml:"-"`
+	// AuthRepo *authRepo.AuthRepo     `json:"-" yaml:"-"` // TODO
 }
 
 func New(h *services.ApiHandler) services.ApiService {
 	return &service{
 		ApiHandler: h,
 		Repo:       commonRepo.New(h.Repo),
-		AuthRepo:   authRepo.New(h.Repo),
+		// AuthRepo:   authRepo.New(h.Repo), // TODO
 	}
 }
 
