@@ -1,3 +1,5 @@
+// Package cmd provides the command-line interface for the FB-Server application.
+// It includes commands for running the server, displaying version information, and more.
 package cmd
 
 import (
@@ -20,6 +22,7 @@ var (
 	logger  *zap.SugaredLogger
 )
 
+// rootCmd is the main Cobra command representing the root of the CLI application.
 var rootCmd = &cobra.Command{
 	Use:   "excelsior",
 	Short: "FB-Server, CLI App",
@@ -34,12 +37,16 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+// Execute runs the root command for the fb-server application.
+// It executes the necessary logic for the command-line interface,
+// handling errors and logging them if they occur.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		logger.Fatal(err.Error())
 	}
 }
 
+// init initializes the Cobra root command, sets up command-line flags, and performs other setup tasks.
 func init() {
 	if err := godotenv.Load(".env"); err != nil {
 		log.Print("Error loading .env file")
@@ -60,10 +67,13 @@ func init() {
 	rootCmd.Flags().BoolP("version", "v", false, "Shows app version")
 }
 
+// initZapLogger initializes the zap logger.
 func initZapLogger() {
 	logger = lg.NewSugared()
 }
 
+// initConfig initializes the application configuration.
+// It sets default values, reads from environment variables, and reads from a config file if present.
 func initConfig() {
 	setConfigDefaults()
 
@@ -82,6 +92,7 @@ func initConfig() {
 	}
 }
 
+// setConfigDefaults sets default values for various configuration options.
 func setConfigDefaults() {
 	// app defaults
 	viper.SetDefault("app.env", "dev")
@@ -116,12 +127,14 @@ func setConfigDefaults() {
 	viper.SetDefault("web.port", os.Getenv("FRONT_PORT"))
 }
 
+// bindViperFlag binds a Viper configuration flag to a Cobra command flag.
 func bindViperFlag(cmd *cobra.Command, viperVal, flagName string) {
 	if err := viper.BindPFlag(viperVal, cmd.Flags().Lookup(flagName)); err != nil {
 		log.Printf("Failed to bind viper flag: %s", err)
 	}
 }
 
+// bindViperPersistentFlag binds a Viper configuration flag to a persistent Cobra command flag.
 func bindViperPersistentFlag(cmd *cobra.Command, viperVal, flagName string) {
 	if err := viper.BindPFlag(viperVal, cmd.PersistentFlags().Lookup(flagName)); err != nil {
 		log.Printf("Failed to bind viper flag: %s", err)
