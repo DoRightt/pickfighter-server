@@ -46,7 +46,7 @@ func Execute() {
 	}
 }
 
-// init initializes the Cobra root command, sets up command-line flags, and performs other setup tasks.
+
 func init() {
 	if err := godotenv.Load(".env"); err != nil {
 		log.Print("Error loading .env file")

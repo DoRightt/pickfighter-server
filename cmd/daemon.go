@@ -33,68 +33,77 @@ func init() {
 	rootCmd.AddCommand(statusCmd)
 }
 
+// serveCmd represents the serve command. It is used to run the HTTP server with specified API routes.
 var serveCmd = &cobra.Command{
 	Use:              "serve",
 	Short:            "Run HTTP Server",
 	Long:             ``,
 	TraverseChildren: true,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) != 1 {
-			return errEmptyApiRoute
-		}
-
-		var ok bool
-		for i := range allowedApiRoutes {
-			if allowedApiRoutes[i] == args[0] {
-				ok = true
-				break
-			}
-		}
-
-		if !ok {
-			return fmt.Errorf("allowed routes are: %s", strings.Join(allowedApiRoutes, ", "))
-		}
-
-		return nil
-	},
-	Run: func(cmd *cobra.Command, args []string) {
-		ctx := context.Background()
-		ctx, cancel := context.WithCancel(ctx)
-		defer cancel()
-
-		route := args[0]
-
-		app := services.New(logger, route)
-
-		sigx.Listen(func(signal os.Signal) {
-			time.AfterFunc(15*time.Second, func() {
-				app.Logger.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
-			})
-
-			app.GracefulShutdown(ctx, signal.String())
-		})
-
-		if err := app.Init(ctx); err != nil {
-			app.GracefulShutdown(ctx, err.Error())
-		}
-
-		viper.Set("api.route", route)
-		switch route {
-		case model.AuthService:
-			app.AddService(model.AuthService, auth.New(app))
-			break
-		case model.CommonService:
-			app.AddService(model.CommonService, common.New(app))
-		default:
-			app.GracefulShutdown(ctx, "invalid service route")
-		}
-
-		if err := app.Run(ctx); err != nil {
-			app.GracefulShutdown(ctx, err.Error())
-		}
-	},
+	Args: validateServerArgs,
+	Run: runServe,
 }
 
 var stopCmd = &cobra.Command{}
 
 var statusCmd = &cobra.Command{}
+
+// validateServerArgs is a function used to validate the arguments passed to the serve command.
+// It checks if a single API route is provided and if it is valid.
+func validateServerArgs(cmd *cobra.Command, args []string) error {
+	if len(args) != 1 {
+		return errEmptyApiRoute
+	}
+
+	var ok bool
+	for i := range allowedApiRoutes {
+		if allowedApiRoutes[i] == args[0] {
+			ok = true
+			break
+		}
+	}
+
+	if !ok {
+		return fmt.Errorf("allowed routes are: %s", strings.Join(allowedApiRoutes, ", "))
+	}
+
+	return nil
+}
+
+// runServe is the main function executed when the serve command is run.
+// It initializes the application, sets up services based on the provided API route,
+// and runs the HTTP server.
+func runServe(cmd *cobra.Command, args []string) {
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	route := args[0]
+
+	app := services.New(logger, route)
+
+	sigx.Listen(func(signal os.Signal) {
+		time.AfterFunc(15*time.Second, func() {
+			app.Logger.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
+		})
+
+		app.GracefulShutdown(ctx, signal.String())
+	})
+
+	if err := app.Init(ctx); err != nil {
+		app.GracefulShutdown(ctx, err.Error())
+	}
+
+	viper.Set("api.route", route)
+	switch route {
+	case model.AuthService:
+		app.AddService(model.AuthService, auth.New(app))
+	case model.CommonService:
+		app.AddService(model.CommonService, common.New(app))
+	default:
+		app.GracefulShutdown(ctx, "invalid service route")
+	}
+
+	if err := app.Run(ctx); err != nil {
+		app.GracefulShutdown(ctx, err.Error())
+	}
+}
