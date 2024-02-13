@@ -46,11 +46,17 @@ func Initialize(logLevel string, logFilePath string) error {
 	return nil
 }
 
-// GetLogger returns the logger instance to use in other packages
+// Get returns the logger instance to use in other packages
 func Get() *zap.Logger {
 	return logger
 }
 
+
+// New creates a new instance of Zap logger with configuration based on application settings.
+// It checks if the 'log_json' configuration option is set to true, and if so, configures the logger
+// to output JSON format logs to the specified file path. Otherwise, it configures the logger for
+// colored console output. The log level is determined by the 'log_level' configuration option, with
+// a default of Debug level if the configuration is not set or invalid.
 func New() *zap.Logger {
 	config := zap.NewDevelopmentConfig()
 
@@ -85,6 +91,11 @@ func New() *zap.Logger {
 	return l
 }
 
+// ScraperLogger creates a new instance of Zap logger specifically configured for the scraper module.
+// It configures the logger to output logs in JSON format to the file "logger/logs/scraper-log.json".
+// The log level is set to Debug. The returned SugaredLogger can be used for logging in the scraper module.
+// If the log file already exists, its contents will be truncated; otherwise, a new file will be created.
+// An error is returned if there is a failure in creating or configuring the logger.
 func ScraperLogger() (*zap.SugaredLogger, error) {
 	config := zap.NewDevelopmentConfig()
 
@@ -120,6 +131,7 @@ func ScraperLogger() (*zap.SugaredLogger, error) {
 	return l.Sugar(), nil
 }
 
+// NewSugared returns SugaredLogger version
 func NewSugared() *zap.SugaredLogger {
 	return New().Sugar()
 }
