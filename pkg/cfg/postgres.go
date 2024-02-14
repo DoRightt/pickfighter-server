@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// ViperPostgres returns the structure that returns pgxs.Cofnig based on values from viper
 func ViperPostgres() *pgxs.Config {
 	return &pgxs.Config{
 		DataDir:  viper.GetString("postgres.data_dir"),
