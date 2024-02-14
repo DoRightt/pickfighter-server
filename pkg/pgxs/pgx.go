@@ -8,16 +8,18 @@ import (
 	"go.uber.org/zap"
 )
 
+// Config is structure that stores data for connecting to a database
 type Config struct {
-	DataDir  string
-	DbUri    string
-	Host     string
-	Port     string
-	Name     string
-	User     string
-	Password string
+	DataDir  string `json:"data_dir" yaml:"data_dir"`
+	DbUri    string `json:"db_uri" yaml:"db_uri"`
+	Host     string `json:"host" yaml:"host"`
+	Port     string `json:"port" yaml:"port"`
+	Name     string `json:"name" yaml:"name"`
+	User     string `json:"user" yaml:"user"`
+	Password string `json:"password" yaml:"password"`
 }
 
+// GetConnString generates and returns a string based on the data in the config
 func (c *Config) GetConnString() string {
 	if len(c.DbUri) > 0 {
 		return c.DbUri
@@ -34,12 +36,16 @@ func (c *Config) GetConnString() string {
 	return connString
 }
 
+// Repo is structure for interacting with the database, storing a pool, logger and config
 type Repo struct {
 	Logger *zap.SugaredLogger `json:"-" yaml:"-"`
-	Pool   *pgxpool.Pool
-	Config *Config `json:"-" yaml:"-"`
+	Pool   *pgxpool.Pool      `json:"-" yaml:"-"`
+	Config *Config            `json:"-" yaml:"-"`
 }
 
+// GetPoolConfig retrieves the pgxpool.Config for the PostgreSQL connection pool.
+// It parses the connection string from the Repo's configuration (Config) using pgxpool.ParseConfig.
+// Returns the pgxpool.Config and an error if parsing fails.
 func (db *Repo) GetPoolConfig() (*pgxpool.Config, error) {
 	c, err := pgxpool.ParseConfig(db.Config.GetConnString())
 	if err != nil {
@@ -49,6 +55,7 @@ func (db *Repo) GetPoolConfig() (*pgxpool.Config, error) {
 	return c, nil
 }
 
+// GracefulShutdown checks whether the value is in the pool and if so, closes it and logs the message
 func (db *Repo) GracefulShutdown() {
 	if db.Pool != nil {
 		db.Pool.Close()
@@ -56,6 +63,7 @@ func (db *Repo) GracefulShutdown() {
 	}
 }
 
+// DeleteRecords deletes records from the table whose name is passed as an argument
 func (db *Repo) DeleteRecords(ctx context.Context, tableName string) error {
 	query := fmt.Sprintf("DELETE FROM %s.%s", "public", tableName)
 
