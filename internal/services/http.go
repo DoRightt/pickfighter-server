@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"projects/fb-server/pkg/httplib"
+	"projects/fb-server/pkg/ipaddr"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -29,6 +30,15 @@ var allowedMethods = []string{
 	http.MethodDelete,
 }
 
+type ContextKey string
+
+const (
+	ContextKeyHost           ContextKey = "host"
+	ContextKeyPath           ContextKey = "path"
+	ContextKeyRemoteAddr     ContextKey = "remote_addr"
+	ContextKeyCFConnectingIP ContextKey = "cf_connecting_ip"
+)
+
 func (h *ApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -43,6 +53,11 @@ func (h *ApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		return
 	}
+
+	ctx = context.WithValue(ctx, ContextKeyHost, r.Host)
+	ctx = context.WithValue(ctx, ContextKeyPath, r.URL.Path)
+	ctx = context.WithValue(ctx, ContextKeyRemoteAddr, r.RemoteAddr)
+	ctx = context.WithValue(ctx, ContextKeyCFConnectingIP, r.Header.Get(ipaddr.CFConnectingIp))
 
 	h.Logger.Infow("Handling request", "method", r.Method, "path", r.URL.Path, "query", r.URL.RawQuery)
 
@@ -65,7 +80,7 @@ func (h *ApiHandler) RunHTTPServer(ctx context.Context) error {
 	}
 
 	srvAddr := viper.GetString("http.addr")
-	if len(srvAddr) < 1 || strings.Index(srvAddr, ":") < 0 {
+	if len(srvAddr) < 1 || !strings.Contains(srvAddr, ":") {
 		return fmt.Errorf("'%s' service address not specified", h.ServiceName)
 	}
 
