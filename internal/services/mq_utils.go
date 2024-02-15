@@ -10,6 +10,10 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
+// HandleEmailEvent processes different email events based on the provided EmailData.
+// It uses the gomail package to send emails through an SMTP server. The email content
+// and recipient details are determined by the event type, such as registration or
+// password reset.
 func (h *ApiHandler) HandleEmailEvent(ctx context.Context, data *model.EmailData) {
 	d := gomail.NewDialer("smtp.gmail.com", 587, viper.GetString("mail.sender_address"), viper.GetString("mail.app_password"))
 	host := viper.GetString("web.host")
@@ -32,6 +36,10 @@ func (h *ApiHandler) HandleEmailEvent(ctx context.Context, data *model.EmailData
 	}
 }
 
+// getVerificationMessage generates a verification email message.
+// It utilizes the provided EmailData and server information (host, port) to create
+// a message with a verification link. The sender, recipient, subject, and body are
+// set accordingly in the gomail.Message.
 func getVerificationMessage(data *model.EmailData, host, port string) *gomail.Message {
 	m := gomail.NewMessage()
 
@@ -46,6 +54,11 @@ func getVerificationMessage(data *model.EmailData, host, port string) *gomail.Me
 	return m
 }
 
+// getPasswordRecoveryMessage generates a password recovery email message using the provided
+// EmailData and server information (host, port). It constructs a message with a recovery link
+// containing the host, port, and token. The email sender and recipient addresses, as well as
+// the subject, are set in the message headers. The message body is a plain text representation
+// containing the recovery link.
 func getPasswordRecoveryMessage(data *model.EmailData, host, port string) *gomail.Message {
 	m := gomail.NewMessage()
 

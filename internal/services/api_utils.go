@@ -10,6 +10,9 @@ import (
 	"github.com/spf13/viper"
 )
 
+// HealthCheck handles HTTP requests for health checks.
+// It returns a JSON response containing information about the application's health,
+// version, uptime, and the status of registered modules.
 func (h *ApiHandler) HealthCheck(w http.ResponseWriter, r *http.Request) {
 	result := httplib.SuccessfulResultMap()
 	delete(result, "success")
@@ -23,5 +26,11 @@ func (h *ApiHandler) HealthCheck(w http.ResponseWriter, r *http.Request) {
 	result["healthy"] = true
 	result["message"] = fmt.Sprintf("[%s] Bee-beep-bop... I'm working fine!", h.ServiceName)
 
+	var names []string
+	for name := range h.Services {
+		names = append(names, name)
+	}
+
+	result["modules"] = names
 	httplib.ResponseJSON(w, result)
 }

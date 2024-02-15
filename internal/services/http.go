@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// allowedHeaders defines the list of allowed HTTP headers that can be used in CORS requests.
 var allowedHeaders = []string{
 	"Accept",
 	"Content-Type",
@@ -21,6 +22,7 @@ var allowedHeaders = []string{
 	"Cookie",
 }
 
+// allowedMethods defines the list of allowed HTTP methods that can be used in CORS requests.
 var allowedMethods = []string{
 	http.MethodOptions,
 	http.MethodGet,
@@ -30,8 +32,10 @@ var allowedMethods = []string{
 	http.MethodDelete,
 }
 
+// ContextKey represents a custom type for identifying context keys in HTTP requests.
 type ContextKey string
 
+// Constants representing various context keys for use in HTTP requests.
 const (
 	ContextKeyHost           ContextKey = "host"
 	ContextKeyPath           ContextKey = "path"
@@ -39,6 +43,10 @@ const (
 	ContextKeyCFConnectingIP ContextKey = "cf_connecting_ip"
 )
 
+// ServeHTTP handles the incoming HTTP request by setting CORS headers, processing preflight OPTIONS requests,
+// and forwarding the request to the underlying router with additional context values.
+// It checks for the "Origin" header to set CORS headers and responds to OPTIONS requests appropriately.
+// The function logs details of the incoming request and forwards it to the router for further handling.
 func (h *ApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -64,6 +72,10 @@ func (h *ApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.Router.ServeHTTP(w, r.WithContext(ctx))
 }
 
+// RunHTTPServer starts the HTTP server for the API handler with specified routes and services.
+// It sets the health check route and adds routes for each registered service.
+// The server listens on the specified address, and if successful, it prints the server address.
+// It returns an error if the service address is not specified or if there is an issue starting the server.
 func (h *ApiHandler) RunHTTPServer(ctx context.Context) error {
 	httplib.SetCookieName(viper.GetString("auth.cookie_name"))
 

@@ -10,6 +10,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+// loadJwtCerts loads the JWT certificates required for authentication from the specified paths.
+// It expects paths to the X.509 certificate (certPath) and private key (keyPath) in the configuration.
+// The loaded keypair is used for signing JWT tokens, and the public key is used for token verification.
+// If the certificate or key cannot be loaded or parsed, an error is returned.
+// The loaded keys are set in the configuration for later use in JWT signing and parsing.
 func (h *ApiHandler) loadJwtCerts() error {
 	certPath := viper.GetString("auth.jwt.cert")
 	keyPath := viper.GetString("auth.jwt.key")

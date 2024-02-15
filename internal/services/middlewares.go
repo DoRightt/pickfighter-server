@@ -13,6 +13,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+// verifyJWT parses a raw JWT string and verifies its signature using the specified algorithm and public key.
+// It returns a parsed JWT token on success, or an error if parsing or verification fails.
 func (h *ApiHandler) verifyJWT(jwtRawValue string) (jwt.Token, error) {
 	alg := jwa.RS256
 
@@ -25,6 +27,9 @@ func (h *ApiHandler) verifyJWT(jwtRawValue string) (jwt.Token, error) {
 	return token, nil
 }
 
+// IfLoggedIn is a middleware that checks if a user is logged in based on the provided JWT token.
+// If the token is valid, it extracts user information such as user ID and claims, and adds them to the request context.
+// If the token is invalid or missing, it returns an unauthorized response.
 func (h *ApiHandler) IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
@@ -45,7 +50,7 @@ func (h *ApiHandler) IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		userId, ok := token.Get(model.ContextUserId)
+		userId, ok := token.Get(string(model.ContextUserId))
 		if !ok {
 			httplib.ErrorResponseJSON(w, http.StatusUnauthorized, http.StatusUnauthorized,
 				fmt.Errorf("illegal token, user id must be specified"))
@@ -62,14 +67,15 @@ func (h *ApiHandler) IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc {
 		if valid {
 			ctx = context.WithValue(ctx, model.ContextUserId, int32(uid))
 		}
-
-		rootClaim, onBoard := token.Get(model.ContextClaim)
-		if onBoard {
-			claim, fit := rootClaim.(string)
-			if fit {
-				ctx = context.WithValue(ctx, model.ContextNamespaceClaims, claim)
-			}
-		}
+		
+		// TODO admin claim?
+		// rootClaim, onBoard := token.Get(string(model.ContextClaim))
+		// if onBoard {
+		// 	claim, fit := rootClaim.(string)
+		// 	if fit {
+		// 		ctx = context.WithValue(ctx, model.ContextNamespaceClaims, claim)
+		// 	}
+		// }
 
 		ctx = context.WithValue(ctx, model.ContextJWTPointer, token)
 
@@ -77,6 +83,9 @@ func (h *ApiHandler) IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+// CheckIsAdmin is a middleware that verifies if the user is logged in as an administrator.
+// It checks the "admin" claim in the JWT (JSON Web Token) stored in the request cookie.
+// If the user is an administrator, the request continues; otherwise, it responds with an error.
 func (h *ApiHandler) CheckIsAdmin(next http.HandlerFunc) http.HandlerFunc {
 	// TODO mb claim should set in createJWTToken method
 	return h.IfLoggedIn(func(w http.ResponseWriter, r *http.Request) {
@@ -88,11 +97,11 @@ func (h *ApiHandler) CheckIsAdmin(next http.HandlerFunc) http.HandlerFunc {
 			if err != nil {
 				h.Logger.Debugf("Failed to parse JWT token: %s", err)
 			} else {
-				f, ok := token.Get(model.ContextFlags)
+				f, ok := token.Get(string(model.ContextFlags))
 				flag, valid := f.(float64)
 				if !ok || int(flag) != 1 {
 					httplib.ErrorResponseJSON(w, http.StatusMethodNotAllowed, http.StatusMethodNotAllowed,
-						fmt.Errorf("Action is allowed only for admins"))
+						fmt.Errorf("action is allowed only for admins"))
 					return
 				}
 
