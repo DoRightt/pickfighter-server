@@ -23,7 +23,7 @@ func (s *service) createJWTToken(ctx context.Context, creds *model.UserCredentia
 		return nil, err
 	}
 
-	s.Logger.Debugf("Issuing OAuth token for User [%d:%s:%s]", creds.UserId, creds.Email, req.Subject)
+	s.Logger.Debugf("Issuing JWT token for User [%d:%s:%s]", creds.UserId, creds.Email, req.Subject)
 
 	tokenId, err := uuid.NewV4()
 	if err != nil {
@@ -44,15 +44,19 @@ func (s *service) createJWTToken(ctx context.Context, creds *model.UserCredentia
 		Subject(hexutil.Encode(subject)).
 		Expiration(now.Add(time.Duration(req.ExpiresIn) * time.Second)).
 		Build()
-
+	if err != nil {
+		s.Logger.Errorf("Unable to build JWT token: %s", err)
+		return nil, err
+	}
+	
 	if err := t.Set(model.ContextUserId, u.UserId); err != nil {
-		s.Logger.Errorf("Unable to set OAuth token userRoles: %s", err)
+		s.Logger.Errorf("Unable to set JWT token userRoles: %s", err)
 		return nil, err
 	}
 
 	if u.Flags > 0 {
 		if err := t.Set(model.ContextFlags, u.Flags); err != nil {
-			s.Logger.Errorf("Unable to set OAuth token private claim key: %s", err)
+			s.Logger.Errorf("Unable to set JWT token private claim key: %s", err)
 			return nil, err
 		}
 	}

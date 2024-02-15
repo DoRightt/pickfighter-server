@@ -171,7 +171,7 @@ func (s *service) Login(w http.ResponseWriter, r *http.Request) {
 
 	token, err := s.createJWTToken(ctx, &creds, req)
 	if err != nil {
-		// s.Logger.Errorf("Unable to create session for google oauth: %s", err)
+		s.Logger.Errorf("Unable to create session for google JWT: %s", err)
 		return
 	}
 
