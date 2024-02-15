@@ -48,14 +48,14 @@ func (s *service) createJWTToken(ctx context.Context, creds *model.UserCredentia
 		s.Logger.Errorf("Unable to build JWT token: %s", err)
 		return nil, err
 	}
-	
-	if err := t.Set(model.ContextUserId, u.UserId); err != nil {
+
+	if err := t.Set(string(model.ContextUserId), u.UserId); err != nil {
 		s.Logger.Errorf("Unable to set JWT token userRoles: %s", err)
 		return nil, err
 	}
 
 	if u.Flags > 0 {
-		if err := t.Set(model.ContextFlags, u.Flags); err != nil {
+		if err := t.Set(string(model.ContextFlags), u.Flags); err != nil {
 			s.Logger.Errorf("Unable to set JWT token private claim key: %s", err)
 			return nil, err
 		}

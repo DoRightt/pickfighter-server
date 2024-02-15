@@ -21,7 +21,7 @@ func (s *service) GetBets(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userId, ok := token.Get(model.ContextUserId)
+	userId, ok := token.Get(string(model.ContextUserId))
 	if !ok {
 		httplib.ErrorResponseJSON(w, http.StatusUnauthorized, http.StatusUnauthorized,
 			fmt.Errorf("illegal token, user id must be specified"))
@@ -67,7 +67,7 @@ func (s *service) CreateBet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userId, ok := token.Get(model.ContextUserId)
+	userId, ok := token.Get(string(model.ContextUserId))
 	if !ok {
 		httplib.ErrorResponseJSON(w, http.StatusUnauthorized, http.StatusUnauthorized,
 			fmt.Errorf("illegal token, user id must be specified"))
