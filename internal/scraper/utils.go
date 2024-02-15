@@ -19,6 +19,8 @@ import (
 	"go.uber.org/zap"
 )
 
+// ReadFighterData reads fighter data from a JSON file and returns a slice of model.Fighter.
+// The file path is set to "data/fighters.json".
 func ReadFighterData() ([]model.Fighter, error) {
 	filePath := "data/fighters.json"
 
@@ -38,6 +40,9 @@ func ReadFighterData() ([]model.Fighter, error) {
 	return fightersData.Fighters, nil
 }
 
+// WriteFighterData writes fighter data to a PostgreSQL database using the provided context,
+// logger, and a slice of model.Fighter. It connects to the database using the configuration
+// from ViperPostgres and performs create or update operations for each fighter.
 func WriteFighterData(ctx context.Context, l *zap.SugaredLogger, data []model.Fighter) error {
 	db, err := pgxs.NewPool(ctx, l, cfg.ViperPostgres())
 	if err != nil {
@@ -52,7 +57,7 @@ func WriteFighterData(ctx context.Context, l *zap.SugaredLogger, data []model.Fi
 		fighterId, err := rep.FindFighter(ctx, fighter)
 		if err != nil {
 			if err == pgx.ErrNoRows {
-				if err := createFighterTx(ctx, rep, fighter); err != nil {
+				if err := createFighter(ctx, rep, fighter); err != nil {
 					l.Errorf("Error while fighter transaction: %s", err)
 					return err
 				}
@@ -68,7 +73,7 @@ func WriteFighterData(ctx context.Context, l *zap.SugaredLogger, data []model.Fi
 				Fighter:   &fighter,
 			}
 
-			if err := updateFighterTx(ctx, rep, fighterReq); err != nil {
+			if err := updateFighter(ctx, rep, fighterReq); err != nil {
 				l.Errorf("Error while fighter transaction: %s", err)
 				return err
 			}
@@ -81,7 +86,10 @@ func WriteFighterData(ctx context.Context, l *zap.SugaredLogger, data []model.Fi
 	return nil
 }
 
-func createFighterTx(ctx context.Context, rep *fighterRepo.FighterRepo, fighter model.Fighter) error {
+// createNewFighterTx performs a transaction to create a new fighter in the database.
+// It takes a context, a fighter repository, and a model.Fighter as parameters.
+// If the transaction fails, it logs the error and returns an appropriate ApiError.
+func createFighter(ctx context.Context, rep *fighterRepo.FighterRepo, fighter model.Fighter) error {
 	tx, err := rep.Pool.BeginTx(ctx, pgx.TxOptions{
 		IsoLevel: pgx.ReadCommitted,
 	})
@@ -118,7 +126,10 @@ func createFighterTx(ctx context.Context, rep *fighterRepo.FighterRepo, fighter 
 	return nil
 }
 
-func updateFighterTx(ctx context.Context, rep *fighterRepo.FighterRepo, fighter model.FighterReq) error {
+// updateFighterTx performs a transaction to update an existing fighter in the database.
+// It takes a context, a fighter repository, and a model.FighterReq as parameters.
+// If the transaction fails, it logs the error and returns an appropriate ApiError.
+func updateFighter(ctx context.Context, rep *fighterRepo.FighterRepo, fighter model.FighterReq) error {
 	tx, err := rep.Pool.BeginTx(ctx, pgx.TxOptions{
 		IsoLevel: pgx.ReadCommitted,
 	})

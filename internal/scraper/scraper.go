@@ -24,6 +24,11 @@ var collection = model.FightersCollection{}
 var wg sync.WaitGroup
 var l *zap.SugaredLogger
 
+// Run is the main function responsible for initializing the web scraping process.
+// It sets up the logger, creates collector instances, defines URL and limits for the main collector,
+// and specifies callback functions for HTML elements. It initiates the web scraping process by visiting
+// the initial URL and waits for the wait group to finish before printing "DONE" to the console and saving
+// the collected data to a JSON file using the saveToJSON function.
 func Run() {
 	var err error
 	l, err = logger.ScraperLogger()
@@ -62,6 +67,10 @@ func Run() {
 	saveToJSON(collection)
 }
 
+// parseAthletesListing is a callback function used with colly that extracts athlete URLs from a given colly.HTMLElement 'e'.
+// It increments the wait group and defers its decrement for synchronization. The function extracts the athlete's URL,
+// converts it to an absolute URL, prints it to the console, and then uses a detailsCollector to visit the athlete's detailed page.
+// This function is typically used during web scraping to collect athlete URLs for subsequent detailed data extraction.
 func parseAthletesListing(e *colly.HTMLElement) {
 	wg.Add(1)
 	defer wg.Done()
@@ -84,6 +93,11 @@ func parseAthletesListing(e *colly.HTMLElement) {
 	// }()
 }
 
+// getData is a callback function used with colly that extracts fighter data from a given colly.HTMLElement 'e'.
+// It initializes a Fighter model, sets basic information such as name, nickname, URL, and image, and then calls
+// SetDivision and SetStatistic functions to update division and general statistics. Finally, it calls parseData
+// to extract additional details about the fighter and appends the resulting Fighter instance to a FightersCollection.
+// This function is typically used during web scraping to gather comprehensive information about a fighter.
 func getData(e *colly.HTMLElement) {
 	wg.Add(1)
 	defer wg.Done()
@@ -108,6 +122,7 @@ func getData(e *colly.HTMLElement) {
 	collection.Fighters = append(collection.Fighters, fighter)
 }
 
+// parseData a unifying function for parsing data from different blocks of information
 func parseData(f *model.Fighter, fighterEl *goquery.Selection) {
 	parseBioFields(f, fighterEl)
 	parseMainStats(f, fighterEl)
@@ -115,6 +130,7 @@ func parseData(f *model.Fighter, fighterEl *goquery.Selection) {
 	parseWinMethodStats(f, fighterEl)
 }
 
+// parseBioFields parses fighter's data from biography block and sets values to model.Fighter
 func parseBioFields(f *model.Fighter, fighterEl *goquery.Selection) {
 	fields := fighterEl.Find("div.c-bio__info-details")
 	fields.Find("div.c-bio__info-details .c-bio__field").Each(func(index int, bioField *goquery.Selection) {
@@ -172,6 +188,7 @@ func parseBioFields(f *model.Fighter, fighterEl *goquery.Selection) {
 	})
 }
 
+// parseMainStats parses stats from main fighter block and sets values to fighter.Stats
 func parseMainStats(f *model.Fighter, fighterEl *goquery.Selection) {
 	reg := regexp.MustCompile("[^0-9]+")
 	fields := fighterEl.Find("div.stats-records-inner-wrap")
@@ -251,6 +268,7 @@ func parseMainStats(f *model.Fighter, fighterEl *goquery.Selection) {
 	})
 }
 
+// parseSpecialStats parses stats from special fighter block and sets values to fighter.Stats.
 func parseSpecialStats(f *model.Fighter, fighterEl *goquery.Selection) {
 	fields := fighterEl.Find("div.stats-records-inner-wrap")
 
@@ -301,6 +319,7 @@ func parseSpecialStats(f *model.Fighter, fighterEl *goquery.Selection) {
 	}
 }
 
+// parseWinMethodStats parses stats from the win methods block and sets values to fighter.Stats
 func parseWinMethodStats(f *model.Fighter, el *goquery.Selection) {
 	fields := el.Find("div.stats-records-inner-wrap")
 
@@ -336,6 +355,9 @@ func parseWinMethodStats(f *model.Fighter, el *goquery.Selection) {
 
 }
 
+// moveNextPage navigates to the next page using colly.
+// It extracts the "href" attribute from the provided HTML element,
+// converts it to an absolute URL, prints it, and visits the next page.
 func moveNextPage(e *colly.HTMLElement) {
 	nextUrl := e.Attr("href")
 	nextUrl = e.Request.AbsoluteURL(nextUrl)
@@ -344,6 +366,10 @@ func moveNextPage(e *colly.HTMLElement) {
 	e.Request.Visit(nextUrl)
 }
 
+// saveToJSON marshals the provided FightersCollection to JSON format
+// and writes it to the file. If there is an error during
+// marshalling, file opening, or file writing, it logs the error. This function
+// is used to store fighter data in JSON format.
 func saveToJSON(c model.FightersCollection) {
 	jsonData, err := json.Marshal(c)
 	if err != nil {
@@ -365,6 +391,9 @@ func saveToJSON(c model.FightersCollection) {
 	}
 }
 
+// getDebutTimestamp parses the octagon debut date provided in the format "Jan. 2, 2006"
+// and returns its Unix timestamp.This function is used to convert the debut date of a fighter in the octagon
+// into a Unix timestamp for further processing.
 func getDebutTimestamp(octagonDebut string) int {
 	layout := "Jan. 2, 2006"
 
