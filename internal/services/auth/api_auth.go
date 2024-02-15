@@ -7,7 +7,6 @@ import (
 	"net/http"
 	internalErr "projects/fb-server/pkg/errors"
 	"projects/fb-server/pkg/httplib"
-	"projects/fb-server/pkg/ipaddr"
 	"projects/fb-server/pkg/model"
 	"projects/fb-server/pkg/utils"
 	"strings"
@@ -161,7 +160,8 @@ func (s *service) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	req.UserAgent = r.UserAgent()
-	req.IpAddress = r.Header.Get(ipaddr.CFConnectingIp)
+	// TODO
+	// req.IpAddress = r.Header.Get(ipaddr.CFConnectingIp)
 
 	if req.RememberMe {
 		req.ExpiresIn = 60 * 60 * 24 * 7
