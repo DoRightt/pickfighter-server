@@ -14,6 +14,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+// createJWTToken generates a JWT token for the provided user credentials and authentication request.
+// It includes user-specific claims such as user ID, user roles, and audience.
+// The token is signed using RS256 algorithm with the configured signing key.
+// Function returns resulting authentication token information (model.AuthenticateRequest),
+// including token ID, access token, and expiration time.
 func (s *service) createJWTToken(ctx context.Context, creds *model.UserCredentials, req model.AuthenticateRequest) (*model.AuthenticateResult, error) {
 	u, err := s.Repo.FindUser(ctx, &model.UserRequest{
 		UserId: creds.UserId,

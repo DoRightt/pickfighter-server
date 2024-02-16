@@ -16,7 +16,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Register is a handler method for /register path
+// Register handles the registration of a new user.
+// It expects a JSON request with user details, including name, email, password, and terms agreement.
+// Upon successful registration, it initiates a confirmation email and returns the user's ID.
 func (s *service) Register(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -68,6 +70,9 @@ func (s *service) Register(w http.ResponseWriter, r *http.Request) {
 	httplib.ResponseJSON(w, result)
 }
 
+// ConfirmRegistration handles the confirmation of user registration by validating the provided token.
+// Users receive a confirmation token upon successful registration, and this endpoint is used to confirm
+// and activate their accounts.
 func (s *service) ConfirmRegistration(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -110,6 +115,9 @@ func (s *service) ConfirmRegistration(w http.ResponseWriter, r *http.Request) {
 	httplib.ResponseJSON(w, httplib.SuccessfulResult())
 }
 
+// Login handles the user login process, authenticating the user based on the provided credentials.
+// It validates the email or username and password, checks user activation status,
+// generates a JWT token for the authenticated user, and sets an authentication cookie.
 func (s *service) Login(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 30*time.Second)
 	defer cancel()
@@ -190,6 +198,7 @@ func (s *service) Login(w http.ResponseWriter, r *http.Request) {
 	httplib.ResponseJSON(w, result)
 }
 
+// Logout handles the user logout process by setting an expired cookie.
 func (s *service) Logout(w http.ResponseWriter, r *http.Request) {
 	// ctx := r.Context()
 

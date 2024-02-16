@@ -7,6 +7,9 @@ import (
 	"projects/fb-server/pkg/model"
 )
 
+// GetCurrentUser retrieves information about the currently authenticated user.
+// It extracts the user ID from the request context, queries the database for the user's details,
+// and responds with a JSON representation of the user.
 func (s *service) GetCurrentUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 

@@ -15,6 +15,13 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+// ResetPassword handles the process of resetting a user's password.
+// It expects a JSON request containing the user's email address.
+// If the email is valid and associated with an existing user, a reset token is generated,
+// and an email containing the reset link is sent to the user.
+// The reset token is also stored in the database for verification during the password reset process.
+// A successful response is returned if the email exists, and the reset process is initiated.
+// In case of errors, appropriate error responses are sent with details in the response body.
 func (s *service) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -99,6 +106,11 @@ func (s *service) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	httplib.ResponseJSON(w, httplib.SuccessfulResult())
 }
 
+// RecoverPassword handles the process of recovering a user's password based on a provided reset token.
+// It expects a JSON request containing the reset token, new password, and confirmation password.
+// If the token is valid, the password is updated, and the token is marked as used.
+// The response includes a successful result if the password recovery process is completed.
+// In case of errors, appropriate error responses are sent with details in the response body.
 func (s *service) RecoverPassword(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 

@@ -17,10 +17,15 @@ import (
 	"github.com/spf13/viper"
 )
 
+// saltLength is the default length of the salt used to generate salted hashes.
 const (
 	saltLength = 32
 )
 
+// createUserCredentials creates user credentials during the user registration process.
+// It validates the provided email and password, creates a new user, generates a salted hash
+// of the password, and creates user credentials. If activation is required, it generates
+// an email verification token. The created credentials are stored in the database.
 func (s service) createUserCredentials(ctx context.Context, tx pgx.Tx, req *model.RegisterRequest) (*model.UserCredentials, error) {
 	if req.Email == "" {
 		intErr := internalErr.New(internalErr.AuthFormEmailInvalid)
