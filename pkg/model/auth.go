@@ -2,6 +2,7 @@ package model
 
 import "time"
 
+// RegisterRequest represents the data structure for handling user registration requests.
 type RegisterRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -11,9 +12,7 @@ type RegisterRequest struct {
 	Token string `json:"token"`
 }
 
-type LoginRequest struct {
-}
-
+// AuthenticateRequest represents the data structure for user authentication requests.
 type AuthenticateRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -29,6 +28,7 @@ type AuthenticateRequest struct {
 	Method int `json:"method"`
 }
 
+// AuthenticateResult represents the result of a successful authentication.
 type AuthenticateResult struct {
 	UserId         int32     `json:"user_id" yaml:"user_id"`
 	TokenId        string    `json:"token_id" yaml:"token_id"`
@@ -37,6 +37,7 @@ type AuthenticateResult struct {
 	ExpirationTime time.Time `json:"expiration_time" yaml:"expiration_time"`
 }
 
+// UserCredentials represents user authentication credentials and related information.
 type UserCredentials struct {
 	UserId      int32  `json:"user_id"`
 	Email       string `json:"email"`
@@ -48,6 +49,7 @@ type UserCredentials struct {
 	Active      bool   `json:"active"`
 }
 
+// UserCredentialsRequest represents a request for retrieving user authentication credentials.
 type UserCredentialsRequest struct {
 	UserId    int32  `json:"user_id"`
 	Email     string `json:"email"`
@@ -56,16 +58,19 @@ type UserCredentialsRequest struct {
 	IsActive  int32  `json:"is_active"`
 }
 
+// ResetPasswordRequest represents a request to initiate the password reset process.
 type ResetPasswordRequest struct {
 	Email string `json:"email"`
 }
 
+// RecoverPasswordRequest represents a request to recover the password after initiating the reset process.
 type RecoverPasswordRequest struct {
 	Token           string `json:"token"`
 	Password        string `json:"password"`
 	ConfirmPassword string `json:"confirm_password"`
 }
 
+// ChangePasswordRequest represents a request to change the user's password.
 type ChangePasswordRequest struct {
 	OldPassword    string `json:"old_password"`
 	NewPassword    string `json:"new_password"`
