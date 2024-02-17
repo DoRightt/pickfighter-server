@@ -1,5 +1,6 @@
 package model
 
+// User represents all user properties
 type User struct {
 	UserId    int32  `json:"user_id,omitempty" yaml:"user_id,omitempty"`
 	Name      string `json:"name,omitempty" yaml:"name,omitempty"`
@@ -12,11 +13,13 @@ type User struct {
 	UpdatedAt int64  `json:"updated_at,omitempty" yaml:"updated_at,omitempty"`
 }
 
+// UserRequest represents a request for user information.
 type UserRequest struct {
 	UserId int32  `json:"user_id,omitempty" yaml:"user_id,omitempty"`
 	Name   string `json:"name,omitempty" yaml:"name,omitempty"`
 }
 
+// UsersRequest represents a request for multiple users' information.
 type UsersRequest struct {
 	UserIds           []int32 `json:"user_ids,omitempty" yaml:"user_ids,omitempty"`
 	Name              string  `json:"name,omitempty" yaml:"name,omitempty"`
@@ -28,11 +31,13 @@ type UsersRequest struct {
 	ListRequest
 }
 
+// UsersRequest represents a request for multiple users' information.
 type UserResult struct {
 	User     User          `json:"user"`
 	Settings *UserSettings `json:"settings,omitempty"`
 }
 
+// UserSetttings represents user settings
 type UserSettings struct {
 	UserId     int32  `json:"user_id"`
 	LoginEmail string `json:"login_email"`
