@@ -57,7 +57,7 @@ func (r *AuthRepo) FindUserCredentials(ctx context.Context, req model.UserCreden
 	}
 
 	c.Token = currentToken.String
-	c.TokenType = currentToken.String
+	c.TokenType = model.TokenType(currentToken.String)
 	c.TokenExpire = tokenExpire.Int
 
 	return c, nil
@@ -68,7 +68,8 @@ func (r *AuthRepo) ConfirmCredentialsToken(ctx context.Context, tx pgx.Tx, req m
 		SET active = true, token = $2, token_type = $3, token_expire = NULL
 		WHERE user_id = $1`
 
-	var token, tokenType *string
+	var token *string
+	var tokenType *model.TokenType
 	if len(req.Token) > 0 {
 		token = &req.Token
 	}

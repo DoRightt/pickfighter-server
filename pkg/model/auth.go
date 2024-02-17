@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 // RegisterRequest represents the data structure for handling user registration requests.
 type RegisterRequest struct {
@@ -39,23 +41,23 @@ type AuthenticateResult struct {
 
 // UserCredentials represents user authentication credentials and related information.
 type UserCredentials struct {
-	UserId      int32  `json:"user_id"`
-	Email       string `json:"email"`
-	Password    string `json:"-"`
-	Salt        string `json:"-"`
-	Token       string `json:"-"`
-	TokenType   string `json:"token_type"`
-	TokenExpire int64  `json:"token_expire"`
-	Active      bool   `json:"active"`
+	UserId      int32     `json:"user_id"`
+	Email       string    `json:"email"`
+	Password    string    `json:"-"`
+	Salt        string    `json:"-"`
+	Token       string    `json:"-"`
+	TokenType   TokenType `json:"token_type"`
+	TokenExpire int64     `json:"token_expire"`
+	Active      bool      `json:"active"`
 }
 
 // UserCredentialsRequest represents a request for retrieving user authentication credentials.
 type UserCredentialsRequest struct {
-	UserId    int32  `json:"user_id"`
-	Email     string `json:"email"`
-	Token     string `json:"token"`
-	TokenType string `json:"token_type"`
-	IsActive  int32  `json:"is_active"`
+	UserId    int32     `json:"user_id"`
+	Email     string    `json:"email"`
+	Token     string    `json:"token"`
+	TokenType TokenType `json:"token_type"`
+	IsActive  int32     `json:"is_active"`
 }
 
 // ResetPasswordRequest represents a request to initiate the password reset process.
