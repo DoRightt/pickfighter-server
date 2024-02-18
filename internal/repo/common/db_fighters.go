@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func (r *CommonRepo) SearchCommentsCount(ctx context.Context, req *model.FightersRequest) (int32, error) {
+func (r *CommonRepo) SearchFightersCount(ctx context.Context, req *model.FightersRequest) (int32, error) {
 	q := `SELECT count(*) FROM public.fb_fighters AS f`
 
 	args := r.performFightersQuery(req)
@@ -24,7 +24,7 @@ func (r *CommonRepo) SearchCommentsCount(ctx context.Context, req *model.Fighter
 	return count, nil
 }
 
-func (r *CommonRepo) SearchFighters(ctx context.Context, req *model.FightersRequest) ([]*model.FighterReq, error) {
+func (r *CommonRepo) SearchFighters(ctx context.Context, req *model.FightersRequest) ([]*model.Fighter, error) {
 	q := `SELECT f.fighter_id, f.name, f.nickname, f.division, f.status,
 		f.hometown, f.trains_at, f.fighting_style, f.age, f.height,
 		f.weight, f.octagon_debut, f.debut_timestamp, f.reach, f.leg_reach,
@@ -48,15 +48,14 @@ func (r *CommonRepo) SearchFighters(ctx context.Context, req *model.FightersRequ
 	}
 	defer rows.Close()
 
-	var results []*model.FighterReq
+	var results []*model.Fighter
 
 	for rows.Next() {
-		var r model.FighterReq
 		var f model.Fighter
 		var fs model.FighterStats
 
 		if err := rows.Scan(
-			&r.FighterId, &f.Name, &f.NickName, &f.Division, &f.Status,
+			&f.FighterId, &f.Name, &f.NickName, &f.Division, &f.Status,
 			&f.Hometown, &f.TrainsAt, &f.FightingStyle, &f.Age, &f.Height,
 			&f.Weight, &f.OctagonDebut, &f.DebutTimestamp, &f.Reach, &f.LegReach,
 			&f.FighterUrl, &f.ImageUrl, &f.Wins, &f.Loses, &f.Draw,
@@ -67,10 +66,9 @@ func (r *CommonRepo) SearchFighters(ctx context.Context, req *model.FightersRequ
 			return nil, err
 		}
 
-		r.Fighter = &f
 		f.Stats = fs
 
-		results = append(results, &r)
+		results = append(results, &f)
 	}
 
 	return results, nil

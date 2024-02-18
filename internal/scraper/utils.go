@@ -68,12 +68,9 @@ func WriteFighterData(ctx context.Context, l *zap.SugaredLogger, data []model.Fi
 				return err
 			}
 		} else {
-			fighterReq := model.FighterReq{
-				FighterId: fighterId,
-				Fighter:   &fighter,
-			}
+			fighter.FighterId = fighterId
 
-			if err := updateFighter(ctx, rep, fighterReq); err != nil {
+			if err := updateFighter(ctx, rep, fighter); err != nil {
 				l.Errorf("Error while fighter transaction: %s", err)
 				return err
 			}
@@ -112,11 +109,8 @@ func createFighter(ctx context.Context, rep *fighterRepo.FighterRepo, fighter mo
 			return httplib.NewApiErrFromInternalErr(intErr, http.StatusInternalServerError)
 		}
 	}
-	stats := model.FighterStatsReq{
-		FighterStats: &fighter.Stats,
-		FighterId:    fighterId,
-	}
-	rep.CreateNewFighterStats(ctx, tx, stats)
+	fighter.Stats.FighterId = fighterId
+	rep.CreateNewFighterStats(ctx, tx, fighter.Stats)
 
 	if txErr := tx.Commit(ctx); txErr != nil {
 		l.Errorf("Unable to commit transaction: %s", txErr)
@@ -127,9 +121,9 @@ func createFighter(ctx context.Context, rep *fighterRepo.FighterRepo, fighter mo
 }
 
 // updateFighterTx performs a transaction to update an existing fighter in the database.
-// It takes a context, a fighter repository, and a model.FighterReq as parameters.
+// It takes a context, a fighter repository, and a model.Fighter as parameters.
 // If the transaction fails, it logs the error and returns an appropriate ApiError.
-func updateFighter(ctx context.Context, rep *fighterRepo.FighterRepo, fighter model.FighterReq) error {
+func updateFighter(ctx context.Context, rep *fighterRepo.FighterRepo, fighter model.Fighter) error {
 	tx, err := rep.Pool.BeginTx(ctx, pgx.TxOptions{
 		IsoLevel: pgx.ReadCommitted,
 	})
@@ -153,12 +147,9 @@ func updateFighter(ctx context.Context, rep *fighterRepo.FighterRepo, fighter mo
 		}
 	}
 
-	stats := model.FighterStatsReq{
-		FighterStats: &fighter.Stats,
-		FighterId:    updatedId,
-	}
+	fighter.Stats.FighterId = updatedId
 
-	if err := rep.UpdateFighterStats(ctx, tx, stats); err != nil {
+	if err := rep.UpdateFighterStats(ctx, tx, fighter.Stats); err != nil {
 		l.Errorf("Error while updating stats: %s", err)
 	}
 

@@ -111,19 +111,17 @@ func (r *CommonRepo) SearchEvents(ctx context.Context) ([]*model.FullEventRespon
 		var event model.FullEventResponse
 		var fight model.FightResponse
 		var redFighter model.Fighter
-		var redFighterReq model.FighterReq
 		var redFighterStats model.FighterStats
 		var blueFighter model.Fighter
-		var blueFighterReq model.FighterReq
 		var blueFighterStats model.FighterStats
 
 		if err := rows.Scan(
 			&event.EventId, &event.Name, &event.IsDone, &fight.FightId, &fight.IsDone,
 			&fight.NotContest, &fight.CreatedAt, &fight.FightDate, &fight.Result,
-			&redFighterReq.FighterId, &redFighter.Name, &redFighter.NickName, &redFighter.Division, &redFighter.FighterUrl,
+			&redFighter.FighterId, &redFighter.Name, &redFighter.NickName, &redFighter.Division, &redFighter.FighterUrl,
 			&redFighter.ImageUrl, &redFighter.Wins, &redFighter.Loses, &redFighter.Draw,
 			&redFighterStats.WinByKO, &redFighterStats.WinBySub, &redFighterStats.WinByDec,
-			&blueFighterReq.FighterId, &blueFighter.Name, &blueFighter.NickName, &blueFighter.Division, &blueFighter.FighterUrl,
+			&blueFighter.FighterId, &blueFighter.Name, &blueFighter.NickName, &blueFighter.Division, &blueFighter.FighterUrl,
 			&blueFighter.ImageUrl, &blueFighter.Wins, &blueFighter.Loses, &blueFighter.Draw,
 			&blueFighterStats.WinByKO, &blueFighterStats.WinBySub, &blueFighterStats.WinByDec,
 		); err != nil {
@@ -131,12 +129,10 @@ func (r *CommonRepo) SearchEvents(ctx context.Context) ([]*model.FullEventRespon
 		}
 
 		redFighter.Stats = redFighterStats
-		redFighterReq.Fighter = &redFighter
 		blueFighter.Stats = blueFighterStats
-		blueFighterReq.Fighter = &blueFighter
 
-		fight.FighterRed = redFighterReq
-		fight.FighterBlue = blueFighterReq
+		fight.FighterRed = redFighter
+		fight.FighterBlue = blueFighter
 
 		fights, found := fightMap[event.EventId]
 		if !found {

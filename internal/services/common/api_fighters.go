@@ -16,7 +16,7 @@ func (s *service) SearchFighters(w http.ResponseWriter, r *http.Request) {
 		Status: capitalize(status),
 	}
 
-	count, err := s.Repo.SearchCommentsCount(ctx, req)
+	count, err := s.Repo.SearchFightersCount(ctx, req)
 	if err != nil {
 		s.Logger.Errorf("Failed to get fighters count: %s", err)
 		httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.CountFighters, err)

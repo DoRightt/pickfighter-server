@@ -50,7 +50,7 @@ func (r *FighterRepo) CreateNewFighter(ctx context.Context, tx pgx.Tx, fighter m
 	return fighterId, nil
 }
 
-func (r *FighterRepo) CreateNewFighterStats(ctx context.Context, tx pgx.Tx, stats model.FighterStatsReq) error {
+func (r *FighterRepo) CreateNewFighterStats(ctx context.Context, tx pgx.Tx, stats model.FighterStats) error {
 	qStats := `INSERT INTO public.fb_fighter_stats (
 		fighter_id, total_sig_str_landed, total_sig_str_attempted, str_accuracy, total_tkd_landed, 
 		total_tkd_attempted, tkd_accuracy, sig_str_landed, sig_str_absorbed, sig_str_defense,
@@ -80,7 +80,7 @@ func (r *FighterRepo) CreateNewFighterStats(ctx context.Context, tx pgx.Tx, stat
 	return nil
 }
 
-func (r *FighterRepo) UpdateFighter(ctx context.Context, tx pgx.Tx, fighter model.FighterReq) (int32, error) {
+func (r *FighterRepo) UpdateFighter(ctx context.Context, tx pgx.Tx, fighter model.Fighter) (int32, error) {
 	qData := `UPDATE public.fb_fighters SET
 		nickname = $2, division = $3, status = $4, hometown = $5, trains_at = $6, 
 		fighting_style = $7, age = $8, height = $9, weight = $10, octagon_debut = $11, 
@@ -112,7 +112,7 @@ func (r *FighterRepo) UpdateFighter(ctx context.Context, tx pgx.Tx, fighter mode
 	return fighterId, nil
 }
 
-func (r *FighterRepo) UpdateFighterStats(ctx context.Context, tx pgx.Tx, stats model.FighterStatsReq) error {
+func (r *FighterRepo) UpdateFighterStats(ctx context.Context, tx pgx.Tx, stats model.FighterStats) error {
 	qStats := `UPDATE public.fb_fighter_stats SET
 		total_sig_str_landed = $2, total_sig_str_attempted = $3, str_accuracy = $4, total_tkd_landed = $5, total_tkd_attempted = $6, 
 		tkd_accuracy = $7, sig_str_landed = $8, sig_str_absorbed = $9, sig_str_defense = $10, takedown_defense = $11, 

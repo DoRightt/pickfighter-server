@@ -53,6 +53,7 @@ type FightersCollection struct {
 }
 
 type FighterStats struct {
+	FighterId            int32   `json:"fighter_id"`
 	TotalSigStrLanded    int     `json:"totalSigStrLandned,omitempty"`
 	TotalSigStrAttempted int     `json:"totalSigStrAttempted,omitempty"`
 	StrAccuracy          int     `json:"strAccuracy,omitempty"`
@@ -73,6 +74,7 @@ type FighterStats struct {
 }
 
 type Fighter struct {
+	FighterId      int32        `json:"fighter_id"`
 	Name           string       `json:"name"`
 	NickName       string       `json:"nickName"`
 	Division       Division     `json:"division"`
@@ -93,16 +95,6 @@ type Fighter struct {
 	FighterUrl     string       `json:"fighterUrl"`
 	ImageUrl       string       `json:"imageUrl"`
 	Stats          FighterStats `json:"stats"`
-}
-
-type FighterReq struct {
-	FighterId int32 `json:"fighter_id"`
-	*Fighter
-}
-
-type FighterStatsReq struct {
-	FighterId int32 `json:"fighter_id"`
-	*FighterStats
 }
 
 type FightersRequest struct {
