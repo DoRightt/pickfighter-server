@@ -1,5 +1,6 @@
 package model
 
+// ListRequest provides parameters for listing entities with optional time range filtering.
 type ListRequest struct {
 	Limit        int32 `json:"limit" yaml:"limit"`
 	Offset       int32 `json:"offset" yaml:"offset"`
