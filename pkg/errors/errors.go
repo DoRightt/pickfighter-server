@@ -39,6 +39,7 @@ const (
 
 	Events            = 900
 	EventsFightResult = 901
+	EventIsDone       = 902
 
 	Count         = 1000
 	CountFighters = 1001
@@ -113,6 +114,8 @@ func New(code int) *InternalError {
 		return &InternalError{Code: code, Message: "[Events]: Decode error"}
 	case EventsFightResult:
 		return &InternalError{Code: code, Message: "[Events]: Failed to set fight result"}
+	case EventIsDone:
+		return &InternalError{Code: code, Message: "[Events]: Failed to set event done"}
 	case Count:
 		return &InternalError{Code: code, Message: "[Count]: Failed to get items count"}
 	case CountFighters:
