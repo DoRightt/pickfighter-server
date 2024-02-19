@@ -75,7 +75,7 @@ func (s *service) CheckEventIsDone(ctx context.Context, tx pgx.Tx, fightId int32
 		return err
 	}
 
-	count, err := s.Repo.GetUndoneFights(ctx, tx, eventId)
+	count, err := s.Repo.GetUndoneFightsCount(ctx, tx, eventId)
 	if err != nil {
 		return err
 	}

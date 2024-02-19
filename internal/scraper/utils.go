@@ -109,8 +109,14 @@ func createFighter(ctx context.Context, rep *fighterRepo.FighterRepo, fighter mo
 			return httplib.NewApiErrFromInternalErr(intErr, http.StatusInternalServerError)
 		}
 	}
+
 	fighter.Stats.FighterId = fighterId
-	rep.CreateNewFighterStats(ctx, tx, fighter.Stats)
+	err = rep.CreateNewFighterStats(ctx, tx, fighter.Stats)
+	if err != nil {
+		if txErr := tx.Rollback(ctx); txErr != nil {
+			l.Errorf("Unable to rollback transaction: %s", txErr)
+		}
+	}
 
 	if txErr := tx.Commit(ctx); txErr != nil {
 		l.Errorf("Unable to commit transaction: %s", txErr)
