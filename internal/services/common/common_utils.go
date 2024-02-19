@@ -13,6 +13,10 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
+// CreateEvent creates a new event along with associated fights in a transaction.
+// It takes the provided context, a transaction object, and the request containing event details.
+// If successful, it returns a response with the newly created event information.
+// If any error occurs during the process, it rolls back the transaction and returns an appropriate API error.
 func (s *service) CreateEvent(ctx context.Context, tx pgx.Tx, req *model.EventsRequest) (*model.EventResponse, error) {
 	eventId, err := s.Repo.TxCreateEvent(ctx, tx, req)
 	if err != nil {
@@ -63,6 +67,8 @@ func (s *service) CreateEvent(ctx context.Context, tx pgx.Tx, req *model.EventsR
 	return &event, err
 }
 
+// CheckEventIsDone checks if all fights are done. If so, sets event as done.
+// It takes the fight ID as input and finds the corresponding event in which it is listed. 
 func (s *service) CheckEventIsDone(ctx context.Context, tx pgx.Tx, fightId int32) error {
 	eventId, err := s.Repo.GetEventId(ctx, tx, fightId)
 	if err != nil {
@@ -84,6 +90,7 @@ func (s *service) CheckEventIsDone(ctx context.Context, tx pgx.Tx, fightId int32
 	return nil
 }
 
+// capitalize returns a capitalized string.
 func capitalize(s string) string {
 	if len(s) == 0 {
 		return s

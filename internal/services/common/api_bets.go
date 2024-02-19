@@ -11,6 +11,11 @@ import (
 	"github.com/lestrrat-go/jwx/v2/jwt"
 )
 
+// GetBets retrieves and returns the bets associated with the authenticated user. It extracts the
+// user ID from the JWT token in the request context, calls the SearchBetsCount and SearchBets methods
+// to get the count and list of bets, and responds with the results. If any error occurs during the
+// process, it responds with an appropriate API error along with the HTTP status code. If there are no
+// bets, it responds with an empty list result.
 func (s *service) GetBets(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -51,6 +56,11 @@ func (s *service) GetBets(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// CreateBet handles the creation of a new bet. It decodes the JSON request body into the
+// model.Bet struct, retrieves the user ID from the JWT token in the request context, and calls
+// the CreateBet method to create the bet. If any error occurs during the process, it responds with
+// an appropriate API error along with the HTTP status code. If the creation is successful, it
+// responds with a successful result and the ID of the created bet.
 func (s *service) CreateBet(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 

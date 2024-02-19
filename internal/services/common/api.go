@@ -16,6 +16,7 @@ type service struct {
 	// AuthRepo *authRepo.AuthRepo     `json:"-" yaml:"-"` // TODO
 }
 
+// New creates a new instance of the service using the provided ApiHandler and initializes an commonRepo for working with the common repository.
 func New(h *services.ApiHandler) services.ApiService {
 	return &service{
 		ApiHandler: h,
@@ -30,6 +31,12 @@ func (s *service) Init(ctx context.Context) error {
 	return nil
 }
 
+// ApplyRoutes sets up and assigns the handlers for various API endpoints. It uses the Gorilla Mux
+// router to define the routes and associate them with the corresponding handler functions. The
+// routes include functionalities such as searching for fighters, creating events, retrieving events,
+// creating bets, retrieving bets, and adding fight results. Access to certain routes is restricted based
+// on user roles, such as admin or logged-in user. The CheckIsAdmin and IfLoggedIn middleware functions
+// are used to enforce role-based access control for specific routes.
 func (s *service) ApplyRoutes() {
 	s.Router.HandleFunc("/fighters", s.CheckIsAdmin(s.SearchFighters)).Methods(http.MethodGet)
 

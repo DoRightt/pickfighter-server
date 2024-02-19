@@ -7,6 +7,11 @@ import (
 	"projects/fb-server/pkg/model"
 )
 
+// SearchFighters handles the search for fighters based on the provided status.
+// It takes the HTTP response writer and request, extracts the status from the request,
+// and performs a search using the repository. The results are returned as a JSON list.
+// If there are no results, it responds with an empty list. If any error occurs during the process,
+// it returns an appropriate API error along with the HTTP status code.
 func (s *service) SearchFighters(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 

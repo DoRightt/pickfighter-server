@@ -10,6 +10,10 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+// AddResult handles the addition of a result for a specific fight. It expects a JSON-encoded
+// request containing the fight result details. It begins a transaction, sets the fight result,
+// checks if the associated event is done, and commits the transaction. If any error occurs during
+// the process, it responds with an appropriate API error along with the HTTP status code.
 func (s *service) AddResult(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 

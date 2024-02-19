@@ -10,6 +10,11 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+// HandleNewEvent handles the creation of a new event. It decodes the JSON request body into the
+// model.EventsRequest struct, begins a new transaction, and calls the CreateEvent method to create
+// the event and its associated fights. If any error occurs during the process, it responds with
+// an appropriate API error along with the HTTP status code. If the transaction is successful, it
+// responds with a successful result and the ID of the created event.
 func (s *service) HandleNewEvent(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -44,6 +49,9 @@ func (s *service) HandleNewEvent(w http.ResponseWriter, r *http.Request) {
 	httplib.ResponseJSON(w, result)
 }
 
+// GetEvents retrieves a list of events. It queries the repository for the count of events and the
+// list of events. If any error occurs during the process, it responds with an appropriate API error
+// along with the HTTP status code. If no events are found, it responds with an empty list result.
 func (s *service) GetEvents(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
