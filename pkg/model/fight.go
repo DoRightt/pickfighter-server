@@ -1,5 +1,6 @@
 package model
 
+// Fight is a structure with fight information and fighters ids
 type Fight struct {
 	FightId       int32 `json:"fight_id"`
 	EventId       int32 `json:"event_id"`
@@ -13,6 +14,7 @@ type Fight struct {
 	FightDate     int   `json:"fight_date"`
 }
 
+// Fight is a structure with information about the fight and contains the structures of the participating fighters
 type FightResponse struct {
 	FightId     int32   `json:"fight_id"`
 	EventId     int32   `json:"event_id,omitempty"`

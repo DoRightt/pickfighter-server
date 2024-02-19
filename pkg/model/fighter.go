@@ -1,7 +1,9 @@
 package model
 
+// Division represents weight divisions
 type Division int
 
+// String returns the string representation of a Division.
 func (d Division) String() string {
 	switch d {
 	case Flyweight:
@@ -48,10 +50,12 @@ const (
 	WomensFeatherweight
 )
 
+// FightersCollection represents a collection of fighters as a slice
 type FightersCollection struct {
 	Fighters []Fighter
 }
 
+// FighterStats represents statistical information for a fighter
 type FighterStats struct {
 	FighterId            int32   `json:"fighter_id"`
 	TotalSigStrLanded    int     `json:"totalSigStrLandned,omitempty"`
@@ -73,6 +77,7 @@ type FighterStats struct {
 	WinByDec             int     `json:"winByDec"`
 }
 
+// Fighter represents fighter information
 type Fighter struct {
 	FighterId      int32        `json:"fighter_id"`
 	Name           string       `json:"name"`
@@ -97,6 +102,7 @@ type Fighter struct {
 	Stats          FighterStats `json:"stats"`
 }
 
+// FightersRequest represents a request for fighters
 type FightersRequest struct {
 	Status string `json:"status"`
 }
