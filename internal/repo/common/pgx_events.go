@@ -7,6 +7,8 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+// TxCreateEvent creates a new event in the 'fb_events' table and returns the event ID.
+// It uses a transaction (tx) if provided, otherwise, it uses the repository's connection pool.
 func (r *CommonRepo) TxCreateEvent(ctx context.Context, tx pgx.Tx, e *model.EventsRequest) (int32, error) {
 	q := `INSERT INTO public.fb_events 
 	(name)
@@ -31,6 +33,7 @@ func (r *CommonRepo) TxCreateEvent(ctx context.Context, tx pgx.Tx, e *model.Even
 	return eventId, nil
 }
 
+// SearchEventsCount returns the count of events in the system, considering the limit constraint.
 func (r *CommonRepo) SearchEventsCount(ctx context.Context) (int32, error) {
 	limit := 5
 
@@ -58,6 +61,11 @@ func (r *CommonRepo) SearchEventsCount(ctx context.Context) (int32, error) {
 	return count, nil
 }
 
+// SearchEvents retrieves a list of events along with associated fights and fighter information.
+// It uses Common Table Expressions (CTE) to rank events and filter them based on whether they are done or not.
+// The method takes a context, retrieves a limited number of events (specified by the 'limit' parameter),
+// and returns a slice of FullEventResponse containing event details, associated fights, and fighter information.
+// If there is an error during the database query, it returns nil and the encountered error.
 func (r *CommonRepo) SearchEvents(ctx context.Context) ([]*model.FullEventResponse, error) {
 	limit := 5
 
@@ -160,6 +168,9 @@ func (r *CommonRepo) SearchEvents(ctx context.Context) ([]*model.FullEventRespon
 	return events, nil
 }
 
+// GetEventId retrieves the event ID associated with a specific fight from the fb_fights table.
+// It takes a transaction (tx), the fight ID, and returns the corresponding event ID.
+// If the query is successful, it returns the event ID; otherwise, it returns -1 and the encountered error.
 func (r *CommonRepo) GetEventId(ctx context.Context, tx pgx.Tx, fightId int32) (int32, error) {
 	q := "SELECT event_id FROM fb_fights WHERE fight_id = $1"
 
@@ -177,7 +188,10 @@ func (r *CommonRepo) GetEventId(ctx context.Context, tx pgx.Tx, fightId int32) (
 	return eventId, nil
 }
 
-func (r *CommonRepo) GetUndoneFights(ctx context.Context, tx pgx.Tx, eventId int32) (int, error) {
+// GetUndoneFightsCount retrieves the count of undone fights for a specific event from the fb_fights table.
+// It takes a transaction (tx), the event ID, and returns the number of fights that are not marked as done (is_done = false).
+// If the query is successful, it returns the count, otherwise, it returns an error.
+func (r *CommonRepo) GetUndoneFightsCount(ctx context.Context, tx pgx.Tx, eventId int32) (int, error) {
 	q := "SELECT COUNT(*) FROM fb_fights WHERE event_id = $1 AND is_done = false"
 	var count int
 	err := tx.QueryRow(ctx, q, eventId).Scan(&count)
@@ -188,6 +202,10 @@ func (r *CommonRepo) GetUndoneFights(ctx context.Context, tx pgx.Tx, eventId int
 	return count, nil
 }
 
+// SetEventDone updates the 'is_done' field of an event in the fb_events table.
+// It takes a transaction (tx) and the event ID as parameters and sets the 'is_done'
+// column to true for the specified event. If the update is successful, it returns nil.
+// In case of an error during the update, it returns the error details.
 func (r *CommonRepo) SetEventDone(ctx context.Context, tx pgx.Tx, eventId int32) error {
 	q := "UPDATE fb_events SET is_done = true WHERE event_id = $1"
 

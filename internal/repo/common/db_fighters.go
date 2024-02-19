@@ -7,6 +7,10 @@ import (
 	"strings"
 )
 
+// SearchFightersCount retrieves the count of fighters based on the provided FightersRequest.
+// It constructs a SQL query to count the number of records in the fb_fighters table, applying
+// optional conditions specified in the FightersRequest for filtering. If the request is successful,
+// it returns the count of fighters. In case of an error, it returns 0 and the error details.
 func (r *CommonRepo) SearchFightersCount(ctx context.Context, req *model.FightersRequest) (int32, error) {
 	q := `SELECT count(*) FROM public.fb_fighters AS f`
 
@@ -24,6 +28,11 @@ func (r *CommonRepo) SearchFightersCount(ctx context.Context, req *model.Fighter
 	return count, nil
 }
 
+// SearchFighters retrieves a list of fighters based on the provided FightersRequest.
+// It constructs a SQL query to join the fb_fighters and fb_fighter_stats tables and applies
+// optional conditions specified in the FightersRequest for filtering. The result includes
+// information about the fighters and their statistics. If the request is successful, it returns
+// a slice of Fighter models. In case of an error, it returns nil and the error details.
 func (r *CommonRepo) SearchFighters(ctx context.Context, req *model.FightersRequest) ([]*model.Fighter, error) {
 	q := `SELECT f.fighter_id, f.name, f.nickname, f.division, f.status,
 		f.hometown, f.trains_at, f.fighting_style, f.age, f.height,
@@ -74,6 +83,9 @@ func (r *CommonRepo) SearchFighters(ctx context.Context, req *model.FightersRequ
 	return results, nil
 }
 
+// performFightersQuery constructs the conditions for filtering fighter search based on the provided FightersRequest.
+// It returns a slice of string conditions that can be used in the WHERE clause of the SQL query.
+// If the provided FightersRequest is nil, an empty slice is returned.
 func (r *CommonRepo) performFightersQuery(req *model.FightersRequest) []string {
 	var args []string
 	if req == nil {

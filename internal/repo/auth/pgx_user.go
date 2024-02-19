@@ -8,6 +8,11 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+// TxCreateUser creates a new user in the 'fb_users' table.
+// If the transaction (tx) is provided, it executes the query within the transaction;
+// otherwise, it uses the repository's connection pool to execute the query.
+// The user's role (claim) is optional and can be nil if not specified.
+// The method returns the newly created user's ID and an error, if any.
 func (r *AuthRepo) TxCreateUser(ctx context.Context, tx pgx.Tx, u model.User) (int32, error) {
 	query := `INSERT INTO public.fb_users 
 		(name, claim, created_at)

@@ -5,6 +5,8 @@ import (
 	"projects/fb-server/pkg/model"
 )
 
+// SearchBetsCount retrieves the count of bets for a given user ID from the 'fb_bets' table.
+// It takes a context and a user ID, and returns the count of bets or an error if the query fails.
 func (r *CommonRepo) SearchBetsCount(ctx context.Context, userId int32) (int32, error) {
 	q := `SELECT COUNT(*) FROM public.fb_bets WHERE user_id = $1`
 
@@ -14,9 +16,10 @@ func (r *CommonRepo) SearchBetsCount(ctx context.Context, userId int32) (int32, 
 	}
 
 	return count, nil
-
 }
  
+// SearchBets retrieves a list of bets for a given user ID from the 'fb_bets' table.
+// It takes a context and a user ID, and returns a slice of Bet models or an error if the query fails.
 func (r *CommonRepo) SearchBets(ctx context.Context, userId int32) ([]*model.Bet, error) {
 	q := `SELECT 
 	bet_id, user_id, fight_id, bet
@@ -41,9 +44,11 @@ func (r *CommonRepo) SearchBets(ctx context.Context, userId int32) ([]*model.Bet
 	}
 
 	return bets, nil
-
 }
 
+// CreateBet inserts a new bet into the 'fb_bets' table.
+// It takes a context, a Bet model and returns the newly created bet's ID 
+// or an error if the insertion fails.
 func (r *CommonRepo) CreateBet(ctx context.Context, bet *model.Bet) (int32, error) {
 	q := `INSERT INTO public.fb_bets 
 	(user_id, fight_id, bet)

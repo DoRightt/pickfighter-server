@@ -9,6 +9,10 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+// TxNewAuthCredentials creates new authentication credentials for a user in the 'fb_user_credentials' table.
+// If the transaction (tx) is provided, it executes the query within the transaction;
+// otherwise, it uses the repository's connection pool to execute the query.
+// The method returns an error if the database operation encounters any issues.
 func (r *AuthRepo) TxNewAuthCredentials(ctx context.Context, tx pgx.Tx, uc model.UserCredentials) error {
 	query := `INSERT INTO
 		public.fb_user_credentials(user_id, email, password_hash, salt, token, token_type, token_expire, active)
@@ -18,7 +22,7 @@ func (r *AuthRepo) TxNewAuthCredentials(ctx context.Context, tx pgx.Tx, uc model
 		uc.UserId, uc.Email, uc.Password,
 		uc.Salt, uc.Token, uc.TokenType, uc.TokenExpire,
 		uc.Active,
-	}
+	}	
 
 	if tx != nil {
 		if _, err := tx.Exec(ctx, query, args...); err != nil {
@@ -33,6 +37,10 @@ func (r *AuthRepo) TxNewAuthCredentials(ctx context.Context, tx pgx.Tx, uc model
 	return nil
 }
 
+// FindUserCredentials retrieves user credentials from the 'fb_user_credentials' table based on the specified request parameters.
+// It supports querying by email, token, or user ID. The method constructs a SQL query dynamically based on the provided parameters,
+// executes the query using the repository's connection pool, and returns the user credentials if found.
+// If the query parameters are invalid or no matching credentials are found, an error is returned.
 func (r *AuthRepo) FindUserCredentials(ctx context.Context, req model.UserCredentialsRequest) (model.UserCredentials, error) {
 	q := `SELECT user_id, email, password_hash, salt, token, token_type, token_expire, active
 		FROM public.fb_user_credentials`
@@ -63,6 +71,10 @@ func (r *AuthRepo) FindUserCredentials(ctx context.Context, req model.UserCreden
 	return c, nil
 }
 
+// ConfirmCredentialsToken updates the 'fb_user_credentials' table to confirm user credentials based on the provided user ID.
+// It sets the 'active' flag to true, updates the token and token type if provided, and sets the token expiration to NULL.
+// The method can be used in a transaction (if a non-nil transaction context is provided) or as a standalone operation.
+// If the transaction is successful, it confirms the user's credentials; otherwise, it returns an error.
 func (r *AuthRepo) ConfirmCredentialsToken(ctx context.Context, tx pgx.Tx, req model.UserCredentialsRequest) error {
 	q := `UPDATE public.fb_user_credentials
 		SET active = true, token = $2, token_type = $3, token_expire = NULL
@@ -91,6 +103,9 @@ func (r *AuthRepo) ConfirmCredentialsToken(ctx context.Context, tx pgx.Tx, req m
 	return nil
 }
 
+// ResetPassword updates the 'fb_user_credentials' table to reset a user's password based on the provided user credentials.
+// It sets the 'active' flag to false, updates the token, token type, and token expiration based on the provided credentials.
+// The method is designed to be used when a user requests a password reset.
 func (r *AuthRepo) ResetPassword(ctx context.Context, req *model.UserCredentials) error {
 	q := `UPDATE public.fb_user_credentials
 		SET active = false, token = $2, token_type = $3, token_expire = $4
@@ -103,6 +118,9 @@ func (r *AuthRepo) ResetPassword(ctx context.Context, req *model.UserCredentials
 	return nil
 }
 
+// UpdatePassword updates the password-related fields of a user in the 'fb_user_credentials' table.
+// It is typically used when a user changes their password. The method takes a user's credentials, including the user ID,
+// the new hashed password, and the salt used for hashing. The update is performed within a transaction (if provided).
 func (r *AuthRepo) UpdatePassword(ctx context.Context, tx pgx.Tx, req model.UserCredentials) error {
 	q := `UPDATE public.fb_user_credentials
 		SET password_hash = $2, salt = $3

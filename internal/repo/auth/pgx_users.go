@@ -15,6 +15,10 @@ const (
 	FROM public.fb_users AS u`
 )
 
+// FindUser searches for a user based on the provided UserRequest.
+// It uses the SearchUsers method with a UsersRequest containing a single user ID.
+// If a matching user is found, it returns the user details; otherwise, it returns pgx.ErrNoRows.
+// In case of an inconsistency where more than one result is found, it returns an error.
 func (r *AuthRepo) FindUser(ctx context.Context, req *model.UserRequest) (*model.User, error) {
 	results, err := r.SearchUsers(ctx, &model.UsersRequest{
 		UserIds: []int32{req.UserId},
@@ -32,6 +36,11 @@ func (r *AuthRepo) FindUser(ctx context.Context, req *model.UserRequest) (*model
 	return nil, pgx.ErrNoRows
 }
 
+// SearchUsers performs a search for users based on the provided UsersRequest.
+// It constructs a dynamic SQL query using the parameters from the UsersRequest.
+// The query is customized based on the filtering criteria such as user IDs, flags, and limits.
+// If an error occurs during the query execution, it is logged along with the SQL query.
+// The method returns a slice of User pointers representing the search results.
 func (r *AuthRepo) SearchUsers(ctx context.Context, req *model.UsersRequest) ([]*model.User, error) {
 	q := searchUsersQuery
 
@@ -78,6 +87,12 @@ func (r *AuthRepo) SearchUsers(ctx context.Context, req *model.UsersRequest) ([]
 	return res, nil
 }
 
+// performUsersRequestQuery constructs a list of SQL query conditions based on the provided UsersRequest.
+// It checks various filtering criteria, such as user IDs, names, emails, and creation timestamps,
+// and creates corresponding SQL conditions for each valid criterion.
+// The resulting list of conditions is intended to be used in a WHERE clause when querying user data.
+// The sanitized strings are used to prevent SQL injection.
+// The method returns a slice of strings representing the SQL conditions.
 func (r *AuthRepo) performUsersRequestQuery(req *model.UsersRequest) []string {
 	var args []string
 	if req == nil {
