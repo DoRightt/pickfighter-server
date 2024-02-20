@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.1.1
 
+## 20 Feb 2024
+
+### Added
+
+-   Tests for /pkg/httplib package
+-   Tests for /pkg/sigx package
+-   Tests for /pkg/utils package
+-   Tests for /pkg/cfg package
+
 ## Released [v0.1.0]
 
 ## 19 Feb 2024
