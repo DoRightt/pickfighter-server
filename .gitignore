@@ -3,6 +3,8 @@
 .env
 config.yaml
 
+coverage.out
+
 /pkg/logger/logs/*
 /data
 
