@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.1.1
 
+## 21 Feb 2024
+
+### Added
+
+-   Tests for /pkg/pgxs package
+
+### Changes
+
+-   Added main/test values for postgres field in config
+
 ## 20 Feb 2024
 
 ### Added
