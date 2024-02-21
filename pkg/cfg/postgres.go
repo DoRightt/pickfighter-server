@@ -9,12 +9,12 @@ import (
 // ViperPostgres returns the structure that returns pgxs.Cofnig based on values from viper
 func ViperPostgres() *pgxs.Config {
 	return &pgxs.Config{
-		DataDir:  viper.GetString("postgres.data_dir"),
-		DbUri:    viper.GetString("postgres.url"),
-		Host:     viper.GetString("postgres.host"),
-		Port:     viper.GetString("postgres.port"),
-		Name:     viper.GetString("postgres.name"),
-		User:     viper.GetString("postgres.user"),
-		Password: viper.GetString("postgres.password"),
+		DataDir:  viper.GetString("postgres.main.data_dir"),
+		DbUri:    viper.GetString("postgres.main.url"),
+		Host:     viper.GetString("postgres.main.host"),
+		Port:     viper.GetString("postgres.main.port"),
+		Name:     viper.GetString("postgres.main.name"),
+		User:     viper.GetString("postgres.main.user"),
+		Password: viper.GetString("postgres.main.password"),
 	}
 }

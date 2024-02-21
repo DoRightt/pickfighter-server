@@ -111,11 +111,11 @@ func setConfigDefaults() {
 	viper.SetDefault("auth.jwt.key", "")
 
 	// postgres
-	viper.SetDefault("postgres.url", os.Getenv("POSTGRES_URL"))
-	viper.SetDefault("postgres.host", "localhost")
-	viper.SetDefault("postgres.port", "5432")
-	viper.SetDefault("postgres.name", "postgres")
-	viper.SetDefault("postgres.user", "postgres")
+	viper.SetDefault("postgres.main.url", os.Getenv("POSTGRES_URL"))
+	viper.SetDefault("postgres.main.host", "localhost")
+	viper.SetDefault("postgres.main.port", "5432")
+	viper.SetDefault("postgres.main.name", "postgres")
+	viper.SetDefault("postgres.main.user", "postgres")
 
 	// email
 	viper.SetDefault("mail.sender_address", os.Getenv("SEND_FROM_ADDRESS"))
