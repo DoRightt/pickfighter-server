@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.1.1
 
+## 22 Feb 2024
+
+### Added
+
+-   Tests for /pkg/logger package
+-   Tests for /pkg/errors package
+
+### Changes
+
+-   Change unknown error code
+-   Change [User Credentials] eror message
+
 ## 21 Feb 2024
 
 ### Added
