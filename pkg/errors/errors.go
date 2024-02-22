@@ -91,7 +91,7 @@ func New(code int) *InternalError {
 	case UserCredentials:
 		return &InternalError{Code: code, Message: "[User Credentials]: Failed to get user credentials"}
 	case UserCredentialsToken:
-		return &InternalError{Code: code, Message: "[User Credentials]: User credentials with specified token does not exists"}
+		return &InternalError{Code: code, Message: "[User Credentials]: User credentials with specified token does not exist"}
 	case UserCredentialsIsNotActive:
 		return &InternalError{Code: code, Message: "[User Credentials]: User is not activated"}
 	case UserCredentialsReset:
@@ -130,7 +130,7 @@ func New(code int) *InternalError {
 		return &InternalError{Code: code, Message: "[Bets]: Failed to get bets count"}
 	default:
 		return &InternalError{
-			Code:    1001,
+			Code:    9999,
 			Message: "Unknown error",
 		}
 
