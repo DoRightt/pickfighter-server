@@ -13,3 +13,11 @@ func TestIfLoggedIn(t *testing.T) {
 func TestCheckIsAdmin(t *testing.T) {
 	// TODO
 }
+
+func TestAddService(t *testing.T) {
+	// TODO
+}
+
+func TestGracefulShutdown(t *testing.T) {
+	// TODO
+}
