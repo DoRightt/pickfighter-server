@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"projects/fb-server/pkg/pgxs"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,6 +18,7 @@ type ApiServiceMock struct {
 func (m *ApiServiceMock) Init(ctx context.Context) error           { return nil }
 func (m *ApiServiceMock) ApplyRoutes()                             {}
 func (m *ApiServiceMock) Shutdown(ctx context.Context, sig string) {}
+func (m *ApiServiceMock) GetRepo() pgxs.FbRepo                     { return nil }
 
 func TestHealthCheck(t *testing.T) {
 	apiHandler := &ApiHandler{

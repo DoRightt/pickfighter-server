@@ -29,7 +29,7 @@ func (r *AuthRepo) TxNewAuthCredentials(ctx context.Context, tx pgx.Tx, uc model
 			return r.DebugLogSqlErr(query, err)
 		}
 	} else {
-		if _, err := r.Pool.Exec(ctx, query, args...); err != nil {
+		if _, err := r.GetPool().Exec(ctx, query, args...); err != nil {
 			return r.DebugLogSqlErr(query, err)
 		}
 	}
@@ -59,7 +59,7 @@ func (r *AuthRepo) FindUserCredentials(ctx context.Context, req model.UserCreden
 	var currentToken, tokenType pgtype.Varchar
 	var tokenExpire pgtype.Int8
 
-	err := r.Pool.QueryRow(ctx, q).Scan(&c.UserId, &c.Email, &c.Password, &c.Salt, &currentToken, &tokenType, &tokenExpire, &c.Active)
+	err := r.GetPool().QueryRow(ctx, q).Scan(&c.UserId, &c.Email, &c.Password, &c.Salt, &currentToken, &tokenType, &tokenExpire, &c.Active)
 	if err != nil {
 		return c, r.DebugLogSqlErr(q, err)
 	}
@@ -95,7 +95,7 @@ func (r *AuthRepo) ConfirmCredentialsToken(ctx context.Context, tx pgx.Tx, req m
 			return r.DebugLogSqlErr(q, err)
 		}
 	} else {
-		if _, err := r.Pool.Exec(ctx, q, args...); err != nil {
+		if _, err := r.GetPool().Exec(ctx, q, args...); err != nil {
 			return r.DebugLogSqlErr(q, err)
 		}
 	}
@@ -111,7 +111,7 @@ func (r *AuthRepo) ResetPassword(ctx context.Context, req *model.UserCredentials
 		SET active = false, token = $2, token_type = $3, token_expire = $4
 		WHERE user_id = $1`
 
-	if _, err := r.Pool.Exec(ctx, q, req.UserId, req.Token, req.TokenType, req.TokenExpire); err != nil {
+	if _, err := r.GetPool().Exec(ctx, q, req.UserId, req.Token, req.TokenType, req.TokenExpire); err != nil {
 		return r.DebugLogSqlErr(q, err)
 	}
 
@@ -132,7 +132,7 @@ func (r *AuthRepo) UpdatePassword(ctx context.Context, tx pgx.Tx, req model.User
 			return r.DebugLogSqlErr(q, err)
 		}
 	} else {
-		if _, err := r.Pool.Exec(ctx, q, req.UserId,
+		if _, err := r.GetPool().Exec(ctx, q, req.UserId,
 			req.Password, req.Salt); err != nil {
 			return r.DebugLogSqlErr(q, err)
 		}

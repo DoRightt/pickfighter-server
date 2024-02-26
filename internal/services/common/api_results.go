@@ -23,7 +23,7 @@ func (s *service) AddResult(w http.ResponseWriter, r *http.Request) {
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
 	}
 
-	tx, err := s.Repo.Pool.BeginTx(ctx, pgx.TxOptions{
+	tx, err := s.Repo.GetPool().BeginTx(ctx, pgx.TxOptions{
 		IsoLevel: pgx.Serializable,
 	})
 	if err != nil {

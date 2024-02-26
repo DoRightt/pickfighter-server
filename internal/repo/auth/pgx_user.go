@@ -35,7 +35,7 @@ func (r *AuthRepo) TxCreateUser(ctx context.Context, tx pgx.Tx, u model.User) (i
 			return 0, r.DebugLogSqlErr(query, err)
 		}
 	} else {
-		if err := r.Pool.QueryRow(ctx, query, args...).Scan(&userId); err != nil {
+		if err := r.GetPool().QueryRow(ctx, query, args...).Scan(&userId); err != nil {
 			return 0, r.DebugLogSqlErr(query, err)
 		}
 	}

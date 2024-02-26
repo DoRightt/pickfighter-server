@@ -43,7 +43,7 @@ func TestNewPool(t *testing.T) {
 
 			if err == nil {
 				assert.NotNil(t, repo, "Repo should not be nil")
-				assert.NotNil(t, repo.Pool, "Pool should not be nil")
+				assert.NotNil(t, repo.GetPool(), "Pool should not be nil")
 			}
 		})
 	}

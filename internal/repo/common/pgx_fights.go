@@ -24,7 +24,7 @@ func (r *CommonRepo) TxCreateEventFight(ctx context.Context, tx pgx.Tx, f model.
 			return r.DebugLogSqlErr(q, err)
 		}
 	} else {
-		if _, err := r.Pool.Exec(ctx, q, args...); err != nil {
+		if _, err := r.GetPool().Exec(ctx, q, args...); err != nil {
 			return r.DebugLogSqlErr(q, err)
 		}
 	}
@@ -49,7 +49,7 @@ func (r *CommonRepo) SetFightResult(ctx context.Context, tx pgx.Tx, fr *model.Fi
 			return r.DebugLogSqlErr(q, err)
 		}
 	} else {
-		if _, err := r.Pool.Exec(ctx, q, args...); err != nil {
+		if _, err := r.GetPool().Exec(ctx, q, args...); err != nil {
 			return r.DebugLogSqlErr(q, err)
 		}
 	}
