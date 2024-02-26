@@ -4,12 +4,41 @@ import (
 	"context"
 	"log"
 	"path/filepath"
+	"projects/fb-server/pkg/cfg"
 	"projects/fb-server/pkg/logger"
+	"projects/fb-server/pkg/pgxs"
+	mock_pgxs "projects/fb-server/pkg/pgxs/mocks"
 	"testing"
 
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
+
+type mockService struct {
+	*ApiHandler
+
+	Repo *pgxs.Repo `json:"-" yaml:"-"`
+}
+
+func (m mockService) Init(ctx context.Context) error {
+	return nil
+}
+func (m mockService) GracefulShutdown()                      {}
+func (m mockService) ApplyRoutes()                           {}
+func (m mockService) Shutdown(ctx context.Context, s string) {}
+
+func NewMock(h *ApiHandler) ApiService {
+	db, err := pgxs.NewPool(context.Background(), logger.NewSugared(), cfg.ViperPostgres())
+	if err != nil {
+		log.Fatalf("Error connecting to DB: %s\n", err)
+	}
+
+	return mockService{
+		ApiHandler: h,
+		Repo:       db,
+	}
+}
 
 func initTestConfig() {
 	viper.SetConfigName("config")
@@ -70,13 +99,32 @@ func TestInit(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			tc.initSettings()
 			h := New(logger.NewSugared(), tc.name)
-			err := h.Init(tc.context)
+
+			ctl := gomock.NewController(t)
+			defer ctl.Finish()
+
+			repo := mock_pgxs.NewMockFbRepo(ctl)
+			err := h.Init(repo)
 
 			tc.testFunc(h, err)
+			viper.Reset()
 		})
 	}
 }
 
 func TestRun(t *testing.T) {
+	// TODO
+}
+
+func TestAddService(t *testing.T) {
+	apiHandler := New(logger.NewSugared(), "TestHandler")
+	testService := NewMock(apiHandler)
+
+	apiHandler.AddService("TestService", testService)
+
+	assert.Equal(t, testService, apiHandler.Services["TestService"], "Service should be added correctly")
+}
+
+func TestGracefulShutdown(t *testing.T) {
 	// TODO
 }
