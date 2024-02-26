@@ -164,3 +164,22 @@ func TestDeleteRecords(t *testing.T) {
 		t.Fatalf("DeleteRecords did not delete records from the table")
 	}
 }
+
+func TestGetLogger(t *testing.T) {
+	config := &Config{
+		DataDir:  viper.GetString("postgres.main.data_dir"),
+		DbUri:    viper.GetString("postgres.main.url"),
+		Host:     viper.GetString("postgres.main.host"),
+		Port:     viper.GetString("postgres.main.port"),
+		Name:     viper.GetString("postgres.main.name"),
+		User:     viper.GetString("postgres.main.user"),
+		Password: viper.GetString("postgres.main.password"),
+	}
+
+	logger := logger.NewSugared()
+
+	db, err := NewPool(context.Background(), logger, config)
+	assert.NoError(t, err, "Expected no error from NewPool")
+
+	assert.NotNil(t, db.GetLogger(), "Expected logger to be not nil")
+}
