@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"os"
-	"projects/fb-server/pkg/cfg"
 	"projects/fb-server/pkg/pgxs"
 	"sync"
 
@@ -23,7 +22,7 @@ type ApiHandler struct {
 	ServiceName string
 	Router      *mux.Router
 	Logger      *zap.SugaredLogger
-	Repo        *pgxs.Repo
+	Repo        pgxs.FbRepo
 
 	Services map[string]ApiService `json:"-" yaml:"-"`
 }
@@ -43,14 +42,8 @@ func New(lg *zap.SugaredLogger, name string) *ApiHandler {
 // Init initializes the ApiHandler by establishing a connection to PostgreSQL using the special configuration.
 // It also loads JWT certificates required for authentication.
 // If any error occurs during initialization, it is logged, and the error is returned.
-func (h *ApiHandler) Init(ctx context.Context) error {
-	db, err := pgxs.NewPool(ctx, h.Logger, cfg.ViperPostgres())
-	if err != nil {
-		h.Logger.Errorf("Unable to start postgresql connection: %s", err)
-		return err
-	}
-
-	h.Repo = db
+func (h *ApiHandler) Init(repo pgxs.FbRepo) error {
+	h.Repo = repo
 
 	if err := h.loadJwtCerts(); err != nil {
 		h.Logger.Errorf("Unable to load JWT certificates: %s", err)
@@ -74,6 +67,11 @@ func (h *ApiHandler) Run(ctx context.Context) error {
 	}
 
 	return h.RunHTTPServer(ctx)
+}
+
+// GetRepo returns the repository instance associated with the ApiHandler.
+func (h *ApiHandler) GetRepo() pgxs.FbRepo {
+	return h.Repo
 }
 
 // AddService adds an instance of the ApiService to the ApiHandler's services map.
