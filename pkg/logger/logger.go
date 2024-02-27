@@ -10,6 +10,22 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
+type FbLogger interface {
+	Debug(args ...interface{})
+	Debugf(template string, args ...interface{})
+	Debugw(msg string, keysAndValues ...interface{})
+	Info(args ...interface{})
+	Infof(template string, args ...interface{})
+	Infow(msg string, keysAndValues ...interface{})
+	Warn(args ...interface{})
+	Warnf(template string, args ...interface{})
+	Error(args ...interface{})
+	Errorf(template string, args ...interface{})
+	Fatal(args ...interface{})
+	Fatalf(template string, args ...interface{})
+	Named(name string) *zap.SugaredLogger
+}
+
 var logger *zap.Logger
 
 // Initialize initializes logger
@@ -50,7 +66,6 @@ func Initialize(logLevel string, logFilePath string) error {
 func Get() *zap.Logger {
 	return logger
 }
-
 
 // New creates a new instance of Zap logger with configuration based on application settings.
 // It checks if the 'log_json' configuration option is set to true, and if so, configures the logger
