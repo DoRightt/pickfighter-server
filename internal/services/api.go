@@ -2,12 +2,15 @@ package services
 
 import (
 	"context"
+	"net/http"
 	"os"
+	"projects/fb-server/pkg/logger"
+	"projects/fb-server/pkg/model"
 	"projects/fb-server/pkg/pgxs"
 	"sync"
 
 	"github.com/gorilla/mux"
-	"go.uber.org/zap"
+	"github.com/lestrrat-go/jwx/v2/jwt"
 )
 
 // ApiService defines the interface that any API service must implement.
@@ -17,18 +20,34 @@ type ApiService interface {
 	Shutdown(ctx context.Context, sig string)
 }
 
+// ApiHandlerInterface defines the main app interface.
+type AppInterface interface {
+	Init(repo pgxs.FbRepo) error
+	Run(ctx context.Context) error
+	GracefulShutdown(ctx context.Context, sig string)
+	AddService(name string, srv ApiService)
+	RunHTTPServer(ctx context.Context) error
+	ServeHTTP(w http.ResponseWriter, r *http.Request)
+	loadJwtCerts() error
+	verifyJWT(jwtRawValue string) (jwt.Token, error)
+	IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc
+	CheckIsAdmin(next http.HandlerFunc) http.HandlerFunc
+	HealthCheck(w http.ResponseWriter, r *http.Request)
+	HandleEmailEvent(ctx context.Context, data *model.EmailData)
+}
+
 // ApiHandler represents the main handler for the API. It holds information about router, logger, repository, and services.
 type ApiHandler struct {
 	ServiceName string
 	Router      *mux.Router
-	Logger      *zap.SugaredLogger
+	Logger      logger.FbLogger
 	Repo        pgxs.FbRepo
 
 	Services map[string]ApiService `json:"-" yaml:"-"`
 }
 
 // New creates a new instance of ApiHandler with the provided logger, service name, and initializes the router and services.
-func New(lg *zap.SugaredLogger, name string) *ApiHandler {
+func New(lg logger.FbLogger, name string) *ApiHandler {
 	h := &ApiHandler{
 		ServiceName: name,
 		Logger:      lg,
@@ -67,11 +86,6 @@ func (h *ApiHandler) Run(ctx context.Context) error {
 	}
 
 	return h.RunHTTPServer(ctx)
-}
-
-// GetRepo returns the repository instance associated with the ApiHandler.
-func (h *ApiHandler) GetRepo() pgxs.FbRepo {
-	return h.Repo
 }
 
 // AddService adds an instance of the ApiService to the ApiHandler's services map.

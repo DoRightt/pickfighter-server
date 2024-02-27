@@ -3,15 +3,15 @@ package pgxs
 import (
 	"context"
 	"fmt"
+	"projects/fb-server/pkg/logger"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"go.uber.org/zap"
 )
 
 // NewPool creates a new Repo with a configured PostgreSQL connection pool.
 // It requires a context, a SugaredLogger, and a database configuration (Config).
 // If the configuration is nil, it returns an error.
-func NewPool(ctx context.Context, lg *zap.SugaredLogger, conf *Config) (*Repo, error) {
+func NewPool(ctx context.Context, lg logger.FbLogger, conf *Config) (*Repo, error) {
 	if conf == nil {
 		return nil, ErrEmptyConfig
 	}
