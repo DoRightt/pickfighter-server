@@ -86,7 +86,7 @@ func (h *ApiHandler) IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc {
 // CheckIsAdmin is a middleware that verifies if the user is logged in as an administrator.
 // It checks the "admin" claim in the JWT (JSON Web Token) stored in the request cookie.
 // If the user is an administrator, the request continues; otherwise, it responds with an error.
-func (h *ApiHandler) CheckIsAdmin(next http.HandlerFunc) http.HandlerFunc {
+func (h *ApiHandler) CheckIsAdmin(fn http.HandlerFunc) http.HandlerFunc {
 	// TODO mb claim should set in createJWTToken method
 	return h.IfLoggedIn(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
@@ -105,14 +105,10 @@ func (h *ApiHandler) CheckIsAdmin(next http.HandlerFunc) http.HandlerFunc {
 				ctx = context.WithValue(ctx, model.ContextFlags, int(flag))
 			}
 
-			ctx = context.WithValue(ctx, model.ContextJWTPointer, token)
-
 		} else {
 			h.Logger.Debugf("Failed to get JWT from context")
 		}
 
-		r = r.WithContext(ctx)
-
-		next(w, r.WithContext(ctx))
+		fn(w, r.WithContext(ctx))
 	})
 }
