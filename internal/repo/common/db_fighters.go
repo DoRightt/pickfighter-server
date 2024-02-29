@@ -21,7 +21,7 @@ func (r *CommonRepo) SearchFightersCount(ctx context.Context, req *model.Fighter
 	}
 
 	var count int32
-	if err := r.Pool.QueryRow(ctx, q).Scan(&count); err != nil {
+	if err := r.GetPool().QueryRow(ctx, q).Scan(&count); err != nil {
 		return 0, r.DebugLogSqlErr(q, err)
 	}
 
@@ -51,7 +51,7 @@ func (r *CommonRepo) SearchFighters(ctx context.Context, req *model.FightersRequ
 		q += strings.Join(args, ` AND `)
 	}
 
-	rows, err := r.Pool.Query(ctx, q)
+	rows, err := r.GetPool().Query(ctx, q)
 	if err != nil {
 		return nil, r.DebugLogSqlErr(q, err)
 	}

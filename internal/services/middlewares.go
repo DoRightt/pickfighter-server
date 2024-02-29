@@ -67,7 +67,7 @@ func (h *ApiHandler) IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc {
 		if valid {
 			ctx = context.WithValue(ctx, model.ContextUserId, int32(uid))
 		}
-		
+
 		// TODO admin claim?
 		// rootClaim, onBoard := token.Get(string(model.ContextClaim))
 		// if onBoard {
@@ -86,35 +86,29 @@ func (h *ApiHandler) IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc {
 // CheckIsAdmin is a middleware that verifies if the user is logged in as an administrator.
 // It checks the "admin" claim in the JWT (JSON Web Token) stored in the request cookie.
 // If the user is an administrator, the request continues; otherwise, it responds with an error.
-func (h *ApiHandler) CheckIsAdmin(next http.HandlerFunc) http.HandlerFunc {
+func (h *ApiHandler) CheckIsAdmin(fn http.HandlerFunc) http.HandlerFunc {
 	// TODO mb claim should set in createJWTToken method
 	return h.IfLoggedIn(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 
-		cookie, err := r.Cookie(httplib.CookieName)
-		if err == nil {
-			token, err := h.verifyJWT(cookie.Value)
-			if err != nil {
-				h.Logger.Debugf("Failed to parse JWT token: %s", err)
-			} else {
-				f, ok := token.Get(string(model.ContextFlags))
-				flag, valid := f.(float64)
-				if !ok || int(flag) != 1 {
-					httplib.ErrorResponseJSON(w, http.StatusMethodNotAllowed, http.StatusMethodNotAllowed,
-						fmt.Errorf("action is allowed only for admins"))
-					return
-				}
-
-				if valid {
-					ctx = context.WithValue(ctx, model.ContextFlags, int(flag))
-				}
-
-				ctx = context.WithValue(ctx, model.ContextJWTPointer, token)
+		token, ok := ctx.Value(model.ContextJWTPointer).(jwt.Token)
+		if ok {
+			f, ok := token.Get(string(model.ContextFlags))
+			flag, valid := f.(float64)
+			if !ok || int(flag) != 1 {
+				httplib.ErrorResponseJSON(w, http.StatusMethodNotAllowed, http.StatusMethodNotAllowed,
+					fmt.Errorf("action is allowed only for admins"))
+				return
 			}
 
-			r = r.WithContext(ctx)
+			if valid {
+				ctx = context.WithValue(ctx, model.ContextFlags, int(flag))
+			}
+
+		} else {
+			h.Logger.Debugf("Failed to get JWT from context")
 		}
 
-		next(w, r.WithContext(ctx))
+		fn(w, r.WithContext(ctx))
 	})
 }

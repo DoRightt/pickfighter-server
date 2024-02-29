@@ -13,13 +13,12 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
 var (
 	cfgPath string
-	logger  *zap.SugaredLogger
+	logger  lg.FbLogger
 )
 
 // rootCmd is the main Cobra command representing the root of the CLI application.
@@ -45,7 +44,6 @@ func Execute() {
 		logger.Fatal(err.Error())
 	}
 }
-
 
 func init() {
 	if err := godotenv.Load(".env"); err != nil {

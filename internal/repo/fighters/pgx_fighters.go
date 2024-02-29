@@ -17,7 +17,7 @@ func (r *FighterRepo) FindFighter(ctx context.Context, req model.Fighter) (int32
 	q := `SELECT fighter_id FROM fb_fighters WHERE name = $1 AND debut_timestamp = $2`
 	var fighterId int32
 
-	err := r.Pool.QueryRow(ctx, q, req.Name, req.DebutTimestamp).Scan(&fighterId)
+	err := r.GetPool().QueryRow(ctx, q, req.Name, req.DebutTimestamp).Scan(&fighterId)
 	if err != nil {
 		return fighterId, err
 	}
@@ -55,7 +55,7 @@ func (r *FighterRepo) CreateNewFighter(ctx context.Context, tx pgx.Tx, fighter m
 			return 0, r.DebugLogSqlErr(qData, err)
 		}
 	} else {
-		if err := r.Pool.QueryRow(ctx, qData, args...).Scan(&fighterId); err != nil {
+		if err := r.GetPool().QueryRow(ctx, qData, args...).Scan(&fighterId); err != nil {
 			return 0, r.DebugLogSqlErr(qData, err)
 		}
 	}
@@ -91,7 +91,7 @@ func (r *FighterRepo) CreateNewFighterStats(ctx context.Context, tx pgx.Tx, stat
 			return err
 		}
 	} else {
-		_, err := r.Pool.Exec(ctx, qStats, args...)
+		_, err := r.GetPool().Exec(ctx, qStats, args...)
 		if err != nil {
 			return err
 		}
@@ -132,7 +132,7 @@ func (r *FighterRepo) UpdateFighter(ctx context.Context, tx pgx.Tx, fighter mode
 			return 0, r.DebugLogSqlErr(qData, err)
 		}
 	} else {
-		if err := r.Pool.QueryRow(ctx, qData, args...).Scan(&fighterId); err != nil {
+		if err := r.GetPool().QueryRow(ctx, qData, args...).Scan(&fighterId); err != nil {
 			return 0, r.DebugLogSqlErr(qData, err)
 		}
 	}
@@ -169,7 +169,7 @@ func (r *FighterRepo) UpdateFighterStats(ctx context.Context, tx pgx.Tx, stats m
 			return err
 		}
 	} else {
-		_, err := r.Pool.Exec(ctx, qStats, args...)
+		_, err := r.GetPool().Exec(ctx, qStats, args...)
 		if err != nil {
 			return err
 		}

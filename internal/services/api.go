@@ -2,13 +2,15 @@ package services
 
 import (
 	"context"
+	"net/http"
 	"os"
-	"projects/fb-server/pkg/cfg"
+	"projects/fb-server/pkg/logger"
+	"projects/fb-server/pkg/model"
 	"projects/fb-server/pkg/pgxs"
 	"sync"
 
 	"github.com/gorilla/mux"
-	"go.uber.org/zap"
+	"github.com/lestrrat-go/jwx/v2/jwt"
 )
 
 // ApiService defines the interface that any API service must implement.
@@ -18,18 +20,34 @@ type ApiService interface {
 	Shutdown(ctx context.Context, sig string)
 }
 
+// ApiHandlerInterface defines the main app interface.
+type AppInterface interface {
+	Init(repo pgxs.FbRepo) error
+	Run(ctx context.Context) error
+	GracefulShutdown(ctx context.Context, sig string)
+	AddService(name string, srv ApiService)
+	RunHTTPServer(ctx context.Context) error
+	ServeHTTP(w http.ResponseWriter, r *http.Request)
+	loadJwtCerts() error
+	verifyJWT(jwtRawValue string) (jwt.Token, error)
+	IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc
+	CheckIsAdmin(next http.HandlerFunc) http.HandlerFunc
+	HealthCheck(w http.ResponseWriter, r *http.Request)
+	HandleEmailEvent(ctx context.Context, data *model.EmailData)
+}
+
 // ApiHandler represents the main handler for the API. It holds information about router, logger, repository, and services.
 type ApiHandler struct {
 	ServiceName string
 	Router      *mux.Router
-	Logger      *zap.SugaredLogger
-	Repo        *pgxs.Repo
+	Logger      logger.FbLogger
+	Repo        pgxs.FbRepo
 
 	Services map[string]ApiService `json:"-" yaml:"-"`
 }
 
 // New creates a new instance of ApiHandler with the provided logger, service name, and initializes the router and services.
-func New(lg *zap.SugaredLogger, name string) *ApiHandler {
+func New(lg logger.FbLogger, name string) *ApiHandler {
 	h := &ApiHandler{
 		ServiceName: name,
 		Logger:      lg,
@@ -43,14 +61,8 @@ func New(lg *zap.SugaredLogger, name string) *ApiHandler {
 // Init initializes the ApiHandler by establishing a connection to PostgreSQL using the special configuration.
 // It also loads JWT certificates required for authentication.
 // If any error occurs during initialization, it is logged, and the error is returned.
-func (h *ApiHandler) Init(ctx context.Context) error {
-	db, err := pgxs.NewPool(ctx, h.Logger, cfg.ViperPostgres())
-	if err != nil {
-		h.Logger.Errorf("Unable to start postgresql connection: %s", err)
-		return err
-	}
-
-	h.Repo = db
+func (h *ApiHandler) Init(repo pgxs.FbRepo) error {
+	h.Repo = repo
 
 	if err := h.loadJwtCerts(); err != nil {
 		h.Logger.Errorf("Unable to load JWT certificates: %s", err)

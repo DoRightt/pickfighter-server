@@ -10,6 +10,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var ErrAuthCertsPathRequired = fmt.Errorf("authentication certificates path is required")
+
 // loadJwtCerts loads the JWT certificates required for authentication from the specified paths.
 // It expects paths to the X.509 certificate (certPath) and private key (keyPath) in the configuration.
 // The loaded keypair is used for signing JWT tokens, and the public key is used for token verification.
@@ -22,7 +24,7 @@ func (h *ApiHandler) loadJwtCerts() error {
 	hasRsaKeys := len(certPath) > 0 && len(keyPath) > 0
 
 	if !hasRsaKeys {
-		return fmt.Errorf("authentication certificates path is required")
+		return ErrAuthCertsPathRequired
 	}
 
 	cert, err := tls.LoadX509KeyPair(certPath, keyPath)

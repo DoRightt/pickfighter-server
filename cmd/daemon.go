@@ -7,7 +7,9 @@ import (
 	"projects/fb-server/internal/services"
 	"projects/fb-server/internal/services/auth"
 	"projects/fb-server/internal/services/common"
+	"projects/fb-server/pkg/cfg"
 	"projects/fb-server/pkg/model"
+	"projects/fb-server/pkg/pgxs"
 	"projects/fb-server/pkg/sigx"
 	"strings"
 	"time"
@@ -39,8 +41,8 @@ var serveCmd = &cobra.Command{
 	Short:            "Run HTTP Server",
 	Long:             ``,
 	TraverseChildren: true,
-	Args: validateServerArgs,
-	Run: runServe,
+	Args:             validateServerArgs,
+	Run:              runServe,
 }
 
 var stopCmd = &cobra.Command{}
@@ -89,7 +91,14 @@ func runServe(cmd *cobra.Command, args []string) {
 		app.GracefulShutdown(ctx, signal.String())
 	})
 
-	if err := app.Init(ctx); err != nil {
+	db, err := pgxs.NewPool(ctx, app.Logger, cfg.ViperPostgres())
+
+	if err != nil {
+		app.Logger.Errorf("Unable to start postgresql connection: %s", err)
+		app.GracefulShutdown(ctx, err.Error())
+	}
+
+	if err := app.Init(db); err != nil {
 		app.GracefulShutdown(ctx, err.Error())
 	}
 

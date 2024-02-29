@@ -57,10 +57,10 @@ func (r *AuthRepo) SearchUsers(ctx context.Context, req *model.UsersRequest) ([]
 		q += fmt.Sprintf(` LIMIT %d OFFSET %d`, req.Limit, req.Offset)
 	}
 
-	rows, err := r.Pool.Query(ctx, q)
+	rows, err := r.GetPool().Query(ctx, q)
 	if err != nil {
 		if err != pgx.ErrNoRows {
-			r.Logger.Debugf("query: \n%s", q)
+			r.GetLogger().Debugf("query: \n%s", q)
 		}
 		return nil, err
 	}

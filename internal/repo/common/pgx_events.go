@@ -25,7 +25,7 @@ func (r *CommonRepo) TxCreateEvent(ctx context.Context, tx pgx.Tx, e *model.Even
 			return 0, r.DebugLogSqlErr(q, err)
 		}
 	} else {
-		if err := r.Pool.QueryRow(ctx, q, args...).Scan(&eventId); err != nil {
+		if err := r.GetPool().QueryRow(ctx, q, args...).Scan(&eventId); err != nil {
 			return 0, r.DebugLogSqlErr(q, err)
 		}
 	}
@@ -54,7 +54,7 @@ func (r *CommonRepo) SearchEventsCount(ctx context.Context) (int32, error) {
 	SELECT COUNT(*) FROM filtered_events`
 
 	var count int32
-	if err := r.Pool.QueryRow(ctx, q, limit).Scan(&count); err != nil {
+	if err := r.GetPool().QueryRow(ctx, q, limit).Scan(&count); err != nil {
 		return 0, r.DebugLogSqlErr(q, err)
 	}
 
@@ -106,7 +106,7 @@ func (r *CommonRepo) SearchEvents(ctx context.Context) ([]*model.FullEventRespon
 
 	var events []*model.FullEventResponse
 
-	rows, err := r.Pool.Query(ctx, q, limit)
+	rows, err := r.GetPool().Query(ctx, q, limit)
 	if err != nil {
 		return nil, r.DebugLogSqlErr(q, err)
 	}
@@ -180,7 +180,7 @@ func (r *CommonRepo) GetEventId(ctx context.Context, tx pgx.Tx, fightId int32) (
 			return -1, r.DebugLogSqlErr(q, err)
 		}
 	} else {
-		if err := r.Pool.QueryRow(ctx, q, fightId).Scan(&eventId); err != nil {
+		if err := r.GetPool().QueryRow(ctx, q, fightId).Scan(&eventId); err != nil {
 			return -1, r.DebugLogSqlErr(q, err)
 		}
 	}

@@ -11,7 +11,7 @@ func (r *CommonRepo) SearchBetsCount(ctx context.Context, userId int32) (int32, 
 	q := `SELECT COUNT(*) FROM public.fb_bets WHERE user_id = $1`
 
 	var count int32
-	if err := r.Pool.QueryRow(ctx, q, userId).Scan(&count); err != nil {
+	if err := r.GetPool().QueryRow(ctx, q, userId).Scan(&count); err != nil {
 		return 0, r.DebugLogSqlErr(q, err)
 	}
 
@@ -26,7 +26,7 @@ func (r *CommonRepo) SearchBets(ctx context.Context, userId int32) ([]*model.Bet
 	FROM public.fb_bets
 	WHERE user_id = $1`
 
-	rows, err := r.Pool.Query(ctx, q, userId)
+	rows, err := r.GetPool().Query(ctx, q, userId)
 	if err != nil {
 		return nil, r.DebugLogSqlErr(q, err)
 	}
@@ -56,7 +56,7 @@ func (r *CommonRepo) CreateBet(ctx context.Context, bet *model.Bet) (int32, erro
 	RETURNING bet_id`
 
 	var betId int32
-	if err := r.Pool.QueryRow(ctx, q, bet.UserId, bet.FightId, bet.FighterId).Scan(&betId); err != nil {
+	if err := r.GetPool().QueryRow(ctx, q, bet.UserId, bet.FightId, bet.FighterId).Scan(&betId); err != nil {
 		return 0, r.DebugLogSqlErr(q, err)
 	}
 

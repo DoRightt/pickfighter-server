@@ -8,6 +8,17 @@ import (
 	"go.uber.org/zap"
 )
 
+type FbRepo interface {
+	GetPoolConfig() (*pgxpool.Config, error)
+	GracefulShutdown()
+	DeleteRecords(ctx context.Context, tableName string) error
+	ConnectDBPool(ctx context.Context) (*pgxpool.Pool, error)
+	DebugLogSqlErr(q string, err error) error
+	SanitizeString(s string) string
+	GetPool() *pgxpool.Pool
+	GetLogger() *zap.SugaredLogger
+}
+
 // Config is structure that stores data for connecting to a database
 type Config struct {
 	DataDir  string `json:"data_dir" yaml:"data_dir"`
@@ -55,6 +66,16 @@ func (db *Repo) GetPoolConfig() (*pgxpool.Config, error) {
 	return c, nil
 }
 
+// GetPool returns the pgxpool.Pool stored in the Repo.
+func (db *Repo) GetPool() *pgxpool.Pool {
+	return db.Pool
+}
+
+// GetLogger returns the zap.SugaredLogger stored in the Repo.
+func (db *Repo) GetLogger() *zap.SugaredLogger {
+	return db.Logger
+}
+
 // GracefulShutdown checks whether the value is in the pool and if so, closes it and logs the message
 func (db *Repo) GracefulShutdown() {
 	if db.Pool != nil {
@@ -65,6 +86,9 @@ func (db *Repo) GracefulShutdown() {
 
 // DeleteRecords deletes records from the table whose name is passed as an argument
 func (db *Repo) DeleteRecords(ctx context.Context, tableName string) error {
+	if len(tableName) == 0 {
+		return fmt.Errorf("pgxs: table name is empty")
+	}
 	query := fmt.Sprintf("DELETE FROM %s.%s", "public", tableName)
 
 	_, err := db.Pool.Exec(ctx, query)
