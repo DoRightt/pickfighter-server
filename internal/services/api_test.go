@@ -1,14 +1,20 @@
-package services
+package services_test
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"path/filepath"
+	"projects/fb-server/internal/services"
+	mock_services "projects/fb-server/internal/services/mocks"
 	"projects/fb-server/pkg/cfg"
 	"projects/fb-server/pkg/logger"
+	mock_logger "projects/fb-server/pkg/logger/mocks"
+	"projects/fb-server/pkg/model"
 	"projects/fb-server/pkg/pgxs"
 	mock_pgxs "projects/fb-server/pkg/pgxs/mocks"
 	"testing"
+	"time"
 
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -16,7 +22,7 @@ import (
 )
 
 type mockService struct {
-	*ApiHandler
+	*services.ApiHandler
 
 	Repo *pgxs.Repo `json:"-" yaml:"-"`
 }
@@ -28,7 +34,7 @@ func (m mockService) GracefulShutdown()                      {}
 func (m mockService) ApplyRoutes()                           {}
 func (m mockService) Shutdown(ctx context.Context, s string) {}
 
-func NewMock(h *ApiHandler) ApiService {
+func NewMock(h *services.ApiHandler) services.ApiService {
 	db, err := pgxs.NewPool(context.Background(), logger.NewSugared(), cfg.ViperPostgres())
 	if err != nil {
 		log.Fatalf("Error connecting to DB: %s\n", err)
@@ -53,7 +59,7 @@ func initTestConfig() {
 
 func TestNew(t *testing.T) {
 	name := "TestName"
-	h := New(logger.NewSugared(), name)
+	h := services.New(logger.NewSugared(), name)
 
 	assert.NotNil(t, h, "Handler should not be nil")
 	assert.Equal(t, h.ServiceName, name, "Service name should be Test")
@@ -68,7 +74,7 @@ func TestInit(t *testing.T) {
 		name         string
 		context      context.Context
 		initSettings func()
-		testFunc     func(h *ApiHandler, err error)
+		testFunc     func(h *services.ApiHandler, err error)
 	}{
 		{
 			name:    "OK",
@@ -77,7 +83,7 @@ func TestInit(t *testing.T) {
 				viper.Set("auth.jwt.cert", filepath.Join("..", "..", certPath))
 				viper.Set("auth.jwt.key", filepath.Join("..", "..", keyPath))
 			},
-			testFunc: func(h *ApiHandler, err error) {
+			testFunc: func(h *services.ApiHandler, err error) {
 				assert.NoError(t, err, "Error should be nil")
 				assert.NotNil(t, h.Repo, "Repo should not be nil")
 			},
@@ -89,7 +95,7 @@ func TestInit(t *testing.T) {
 				viper.Set("auth.jwt.cert", certPath)
 				viper.Set("auth.jwt.key", keyPath)
 			},
-			testFunc: func(h *ApiHandler, err error) {
+			testFunc: func(h *services.ApiHandler, err error) {
 				assert.NotNil(t, err, "Must be error")
 			},
 		},
@@ -98,7 +104,7 @@ func TestInit(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			tc.initSettings()
-			h := New(logger.NewSugared(), tc.name)
+			h := services.New(logger.NewSugared(), tc.name)
 
 			ctl := gomock.NewController(t)
 			defer ctl.Finish()
@@ -113,11 +119,34 @@ func TestInit(t *testing.T) {
 }
 
 func TestRun(t *testing.T) {
-	// TODO
+	ctrl := gomock.NewController(t)
+
+	service := mock_services.NewMockApiService(ctrl)
+	app := &services.ApiHandler{
+		Services: map[string]services.ApiService{"mockService": service},
+		Logger:   logger.NewSugared(),
+	}
+	ctx := context.Background()
+
+	app.AddService(model.AuthService, service)
+
+	service.EXPECT().Init(ctx).AnyTimes().Return(nil)
+
+	var panicErr error
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				panicErr = fmt.Errorf("Panic: %v", r)
+			}
+		}()
+		app.Run(ctx)
+	}()
+
+	assert.NoError(t, panicErr)
 }
 
 func TestAddService(t *testing.T) {
-	apiHandler := New(logger.NewSugared(), "TestHandler")
+	apiHandler := services.New(logger.NewSugared(), "TestHandler")
 	testService := NewMock(apiHandler)
 
 	apiHandler.AddService("TestService", testService)
@@ -126,5 +155,36 @@ func TestAddService(t *testing.T) {
 }
 
 func TestGracefulShutdown(t *testing.T) {
-	// TODO
+	ctl := gomock.NewController(t)
+	defer ctl.Finish()
+
+	mockRepo := mock_pgxs.NewMockFbRepo(ctl)
+	mockLogger := mock_logger.NewMockFbLogger(ctl)
+
+	app := &services.ApiHandler{
+		Repo:   mockRepo,
+		Logger: mockLogger,
+	}
+
+	mockRepo.EXPECT().GracefulShutdown()
+	mockLogger.EXPECT().Warnf(gomock.Any(), gomock.Any())
+
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+
+	var panicErr error
+
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				panicErr = fmt.Errorf("Panic: %v", r)
+			}
+		}()
+		app.GracefulShutdown(ctx, "SIGTERM")
+	}()
+
+	time.Sleep(500 * time.Millisecond)
+
+	assert.NoError(t, ctx.Err())
+	assert.Error(t, panicErr)
 }
