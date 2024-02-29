@@ -6,6 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.1.1
 
+## 29 Feb 2024
+
+### Added
+
+-   Tests for /internal/services package
+-   Mocks for services package
+-   Mocks for logger package
+-   Mocks for pgxs package
+-   Repo interface
+-   Logger interface
+-   Api interface
+-   Added shell scripts for testing and check coverage
+
+### Changes
+-   CheckIsAdmin middleware was cleared of unnecessary code
+
 ## 23 Feb 2024
 
 ### Added
