@@ -17,9 +17,73 @@ import (
 	pgxs "projects/fb-server/pkg/pgxs"
 	reflect "reflect"
 
+	mux "github.com/gorilla/mux"
 	jwt "github.com/lestrrat-go/jwx/v2/jwt"
 	gomock "go.uber.org/mock/gomock"
 )
+
+// MockFbRouter is a mock of FbRouter interface.
+type MockFbRouter struct {
+	ctrl     *gomock.Controller
+	recorder *MockFbRouterMockRecorder
+}
+
+// MockFbRouterMockRecorder is the mock recorder for MockFbRouter.
+type MockFbRouterMockRecorder struct {
+	mock *MockFbRouter
+}
+
+// NewMockFbRouter creates a new mock instance.
+func NewMockFbRouter(ctrl *gomock.Controller) *MockFbRouter {
+	mock := &MockFbRouter{ctrl: ctrl}
+	mock.recorder = &MockFbRouterMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockFbRouter) EXPECT() *MockFbRouterMockRecorder {
+	return m.recorder
+}
+
+// Handle mocks base method.
+func (m *MockFbRouter) Handle(path string, handler http.Handler) *mux.Route {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Handle", path, handler)
+	ret0, _ := ret[0].(*mux.Route)
+	return ret0
+}
+
+// Handle indicates an expected call of Handle.
+func (mr *MockFbRouterMockRecorder) Handle(path, handler any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Handle", reflect.TypeOf((*MockFbRouter)(nil).Handle), path, handler)
+}
+
+// HandleFunc mocks base method.
+func (m *MockFbRouter) HandleFunc(path string, f func(http.ResponseWriter, *http.Request)) *mux.Route {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "HandleFunc", path, f)
+	ret0, _ := ret[0].(*mux.Route)
+	return ret0
+}
+
+// HandleFunc indicates an expected call of HandleFunc.
+func (mr *MockFbRouterMockRecorder) HandleFunc(path, f any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "HandleFunc", reflect.TypeOf((*MockFbRouter)(nil).HandleFunc), path, f)
+}
+
+// ServeHTTP mocks base method.
+func (m *MockFbRouter) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "ServeHTTP", w, req)
+}
+
+// ServeHTTP indicates an expected call of ServeHTTP.
+func (mr *MockFbRouterMockRecorder) ServeHTTP(w, req any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ServeHTTP", reflect.TypeOf((*MockFbRouter)(nil).ServeHTTP), w, req)
+}
 
 // MockApiService is a mock of ApiService interface.
 type MockApiService struct {
