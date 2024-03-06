@@ -24,12 +24,13 @@ func (s *service) HandleNewEvent(w http.ResponseWriter, r *http.Request) {
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
 	}
 
-	tx, err := s.Repo.GetPool().BeginTx(ctx, pgx.TxOptions{
+	tx, err := s.Repo.BeginTx(ctx, pgx.TxOptions{
 		IsoLevel: pgx.Serializable,
 	})
 	if err != nil {
 		s.Logger.Errorf("Unable to begin transaction: %s", err)
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Tx, err)
+		return
 	}
 
 	event, err := s.CreateEvent(ctx, tx, &req)
