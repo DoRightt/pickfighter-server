@@ -14,7 +14,6 @@ import (
 	"projects/fb-server/pkg/model"
 	"testing"
 
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
@@ -207,13 +206,5 @@ func TestGetEvents(t *testing.T) {
 
 			assert.Equal(t, tc.expectedStatus, w.Code)
 		})
-	}
-}
-
-func initTestConfig() {
-	viper.SetConfigName("config")
-	viper.AddConfigPath("../../../")
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading config file: %s\n", err)
 	}
 }
