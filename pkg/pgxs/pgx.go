@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
 )
@@ -17,6 +18,7 @@ type FbRepo interface {
 	SanitizeString(s string) string
 	GetPool() *pgxpool.Pool
 	GetLogger() *zap.SugaredLogger
+	BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error)
 }
 
 // Config is structure that stores data for connecting to a database
@@ -64,6 +66,11 @@ func (db *Repo) GetPoolConfig() (*pgxpool.Config, error) {
 	}
 
 	return c, nil
+}
+
+// BeginTx starts a new transaction with the given options.
+func (db *Repo) BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error) {
+	return db.Pool.BeginTx(ctx, txOptions)
 }
 
 // GetPool returns the pgxpool.Pool stored in the Repo.
