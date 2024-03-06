@@ -13,6 +13,13 @@ import (
 	"github.com/lestrrat-go/jwx/v2/jwt"
 )
 
+// FbRouter represents an interface for routing and handling HTTP requests.
+type FbRouter interface {
+	ServeHTTP(w http.ResponseWriter, req *http.Request)
+	Handle(path string, handler http.Handler) *mux.Route
+	HandleFunc(path string, f func(http.ResponseWriter, *http.Request)) *mux.Route
+}
+
 // ApiService defines the interface that any API service must implement.
 type ApiService interface {
 	Init(ctx context.Context) error
@@ -39,7 +46,7 @@ type AppInterface interface {
 // ApiHandler represents the main handler for the API. It holds information about router, logger, repository, and services.
 type ApiHandler struct {
 	ServiceName string
-	Router      *mux.Router
+	Router      FbRouter
 	Logger      logger.FbLogger
 	Repo        pgxs.FbRepo
 

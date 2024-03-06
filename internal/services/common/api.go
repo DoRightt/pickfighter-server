@@ -7,17 +7,25 @@ import (
 	// authRepo "projects/fb-server/internal/repo/auth"
 	commonRepo "projects/fb-server/internal/repo/common"
 	"projects/fb-server/internal/services"
+
+	"github.com/jackc/pgx/v5"
 )
+
+type CommonService interface {
+	services.ApiService
+	CheckEventIsDone(ctx context.Context, tx pgx.Tx, fightId int32) error
+	HandleNewEvent(w http.ResponseWriter, r *http.Request)
+}
 
 type service struct {
 	*services.ApiHandler
 
-	Repo *commonRepo.CommonRepo `json:"-" yaml:"-"`
+	Repo commonRepo.FbCommonRepo `json:"-" yaml:"-"`
 	// AuthRepo *authRepo.AuthRepo     `json:"-" yaml:"-"` // TODO
 }
 
 // New creates a new instance of the service using the provided ApiHandler and initializes an commonRepo for working with the common repository.
-func New(h *services.ApiHandler) services.ApiService {
+func New(h *services.ApiHandler) CommonService {
 	return &service{
 		ApiHandler: h,
 		Repo:       commonRepo.New(h.Repo),

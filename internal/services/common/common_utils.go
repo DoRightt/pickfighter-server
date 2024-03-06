@@ -24,9 +24,11 @@ func (s *service) CreateEvent(ctx context.Context, tx pgx.Tx, req *model.EventsR
 			s.Logger.Errorf("Unable to rollback transaction: %s", txErr)
 		}
 
-		if err.(*pgconn.PgError).Code == pgerrcode.UniqueViolation {
-			intErr := internalErr.New(internalErr.TxNotUnique)
-			return nil, httplib.NewApiErrFromInternalErr(intErr)
+		if pgErr, ok := err.(*pgconn.PgError); ok {
+			if pgErr.Code == pgerrcode.UniqueViolation {
+				intErr := internalErr.New(internalErr.TxNotUnique)
+				return nil, httplib.NewApiErrFromInternalErr(intErr)
+			}
 		} else {
 			intErr := internalErr.New(internalErr.TxUnknown)
 			s.Logger.Errorf("Failed to create event during registration transaction: %s", err)
@@ -53,9 +55,12 @@ func (s *service) CreateEvent(ctx context.Context, tx pgx.Tx, req *model.EventsR
 			if txErr := tx.Rollback(ctx); txErr != nil {
 				s.Logger.Errorf("Unable to rollback transaction: %s", txErr)
 			}
-			if err.(*pgconn.PgError).Code == pgerrcode.UniqueViolation {
-				intErr := internalErr.New(internalErr.TxNotUnique)
-				return nil, httplib.NewApiErrFromInternalErr(intErr)
+
+			if pgErr, ok := err.(*pgconn.PgError); ok {
+				if pgErr.Code == pgerrcode.UniqueViolation {
+					intErr := internalErr.New(internalErr.TxNotUnique)
+					return nil, httplib.NewApiErrFromInternalErr(intErr)
+				}
 			} else {
 				intErr := internalErr.New(internalErr.TxUnknown)
 				s.Logger.Errorf("Failed to create fight during registration transaction: %s", err)
@@ -68,7 +73,7 @@ func (s *service) CreateEvent(ctx context.Context, tx pgx.Tx, req *model.EventsR
 }
 
 // CheckEventIsDone checks if all fights are done. If so, sets event as done.
-// It takes the fight ID as input and finds the corresponding event in which it is listed. 
+// It takes the fight ID as input and finds the corresponding event in which it is listed.
 func (s *service) CheckEventIsDone(ctx context.Context, tx pgx.Tx, fightId int32) error {
 	eventId, err := s.Repo.GetEventId(ctx, tx, fightId)
 	if err != nil {

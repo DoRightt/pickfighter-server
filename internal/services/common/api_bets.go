@@ -53,7 +53,6 @@ func (s *service) GetBets(w http.ResponseWriter, r *http.Request) {
 		Results: bets,
 		Count:   count,
 	})
-
 }
 
 // CreateBet handles the creation of a new bet. It decodes the JSON request body into the
