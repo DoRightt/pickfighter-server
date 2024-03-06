@@ -14,6 +14,7 @@ import (
 type CommonService interface {
 	services.ApiService
 	CheckEventIsDone(ctx context.Context, tx pgx.Tx, fightId int32) error
+	HandleNewEvent(w http.ResponseWriter, r *http.Request)
 }
 
 type service struct {
