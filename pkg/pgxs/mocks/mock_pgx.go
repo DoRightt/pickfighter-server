@@ -13,6 +13,8 @@ import (
 	context "context"
 	reflect "reflect"
 
+	pgconn "github.com/jackc/pgconn"
+	pgx "github.com/jackc/pgx/v5"
 	pgxpool "github.com/jackc/pgx/v5/pgxpool"
 	gomock "go.uber.org/mock/gomock"
 	zap "go.uber.org/zap"
@@ -39,6 +41,21 @@ func NewMockFbRepo(ctrl *gomock.Controller) *MockFbRepo {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockFbRepo) EXPECT() *MockFbRepoMockRecorder {
 	return m.recorder
+}
+
+// BeginTx mocks base method.
+func (m *MockFbRepo) BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BeginTx", ctx, txOptions)
+	ret0, _ := ret[0].(pgx.Tx)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// BeginTx indicates an expected call of BeginTx.
+func (mr *MockFbRepoMockRecorder) BeginTx(ctx, txOptions any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BeginTx", reflect.TypeOf((*MockFbRepo)(nil).BeginTx), ctx, txOptions)
 }
 
 // ConnectDBPool mocks base method.
@@ -151,4 +168,113 @@ func (m *MockFbRepo) SanitizeString(s string) string {
 func (mr *MockFbRepoMockRecorder) SanitizeString(s any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SanitizeString", reflect.TypeOf((*MockFbRepo)(nil).SanitizeString), s)
+}
+
+// MockFbPool is a mock of FbPool interface.
+type MockFbPool struct {
+	ctrl     *gomock.Controller
+	recorder *MockFbPoolMockRecorder
+}
+
+// MockFbPoolMockRecorder is the mock recorder for MockFbPool.
+type MockFbPoolMockRecorder struct {
+	mock *MockFbPool
+}
+
+// NewMockFbPool creates a new mock instance.
+func NewMockFbPool(ctrl *gomock.Controller) *MockFbPool {
+	mock := &MockFbPool{ctrl: ctrl}
+	mock.recorder = &MockFbPoolMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockFbPool) EXPECT() *MockFbPoolMockRecorder {
+	return m.recorder
+}
+
+// BeginTx mocks base method.
+func (m *MockFbPool) BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BeginTx", ctx, txOptions)
+	ret0, _ := ret[0].(pgx.Tx)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// BeginTx indicates an expected call of BeginTx.
+func (mr *MockFbPoolMockRecorder) BeginTx(ctx, txOptions any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BeginTx", reflect.TypeOf((*MockFbPool)(nil).BeginTx), ctx, txOptions)
+}
+
+// Close mocks base method.
+func (m *MockFbPool) Close() {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "Close")
+}
+
+// Close indicates an expected call of Close.
+func (mr *MockFbPoolMockRecorder) Close() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockFbPool)(nil).Close))
+}
+
+// Exec mocks base method.
+func (m *MockFbPool) Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error) {
+	m.ctrl.T.Helper()
+	varargs := []any{ctx, sql}
+	for _, a := range arguments {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "Exec", varargs...)
+	ret0, _ := ret[0].(pgconn.CommandTag)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Exec indicates an expected call of Exec.
+func (mr *MockFbPoolMockRecorder) Exec(ctx, sql any, arguments ...any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]any{ctx, sql}, arguments...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exec", reflect.TypeOf((*MockFbPool)(nil).Exec), varargs...)
+}
+
+// Query mocks base method.
+func (m *MockFbPool) Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error) {
+	m.ctrl.T.Helper()
+	varargs := []any{ctx, sql}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "Query", varargs...)
+	ret0, _ := ret[0].(pgx.Rows)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Query indicates an expected call of Query.
+func (mr *MockFbPoolMockRecorder) Query(ctx, sql any, args ...any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]any{ctx, sql}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Query", reflect.TypeOf((*MockFbPool)(nil).Query), varargs...)
+}
+
+// QueryRow mocks base method.
+func (m *MockFbPool) QueryRow(ctx context.Context, sql string, args ...any) pgx.Row {
+	m.ctrl.T.Helper()
+	varargs := []any{ctx, sql}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "QueryRow", varargs...)
+	ret0, _ := ret[0].(pgx.Row)
+	return ret0
+}
+
+// QueryRow indicates an expected call of QueryRow.
+func (mr *MockFbPoolMockRecorder) QueryRow(ctx, sql any, args ...any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]any{ctx, sql}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "QueryRow", reflect.TypeOf((*MockFbPool)(nil).QueryRow), varargs...)
 }
