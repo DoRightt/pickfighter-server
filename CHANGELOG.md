@@ -6,6 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.1.1
 
+## 6 March 2024
+
+### Added
+
+-   Tests for /internal/common package
+-   CommonRepo interface
+-   CommonRepo mocks
+-   Router interface
+
+### Changes
+
+-   Api mocks have been changed
+-   CommonService interface has new methods
+-   ApiService mock was regenerated
+-   Pgxs mock was regenerated
+
 ## 29 Feb 2024
 
 ### Added
@@ -20,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Added shell scripts for testing and check coverage
 
 ### Changes
+
 -   CheckIsAdmin middleware was cleared of unnecessary code
 
 ## 23 Feb 2024
