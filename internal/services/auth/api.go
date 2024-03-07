@@ -3,19 +3,23 @@ package auth
 import (
 	"context"
 	"net/http"
-	"projects/fb-server/pkg/model"
 	authRepo "projects/fb-server/internal/repo/auth"
 	"projects/fb-server/internal/services"
+	"projects/fb-server/pkg/model"
 )
+
+type AuthService interface {
+	services.ApiService
+}
 
 type service struct {
 	*services.ApiHandler
 
-	Repo *authRepo.AuthRepo `json:"-" yaml:"-"`
+	Repo authRepo.FbAuthRepo `json:"-" yaml:"-"`
 }
 
 // New creates a new instance of the service using the provided ApiHandler and initializes an AuthRepo for working with the authentication repository.
-func New(h *services.ApiHandler) services.ApiService {
+func New(h *services.ApiHandler) AuthService {
 	return service{
 		ApiHandler: h,
 		Repo:       authRepo.New(h.Repo),
