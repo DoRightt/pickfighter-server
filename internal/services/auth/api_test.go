@@ -53,9 +53,9 @@ func TestApplyRoutes(t *testing.T) {
 		expectedErr  error
 	}{
 		{
-			path: "/fighters",
+			path: "/register",
 			mockBehavior: func(m *mock_services.MockFbRouter) {
-				m.EXPECT().HandleFunc("/fighters", gomock.Any()).Return(nil)
+				m.EXPECT().HandleFunc("/register", gomock.Any()).Return(nil)
 			},
 			expectedErr: nil,
 		},
