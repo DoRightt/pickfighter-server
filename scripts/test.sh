@@ -4,7 +4,6 @@ packages=(
     "./internal/services"
     "./internal/services/auth"
     "./internal/services/common"
-    "./internal/scraper"
     "./internal/repo/auth"
     "./internal/repo/common"
     "./internal/repo/fighters"
