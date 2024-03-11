@@ -294,5 +294,324 @@ func TestResetPassword(t *testing.T) {
 }
 
 func TestRecoverPassword(t *testing.T) {
-	// TODO
+	tests := []struct {
+		name           string
+		req            *http.Request
+		mockBehavior   func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger)
+		expectedStatus int
+	}{
+		{
+			name: "Success",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.RecoverPasswordRequest{
+					Token:           "asdasqqwe1243235654ytrewq",
+					Password:        "test123",
+					ConfirmPassword: "test123",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+				mrepo.EXPECT().FindUserCredentials(gomock.Any(), gomock.Any()).Return(model.UserCredentials{UserId: 1}, nil)
+				mrepo.EXPECT().BeginTx(gomock.Any(), pgx.TxOptions{
+					IsoLevel: pgx.Serializable,
+				}).Return(mtx, nil)
+				mrepo.EXPECT().ConfirmCredentialsToken(gomock.Any(), mtx, model.UserCredentialsRequest{
+					UserId: 1,
+				}).Return(nil)
+				mrepo.EXPECT().UpdatePassword(gomock.Any(), mtx, gomock.Any()).Return(nil)
+
+				mtx.EXPECT().Commit(gomock.Any()).Return(nil)
+			},
+			expectedStatus: http.StatusOK,
+		},
+		{
+			name: "Bad request because of empty body",
+			req:  httptest.NewRequest("POST", "/example", nil),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Token length is less than 2",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.RecoverPasswordRequest{
+					Token: "a",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Token is empty string",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.RecoverPasswordRequest{
+					Token: " ",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			name: "No password",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.RecoverPasswordRequest{
+					Token:           "asdasqqwe1243235654ytrewq",
+					Password:        "",
+					ConfirmPassword: "123456",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			name: "No confirm password",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.RecoverPasswordRequest{
+					Token:           "asdasqqwe1243235654ytrewq",
+					Password:        "123456",
+					ConfirmPassword: "",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			name: "No password and no confirm password",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.RecoverPasswordRequest{
+					Token:           "asdasqqwe1243235654ytrewq",
+					Password:        "",
+					ConfirmPassword: "",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			name: "FindUserCredentials error",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.RecoverPasswordRequest{
+					Token:           "asdasqqwe1243235654ytrewq",
+					Password:        "test123",
+					ConfirmPassword: "test123",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+				expectedError := errors.New("Error")
+				mrepo.EXPECT().FindUserCredentials(gomock.Any(), gomock.Any()).Return(model.UserCredentials{}, expectedError)
+				mlogger.EXPECT().Errorf("Failed to find user credentials: %s", expectedError)
+			},
+			expectedStatus: http.StatusInternalServerError,
+		},
+		{
+			name: "FindUserCredentials NoRows error",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.RecoverPasswordRequest{
+					Token:           "asdasqqwe1243235654ytrewq",
+					Password:        "test123",
+					ConfirmPassword: "test123",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+				expectedError := pgx.ErrNoRows
+
+				mrepo.EXPECT().FindUserCredentials(gomock.Any(), gomock.Any()).Return(model.UserCredentials{}, expectedError)
+			},
+			expectedStatus: http.StatusNotFound,
+		},
+		{
+			name: "Tx error",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.RecoverPasswordRequest{
+					Token:           "asdasqqwe1243235654ytrewq",
+					Password:        "test123",
+					ConfirmPassword: "test123",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+				expectedError := errors.New("Error")
+
+				mrepo.EXPECT().FindUserCredentials(gomock.Any(), gomock.Any()).Return(model.UserCredentials{UserId: 1}, nil)
+				mrepo.EXPECT().BeginTx(gomock.Any(), pgx.TxOptions{
+					IsoLevel: pgx.Serializable,
+				}).Return(nil, expectedError)
+
+				mlogger.EXPECT().Errorf("Failed to create registration transaction: %s", expectedError)
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			name: "ConfirmCredentialsToken error",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.RecoverPasswordRequest{
+					Token:           "asdasqqwe1243235654ytrewq",
+					Password:        "test123",
+					ConfirmPassword: "test123",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+				expectedError := errors.New("Error")
+
+				mrepo.EXPECT().FindUserCredentials(gomock.Any(), gomock.Any()).Return(model.UserCredentials{UserId: 1}, nil)
+				mrepo.EXPECT().BeginTx(gomock.Any(), pgx.TxOptions{
+					IsoLevel: pgx.Serializable,
+				}).Return(mtx, nil)
+				mrepo.EXPECT().ConfirmCredentialsToken(gomock.Any(), mtx, model.UserCredentialsRequest{
+					UserId: 1,
+				}).Return(expectedError)
+
+				mlogger.EXPECT().Errorf("Failed to reset user credentials: %s", expectedError)
+			},
+			expectedStatus: http.StatusInternalServerError,
+		},
+		{
+			name: "UpdatePassword error",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.RecoverPasswordRequest{
+					Token:           "asdasqqwe1243235654ytrewq",
+					Password:        "test123",
+					ConfirmPassword: "test123",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+				expectedError := errors.New("Error")
+
+				mrepo.EXPECT().FindUserCredentials(gomock.Any(), gomock.Any()).Return(model.UserCredentials{UserId: 1}, nil)
+				mrepo.EXPECT().BeginTx(gomock.Any(), pgx.TxOptions{
+					IsoLevel: pgx.Serializable,
+				}).Return(mtx, nil)
+				mrepo.EXPECT().ConfirmCredentialsToken(gomock.Any(), mtx, model.UserCredentialsRequest{
+					UserId: 1,
+				}).Return(nil)
+				mrepo.EXPECT().UpdatePassword(gomock.Any(), mtx, gomock.Any()).Return(expectedError)
+
+				mlogger.EXPECT().Errorf("Failed to update user password: %s", expectedError)
+			},
+			expectedStatus: http.StatusInternalServerError,
+		},
+		{
+			name: "Tx commit error",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.RecoverPasswordRequest{
+					Token:           "asdasqqwe1243235654ytrewq",
+					Password:        "test123",
+					ConfirmPassword: "test123",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+				expectedError := errors.New("Error")
+
+				mrepo.EXPECT().FindUserCredentials(gomock.Any(), gomock.Any()).Return(model.UserCredentials{UserId: 1}, nil)
+				mrepo.EXPECT().BeginTx(gomock.Any(), pgx.TxOptions{
+					IsoLevel: pgx.Serializable,
+				}).Return(mtx, nil)
+				mrepo.EXPECT().ConfirmCredentialsToken(gomock.Any(), mtx, model.UserCredentialsRequest{
+					UserId: 1,
+				}).Return(nil)
+				mrepo.EXPECT().UpdatePassword(gomock.Any(), mtx, gomock.Any()).Return(nil)
+
+				mtx.EXPECT().Commit(gomock.Any()).Return(expectedError)
+
+				mlogger.EXPECT().Errorf("Failed to commit registration transaction: %s", expectedError)
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			ctx := tc.req.Context()
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			mockRepo := mock_repo.NewMockFbAuthRepo(ctrl)
+			mockLogger := mock_logger.NewMockFbLogger(ctrl)
+			mockTx := mock_tx.NewMockTestTx(ctrl)
+			handler := &services.ApiHandler{
+				Logger: mockLogger,
+			}
+			service := &service{
+				Repo:       mockRepo,
+				ApiHandler: handler,
+			}
+
+			tc.mockBehavior(ctx, mockRepo, mockTx, mockLogger)
+
+			w := httptest.NewRecorder()
+
+			service.RecoverPassword(w, tc.req)
+
+			assert.Equal(t, tc.expectedStatus, w.Code)
+		})
+	}
 }

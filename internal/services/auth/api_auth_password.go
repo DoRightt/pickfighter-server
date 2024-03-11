@@ -162,7 +162,7 @@ func (s *service) RecoverPassword(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	tx, err := s.Repo.GetPool().BeginTx(ctx, pgx.TxOptions{
+	tx, err := s.Repo.BeginTx(ctx, pgx.TxOptions{
 		IsoLevel: pgx.Serializable,
 	})
 	if err != nil {
