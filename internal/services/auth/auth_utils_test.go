@@ -125,6 +125,8 @@ func TestCreateUserCredentials(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ctx := context.Background()
 			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+			
 			mockRepo := mock_repo.NewMockFbAuthRepo(ctrl)
 			mockLogger := mock_logger.NewMockFbLogger(ctrl)
 			mockTx := mock_tx.NewMockTestTx(ctrl)
