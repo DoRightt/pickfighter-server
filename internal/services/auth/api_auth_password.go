@@ -64,7 +64,7 @@ func (s *service) ResetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tx, err := s.Repo.GetPool().BeginTx(ctx, pgx.TxOptions{
+	tx, err := s.Repo.BeginTx(ctx, pgx.TxOptions{
 		IsoLevel: pgx.Serializable,
 	})
 	if err != nil {
