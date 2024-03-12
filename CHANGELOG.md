@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.1.1
 
+## 12 March 2024
+
+### Added
+
+-   Tests for /internal/auth package
+-   FbAuth interface
+-   AuthRepo mocks
+
+### Changes
+
+-   Script for packages testing. Scrapper package no longer counts
+
 ## 6 March 2024
 
 ### Added
