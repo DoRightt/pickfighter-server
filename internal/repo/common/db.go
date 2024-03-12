@@ -10,6 +10,7 @@ import (
 
 const sep = ` AND `
 
+// FbCommonRepo an interface for interacting with fight-related data in the database.
 type FbCommonRepo interface {
 	pgxs.FbRepo
 	TxCreateEvent(ctx context.Context, tx pgx.Tx, e *model.EventsRequest) (int32, error)

@@ -54,7 +54,8 @@ func (s service) createUserCredentials(ctx context.Context, tx pgx.Tx, req *mode
 		if txErr := tx.Rollback(ctx); txErr != nil {
 			s.Logger.Errorf("Unable to rollback transaction: %s", txErr)
 		}
-		if err.(*pgconn.PgError).Code == pgerrcode.UniqueViolation {
+		pgErr, isPgError := err.(*pgconn.PgError)
+		if isPgError && pgErr.Code == pgerrcode.UniqueViolation {
 			intErr := internalErr.New(internalErr.TxNotUnique)
 			return nil, httplib.NewApiErrFromInternalErr(intErr)
 		} else {
@@ -87,7 +88,8 @@ func (s service) createUserCredentials(ctx context.Context, tx pgx.Tx, req *mode
 		if txErr := tx.Rollback(ctx); txErr != nil {
 			s.Logger.Errorf("Unable to rollback transaction: %s", txErr)
 		}
-		if err.(*pgconn.PgError).Code == pgerrcode.UniqueViolation {
+		pgErr, isPgError := err.(*pgconn.PgError)
+		if isPgError && pgErr.Code == pgerrcode.UniqueViolation {
 			intErr := internalErr.New(internalErr.TxNotUnique)
 			return nil, httplib.NewApiErrFromInternalErr(intErr)
 		} else {
