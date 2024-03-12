@@ -12,6 +12,7 @@ import (
 	"projects/fb-server/internal/services"
 	mock_logger "projects/fb-server/pkg/logger/mocks"
 	"projects/fb-server/pkg/model"
+	"projects/fb-server/pkg/utils"
 	"strings"
 	"testing"
 	"time"
@@ -383,7 +384,218 @@ func TestConfirmRegistration(t *testing.T) {
 }
 
 func TestLogin(t *testing.T) {
-	// TODO
+	tests := []struct {
+		name           string
+		mockBehavior   func(ctx context.Context, mockRepo *mock_repo.MockFbAuthRepo, mockTx *mock_tx.MockTestTx, mockLogger *mock_logger.MockFbLogger)
+		req            *http.Request
+		expectedStatus int
+	}{
+		{
+			name: "Success",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.AuthenticateRequest{
+					Email:    "test@gmail.com",
+					Password: "12345qwerty",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+				password := "12345qwerty"
+				salt := "123qwer123"
+				fakePassword := utils.GenerateSaltedHash(password, salt)
+
+				userCredsReq := model.UserCredentialsRequest{
+					Email: "test@gmail.com",
+				}
+				userCreds := model.UserCredentials{
+					UserId:   1,
+					Active:   true,
+					Salt:     "123qwer123",
+					Password: fakePassword,
+				}
+				userReq := &model.UserRequest{
+					UserId: 1,
+				}
+				user := &model.User{UserId: 1}
+
+				loadJwtCerts()
+
+				mrepo.EXPECT().FindUserCredentials(gomock.Any(), userCredsReq).Return(userCreds, nil)
+				mrepo.EXPECT().FindUser(gomock.Any(), userReq).Return(user, nil)
+
+				mlogger.EXPECT().Debugf("Issuing JWT token for User [%d:%s:%s]", userCreds.UserId, userCreds.Email, gomock.Any())
+			},
+			expectedStatus: http.StatusOK,
+		},
+		{
+			name: "Bad request because of empty body",
+			req:  httptest.NewRequest("POST", "/example", nil),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Email is empty",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.AuthenticateRequest{
+					Email:    "",
+					Password: "12345qwerty",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Password is empty",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.AuthenticateRequest{
+					Email:    "test@gmail.com",
+					Password: "",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			name: "FindUserCredentials error",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.AuthenticateRequest{
+					Email:    "test@gmail.com",
+					Password: "12345qwerty",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+				expectedError := errors.New("Error")
+				userCredsReq := model.UserCredentialsRequest{
+					Email: "test@gmail.com",
+				}
+				mrepo.EXPECT().FindUserCredentials(gomock.Any(), userCredsReq).Return(model.UserCredentials{}, expectedError)
+				mlogger.EXPECT().Errorf("Failed to get user credentials: %s", expectedError)
+			},
+			expectedStatus: http.StatusInternalServerError,
+		},
+		{
+			name: "FindUserCredentials NoRows error",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.AuthenticateRequest{
+					Email:    "test@gmail.com",
+					Password: "12345qwerty",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+				expectedError := pgx.ErrNoRows
+				userCredsReq := model.UserCredentialsRequest{
+					Email: "test@gmail.com",
+				}
+				mrepo.EXPECT().FindUserCredentials(gomock.Any(), userCredsReq).Return(model.UserCredentials{}, expectedError)
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Creds is not active",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.AuthenticateRequest{
+					Email:    "test@gmail.com",
+					Password: "12345qwerty",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+				userCredsReq := model.UserCredentialsRequest{
+					Email: "test@gmail.com",
+				}
+				mrepo.EXPECT().FindUserCredentials(gomock.Any(), userCredsReq).Return(model.UserCredentials{UserId: 1, Active: false}, nil)
+			},
+			expectedStatus: http.StatusForbidden,
+		},
+		{
+			name: "Password doesnt match",
+			req: (func() *http.Request {
+				token, err := getFakeToken()
+				require.NoError(t, err)
+
+				registerReq := model.AuthenticateRequest{
+					Email:    "test@gmail.com",
+					Password: "12345qwerty",
+				}
+
+				return createFakeRequestWithBody(token, registerReq)
+			})(),
+			mockBehavior: func(ctx context.Context, mrepo *mock_repo.MockFbAuthRepo, mtx *mock_tx.MockTestTx, mlogger *mock_logger.MockFbLogger) {
+				userCredsReq := model.UserCredentialsRequest{
+					Email: "test@gmail.com",
+				}
+				mrepo.EXPECT().FindUserCredentials(gomock.Any(), userCredsReq).Return(model.UserCredentials{UserId: 1, Active: true, Salt: "123ww1"}, nil)
+			},
+			expectedStatus: http.StatusBadRequest,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			viper.Set("auth.jwt.cert", "../../../hack/dev/certs/server-cert.pem")
+			viper.Set("auth.jwt.key", "../../../hack/dev/certs/server-key.pem")
+			defer viper.Reset()
+
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			ctx := context.Background()
+			mockRepo := mock_repo.NewMockFbAuthRepo(ctrl)
+			mockLogger := mock_logger.NewMockFbLogger(ctrl)
+			mockTx := mock_tx.NewMockTestTx(ctrl)
+
+			handler := &services.ApiHandler{
+				Logger: mockLogger,
+			}
+
+			service := &service{
+				Repo:       mockRepo,
+				ApiHandler: handler,
+			}
+
+			w := httptest.NewRecorder()
+
+			tc.mockBehavior(ctx, mockRepo, mockTx, mockLogger)
+
+			service.Login(w, tc.req)
+
+			assert.Equal(t, tc.expectedStatus, w.Code)
+		})
+	}
 }
 
 func TestLogout(t *testing.T) {
