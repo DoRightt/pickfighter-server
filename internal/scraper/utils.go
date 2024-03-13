@@ -87,7 +87,7 @@ func WriteFighterData(ctx context.Context, l *zap.SugaredLogger, data []model.Fi
 // It takes a context, a fighter repository, and a model.Fighter as parameters.
 // If the transaction fails, it logs the error and returns an appropriate ApiError.
 func createFighter(ctx context.Context, rep *fighterRepo.FighterRepo, fighter model.Fighter) error {
-	tx, err := rep.Pool.BeginTx(ctx, pgx.TxOptions{
+	tx, err := rep.BeginTx(ctx, pgx.TxOptions{
 		IsoLevel: pgx.ReadCommitted,
 	})
 	if err != nil {
@@ -130,7 +130,7 @@ func createFighter(ctx context.Context, rep *fighterRepo.FighterRepo, fighter mo
 // It takes a context, a fighter repository, and a model.Fighter as parameters.
 // If the transaction fails, it logs the error and returns an appropriate ApiError.
 func updateFighter(ctx context.Context, rep *fighterRepo.FighterRepo, fighter model.Fighter) error {
-	tx, err := rep.Pool.BeginTx(ctx, pgx.TxOptions{
+	tx, err := rep.BeginTx(ctx, pgx.TxOptions{
 		IsoLevel: pgx.ReadCommitted,
 	})
 	if err != nil {
