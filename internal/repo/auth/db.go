@@ -20,10 +20,10 @@ type FbAuthRepo interface {
 	ResetPassword(ctx context.Context, req *model.UserCredentials) error
 	UpdatePassword(ctx context.Context, tx pgx.Tx, req model.UserCredentials) error
 	TxCreateUser(ctx context.Context, tx pgx.Tx, u model.User) (int32, error)
-	
+
 	FindUser(ctx context.Context, req *model.UserRequest) (*model.User, error)
 	SearchUsers(ctx context.Context, req *model.UsersRequest) ([]*model.User, error)
-	// performUsersRequestQuery(req *model.UsersRequest) []string
+	PerformUsersRequestQuery(req *model.UsersRequest) []string
 }
 
 // AuthRepo represents a repository for handling authentication-related database operations.
