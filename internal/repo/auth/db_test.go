@@ -2,7 +2,6 @@ package repo
 
 import (
 	"context"
-	"fmt"
 	"log"
 	mock_repo "projects/fb-server/internal/repo/auth/mocks"
 	"projects/fb-server/pkg/logger"
@@ -60,7 +59,6 @@ func updateTables() {
 
 	if dbName == testName {
 		_, err := authRepo.GetPool().Exec(context.Background(), "TRUNCATE TABLE public.fb_users, public.fb_user_credentials RESTART IDENTITY;")
-		fmt.Println("TRUNCATE")
 		if err != nil {
 			log.Fatal(err)
 		}
