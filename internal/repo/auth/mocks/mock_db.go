@@ -200,6 +200,20 @@ func (mr *MockFbAuthRepoMockRecorder) GracefulShutdown() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GracefulShutdown", reflect.TypeOf((*MockFbAuthRepo)(nil).GracefulShutdown))
 }
 
+// PerformUsersRequestQuery mocks base method.
+func (m *MockFbAuthRepo) PerformUsersRequestQuery(req *model.UsersRequest) []string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "PerformUsersRequestQuery", req)
+	ret0, _ := ret[0].([]string)
+	return ret0
+}
+
+// PerformUsersRequestQuery indicates an expected call of PerformUsersRequestQuery.
+func (mr *MockFbAuthRepoMockRecorder) PerformUsersRequestQuery(req any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PerformUsersRequestQuery", reflect.TypeOf((*MockFbAuthRepo)(nil).PerformUsersRequestQuery), req)
+}
+
 // ResetPassword mocks base method.
 func (m *MockFbAuthRepo) ResetPassword(ctx context.Context, req *model.UserCredentials) error {
 	m.ctrl.T.Helper()

@@ -44,7 +44,7 @@ func (r *AuthRepo) FindUser(ctx context.Context, req *model.UserRequest) (*model
 func (r *AuthRepo) SearchUsers(ctx context.Context, req *model.UsersRequest) ([]*model.User, error) {
 	q := searchUsersQuery
 
-	args := r.performUsersRequestQuery(req)
+	args := r.PerformUsersRequestQuery(req)
 
 	if len(args) > 0 {
 		q += ` WHERE `
@@ -87,13 +87,13 @@ func (r *AuthRepo) SearchUsers(ctx context.Context, req *model.UsersRequest) ([]
 	return res, nil
 }
 
-// performUsersRequestQuery constructs a list of SQL query conditions based on the provided UsersRequest.
+// PerformUsersRequestQuery constructs a list of SQL query conditions based on the provided UsersRequest.
 // It checks various filtering criteria, such as user IDs, names, emails, and creation timestamps,
 // and creates corresponding SQL conditions for each valid criterion.
 // The resulting list of conditions is intended to be used in a WHERE clause when querying user data.
 // The sanitized strings are used to prevent SQL injection.
 // The method returns a slice of strings representing the SQL conditions.
-func (r *AuthRepo) performUsersRequestQuery(req *model.UsersRequest) []string {
+func (r *AuthRepo) PerformUsersRequestQuery(req *model.UsersRequest) []string {
 	var args []string
 	if req == nil {
 		return args

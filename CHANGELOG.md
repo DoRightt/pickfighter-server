@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.1.1
 
+## 24 March 2024
+
+### Added
+
+-   Tests for /internal/repo/auth
+-   Added FbFightersRepo interface
+
+### Changes
+
+-   AuthRepo mocks
+
 ## 12 March 2024
 
 ### Added
