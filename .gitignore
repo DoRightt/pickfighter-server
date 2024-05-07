@@ -9,3 +9,7 @@ coverage.out
 /data
 
 /hack
+
+/scraper/logs
+/scraper/collection
+/scraper/configs
