@@ -57,7 +57,7 @@ type FightersCollection struct {
 
 // FighterStats represents statistical information for a fighter
 type FighterStats struct {
-	FighterId            int32   `json:"fighter_id"`
+	FighterId            int32   `json:"fighter_id,omitempty"`
 	TotalSigStrLanded    int     `json:"totalSigStrLandned,omitempty"`
 	TotalSigStrAttempted int     `json:"totalSigStrAttempted,omitempty"`
 	StrAccuracy          int     `json:"strAccuracy,omitempty"`
@@ -79,7 +79,7 @@ type FighterStats struct {
 
 // Fighter represents fighter information
 type Fighter struct {
-	FighterId      int32        `json:"fighter_id"`
+	FighterId      int32        `json:"fighter_id,omitempty"`
 	Name           string       `json:"name"`
 	NickName       string       `json:"nickName"`
 	Division       Division     `json:"division"`
