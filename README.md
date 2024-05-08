@@ -2,10 +2,10 @@
 
 Represents APIs for fb-client
 
-### Modules
+### FB-Server Modules
 
-- REST Interface
-- JWT Authentication
-- Modules
-    - Auth
-    - Common
+-   REST Interface
+-   JWT Authentication
+-   Modules
+    -   Auth
+    -   Common
