@@ -1,11 +1,9 @@
-package main
+package scraper
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"math/rand"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -16,14 +14,13 @@ import (
 	"fightbettr.com/scraper/internal/scraperutil"
 	data "fightbettr.com/scraper/pkg"
 	"fightbettr.com/scraper/pkg/logger"
-	"gopkg.in/yaml.v3"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
-var config Config
 var gc *colly.Collector
 var detailsCollector *colly.Collector
 var collection = model.FightersCollection{}
@@ -35,15 +32,10 @@ var l *zap.SugaredLogger
 // and specifies callback functions for HTML elements. It initiates the web scraping process by visiting
 // the initial URL and waits for the wait group to finish before printing "DONE" to the console and saving
 // the collected data to a JSON file using the saveToJSON function.
-func main() {
-	var useProxy bool
-	var startPage int
-	var toAdd bool
-
-	flag.BoolVar(&toAdd, "add", false, "Add fighters")
-	flag.BoolVar(&useProxy, "proxy", false, "Use proxy")
-	flag.IntVar(&startPage, "start", 0, "Start page")
-	flag.Parse()
+func Run() {
+	useProxy := viper.GetBool("proxy")
+	toAdd := viper.GetBool("add")
+	startPage := viper.GetInt("start")
 
 	logFlag := scraperutil.GetLoggerFlag(toAdd)
 	if err := logger.Initialize(logFlag); err != nil {
@@ -61,17 +53,6 @@ func main() {
 		url = fmt.Sprintf("%s?page=%d", url, startPage)
 	}
 
-	if useProxy {
-		f, err := os.Open("./configs/proxy.yaml")
-		if err != nil {
-			l.Fatal("Failed to open configuration", zap.Error(err))
-		}
-
-		if err := yaml.NewDecoder(f).Decode(&config); err != nil {
-			l.Fatal("Failed to parse configuration", zap.Error(err))
-		}
-	}
-
 	gc.Limit(&colly.LimitRule{
 		DomainGlob:  "*",
 		RandomDelay: 3 * time.Second,
@@ -79,8 +60,10 @@ func main() {
 
 	gc.OnRequest(func(r *colly.Request) {
 		if useProxy {
+			login := viper.GetString("Login")
+			password := viper.GetString("Password")
 			proxy := getProxy()
-			proxyUrl := fmt.Sprintf("socks5h://%s:%s@%s", config.Login, config.Password, proxy)
+			proxyUrl := fmt.Sprintf("socks5h://%s:%s@%s", login, password, proxy)
 
 			gc.SetProxy(proxyUrl)
 			l.Infow(proxy, "type", "proxy address")
@@ -424,11 +407,13 @@ func saveToJSON(c model.FightersCollection, toAdd bool) {
 }
 
 func getProxy() string {
-	if len(config.Proxys) == 0 {
+	proxys := viper.GetStringSlice("Proxys")
+	if len(proxys) == 0 {
 		return ""
 	}
-	rand.Seed(time.Now().UnixNano())
-	idx := rand.Intn(len(config.Proxys))
 
-	return config.Proxys[idx]
+	rand.Seed(time.Now().UnixNano())
+	idx := rand.Intn(len(proxys))
+
+	return proxys[idx]
 }
