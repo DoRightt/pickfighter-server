@@ -13,3 +13,5 @@ coverage.out
 /scraper/logs
 /scraper/collection
 /scraper/configs
+
+/fb-server/hack
