@@ -14,10 +14,6 @@ var (
 	cfgPath string
 )
 
-func init() {
-	rootCmd.AddCommand(scrapeCmd)
-}
-
 // rootCmd is the main Cobra command representing the root of the scraper service.
 var rootCmd = &cobra.Command{
 	Use:   "UFC-Scraper",

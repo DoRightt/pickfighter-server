@@ -52,7 +52,7 @@ const (
 
 // FighterStats represents statistical information for a fighter
 type FighterStats struct {
-	StatId               int32   `json:"stat_id`
+	StatId               int32   `json:"stat_id"`
 	FighterId            int32   `json:"fighter_id,omitempty"`
 	TotalSigStrLanded    int     `json:"totalSigStrLandned,omitempty"`
 	TotalSigStrAttempted int     `json:"totalSigStrAttempted,omitempty"`
