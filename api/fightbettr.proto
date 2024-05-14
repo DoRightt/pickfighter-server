@@ -1,0 +1,69 @@
+syntax = "proto3";
+option go_package = "/gen";
+
+// * * * * * Fighter Service * * * * *
+
+message Fighter {
+    int32 fighterId = 1;
+    string name = 2;
+    string nickName = 3;
+    int32 division = 4;
+    string status = 5;
+    string hometown = 6;
+    string trainsAt = 7;
+    string fightingStyle = 8;
+    int32 age = 9;
+    float height = 10;
+    float weight = 11;
+    string octagonDebut = 12;
+    int32 debutTimestamp = 13;
+    float reach = 14;
+    float legReach = 15;
+    int32 wins = 16;
+    int32 loses = 17;
+    int32 draw = 18;
+    string fighterUrl = 19;
+    string imageUrl = 20;
+    FighterStats stats = 21;
+}
+
+message FighterStats {
+    int32 statId = 1;
+    int32 fighterId = 2;
+    int32 totalSigStrLanded = 3;
+    int32 totalSigStrAttempted = 4;
+    int32 strAccuracy = 5;
+    int32 totalTkdLanded = 6;
+    int32 totalTkdAttempted = 7;
+    int32 tkdAccuracy = 8;
+    float sigStrLanded = 9;
+    float sigStrAbs = 10;
+    int32 sigStrDefense = 11;
+    int32 takedownDefense = 12;
+    float takedownAvg = 13;
+    float submissionAvg = 14;
+    float knockdownAvg = 15;
+    string avgFightTime = 16;
+    int32 winByKO = 17;
+    int32 winBySub = 18;
+    int32 winByDec = 19;
+}
+
+message FightersRequest {
+    string status = 1;
+}
+
+message FightersResponse {
+    repeated Fighter fighters = 1;
+}
+
+message FightersCountResponse {
+    int32 count = 1;
+}
+
+service FightersService {
+    rpc SearchFightersCount(FightersRequest) returns (FightersCountResponse);
+    rpc SearchFighters(FightersRequest) returns (FightersResponse);
+}
+
+// * * * * * * * * * * * * * * * * *
