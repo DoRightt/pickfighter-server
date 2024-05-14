@@ -15,5 +15,6 @@ coverage.out
 /scraper/configs
 
 /fighters/configs
+/fighters/logs
 
 /fb-server/hack
