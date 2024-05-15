@@ -48,7 +48,7 @@ func (c *Controller) SearchFightersCount(ctx context.Context, req *model.Fighter
 	if err != nil {
 		c.Logger.Errorf("Failed to get fighters count: %s", err)
 
-		// TODO errors package for grpc
+		// TODO errors package for grpc. Mb it should be handled by a handler on higher level
 		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.CountFighters, err)
 
 		return 0, err
@@ -67,7 +67,7 @@ func (c *Controller) SearchFighters(ctx context.Context, req *model.FightersRequ
 	if err != nil {
 		c.Logger.Errorf("Failed to get fighters count: %s", err)
 
-		// TODO errors package for grpc
+		// TODO errors package for grpc. Mb it should be handled by a handler on higher level
 		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.CountFighters, err)
 
 		return []*model.Fighter{}, err
@@ -81,7 +81,7 @@ func (c *Controller) SearchFighters(ctx context.Context, req *model.FightersRequ
 	if err != nil {
 		c.Logger.Errorf("Failed to find fighters: %s", err)
 
-		// TODO errors package for grpc
+		// TODO errors package for grpc. Mb it should be handled by a handler on higher level
 		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.Fighters, err)
 
 		return []*model.Fighter{}, err
