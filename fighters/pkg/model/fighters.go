@@ -97,3 +97,8 @@ type Fighter struct {
 	ImageUrl       string       `json:"imageUrl"`
 	Stats          FighterStats `json:"stats"`
 }
+
+// FightersRequest represents a request for fighters
+type FightersRequest struct {
+	Status string `json:"status"`
+}
