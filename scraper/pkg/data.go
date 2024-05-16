@@ -8,12 +8,18 @@ import (
 	"fightbettr.com/scraper/pkg/logger"
 )
 
+const defaultStat = "0-0-0 (W-L-D)"
+
 // SetStatistic sets the statistical data for a Fighter based on the provided string 'stat'.
 // The function splits the input string, extracts individual parts, converts them to integers,
 // and sets the Wins, Loses, and Draw fields of the Fighter accordingly. If conversion errors occur,
 // it logs an error and sets the corresponding value to 0.
 func SetStatistic(f *fighterModel.Fighter, stat string) {
 	l := logger.Get()
+
+	if len(stat) == 0 {
+		stat = defaultStat
+	}
 
 	parts := strings.Split(strings.Split(stat, " ")[0], "-")
 	var scores []int
