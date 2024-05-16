@@ -25,3 +25,7 @@ func New(ctx context.Context, logger logger.FbLogger) (*Repository, error) {
 		FbRepo: db,
 	}, nil
 }
+
+func (r *Repository) PoolClose() {
+	r.GetPool().Close()
+}
