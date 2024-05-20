@@ -30,7 +30,7 @@ func init() {
 // serveCmd represents the serve command. It is used to run the HTTP server with specified API routes.
 var serveCmd = &cobra.Command{
 	Use:              "serve",
-	Short:            "Run HTTP Server",
+	Short:            "Run gRPC Server",
 	Long:             ``,
 	TraverseChildren: true,
 	Args:             validateServerArgs,
