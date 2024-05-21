@@ -21,7 +21,6 @@ func ReadFighterData() ([]model.Fighter, error) {
 
 	jsonData, err := os.ReadFile(filePath)
 	if err != nil {
-		fmt.Println("DEBUG", "ERROR FILE", err)
 		return nil, err
 	}
 
