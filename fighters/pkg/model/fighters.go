@@ -3,6 +3,9 @@ package model
 // Division represents weight divisions
 type Division int
 
+// FighterStatus defines a fighter status. Uses to find active fighters
+type FighterStatus string
+
 // String returns the string representation of a Division.
 func (d Division) String() string {
 	switch d {
@@ -75,27 +78,27 @@ type FighterStats struct {
 
 // Fighter represents fighter information
 type Fighter struct {
-	FighterId      int32        `json:"fighter_id,omitempty"`
-	Name           string       `json:"name"`
-	NickName       string       `json:"nickName"`
-	Division       Division     `json:"division"`
-	Status         string       `json:"status"`
-	Hometown       string       `json:"hometown"`
-	TrainsAt       string       `json:"trainsAt"`
-	FightingStyle  string       `json:"fightingStyle"`
-	Age            int8         `json:"age"`
-	Height         float32      `json:"height"`
-	Weight         float32      `json:"weight"`
-	OctagonDebut   string       `json:"octagonDebut"`
-	DebutTimestamp int          `json:"debutTimestamp"`
-	Reach          float32      `json:"reach"`
-	LegReach       float32      `json:"legReach"`
-	Wins           int          `json:"wins"`
-	Loses          int          `json:"loses"`
-	Draw           int          `json:"draw"`
-	FighterUrl     string       `json:"fighterUrl"`
-	ImageUrl       string       `json:"imageUrl"`
-	Stats          FighterStats `json:"stats"`
+	FighterId      int32         `json:"fighter_id,omitempty"`
+	Name           string        `json:"name"`
+	NickName       string        `json:"nickName"`
+	Division       Division      `json:"division"`
+	Status         FighterStatus `json:"status"`
+	Hometown       string        `json:"hometown"`
+	TrainsAt       string        `json:"trainsAt"`
+	FightingStyle  string        `json:"fightingStyle"`
+	Age            int8          `json:"age"`
+	Height         float32       `json:"height"`
+	Weight         float32       `json:"weight"`
+	OctagonDebut   string        `json:"octagonDebut"`
+	DebutTimestamp int           `json:"debutTimestamp"`
+	Reach          float32       `json:"reach"`
+	LegReach       float32       `json:"legReach"`
+	Wins           int           `json:"wins"`
+	Loses          int           `json:"loses"`
+	Draw           int           `json:"draw"`
+	FighterUrl     string        `json:"fighterUrl"`
+	ImageUrl       string        `json:"imageUrl"`
+	Stats          FighterStats  `json:"stats"`
 }
 
 // FightersRequest represents a request for fighters

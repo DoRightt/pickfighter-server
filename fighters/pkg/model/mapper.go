@@ -9,7 +9,7 @@ func FighterToProto(f *Fighter) *gen.Fighter {
 		Name:           f.Name,
 		NickName:       f.NickName,
 		Division:       int32(f.Division),
-		Status:         f.Status,
+		Status:         string(f.Status),
 		Hometown:       f.Hometown,
 		TrainsAt:       f.TrainsAt,
 		FightingStyle:  f.FightingStyle,
@@ -23,7 +23,7 @@ func FighterToProto(f *Fighter) *gen.Fighter {
 		Draw:           int32(f.Draw),
 		FighterUrl:     f.FighterUrl,
 		ImageUrl:       f.ImageUrl,
-		Stats: FighterStatsrToProto(&f.Stats),
+		Stats:          FighterStatsrToProto(&f.Stats),
 	}
 }
 
@@ -45,7 +45,7 @@ func FighterFromProto(f *gen.Fighter) *Fighter {
 		Name:           f.Name,
 		NickName:       f.NickName,
 		Division:       Division(f.Division),
-		Status:         f.Status,
+		Status:         FighterStatus(f.Status),
 		Hometown:       f.Hometown,
 		TrainsAt:       f.TrainsAt,
 		FightingStyle:  f.FightingStyle,
@@ -59,7 +59,7 @@ func FighterFromProto(f *gen.Fighter) *Fighter {
 		Draw:           int(f.Draw),
 		FighterUrl:     f.FighterUrl,
 		ImageUrl:       f.ImageUrl,
-		Stats: *FighterStatsrFromProto(f.Stats),
+		Stats:          *FighterStatsrFromProto(f.Stats),
 	}
 }
 
