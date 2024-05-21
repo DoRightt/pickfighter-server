@@ -13,8 +13,11 @@ import (
 	"fightbettr.com/fighters/internal/repository/psql"
 	service "fightbettr.com/fighters/internal/service/fighters"
 	"fightbettr.com/fighters/pkg/model"
+	"fightbettr.com/pkg/discovery"
+	"fightbettr.com/pkg/discovery/consul"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 var allowedApiRoutes = []string{
@@ -62,12 +65,34 @@ func validateServerArgs(cmd *cobra.Command, args []string) error {
 // runServe is the main function executed when the serve command is run.
 // It initializes the application, sets up service and runs the HTTP server.
 func runServe(cmd *cobra.Command, args []string) {
+	port := viper.GetInt("http.port")
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	route := args[0]
 
 	app := service.New()
+
+	registry, err := consul.NewRegistry("localhost:8500")
+	if err != nil {
+		panic(err)
+	}
+	instanceID := discovery.GenerateInstanceID(app.ServiceName)
+	if err := registry.Register(ctx, instanceID, app.ServiceName, fmt.Sprintf("localhost:%d", port)); err != nil {
+		panic(err)
+	}
+
+	go func() {
+		for {
+			if err := registry.ReportHealthyState(instanceID, app.ServiceName); err != nil {
+				logger.Error("Failed to report healthy state", zap.Error(err))
+			}
+
+			time.Sleep(1 * time.Second)
+		}
+	}()
+
+	defer registry.Deregister(ctx, instanceID, app.ServiceName)
 
 	repo, err := psql.New(ctx, logger)
 	if err != nil {
