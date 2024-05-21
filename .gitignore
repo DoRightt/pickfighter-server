@@ -10,8 +10,14 @@ coverage.out
 
 /hack
 
+/fightbettr/configs
+/fightbettr/logs
+
 /scraper/logs
 /scraper/collection
 /scraper/configs
+
+/fighters/configs
+/fighters/logs
 
 /fb-server/hack

@@ -5,24 +5,27 @@ import (
 	"log"
 	"time"
 
-	"fightbettr.com/fb-server/pkg/version"
+	lg "fightbettr.com/fightbettr/pkg/logger"
+	"fightbettr.com/fightbettr/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"go.uber.org/zap/zapcore"
 )
 
 var (
 	cfgPath string
+	logger  lg.FbLogger
 )
 
-// rootCmd is the main Cobra command representing the root of the scraper service.
+// rootCmd is the main Cobra command representing the root of the Fightbettr service.
 var rootCmd = &cobra.Command{
-	Use:   "UFC-Scraper",
-	Short: "UFC fighters scraper",
+	Use:   "Fightbettr Service",
+	Short: "This CLI works with data to manage and redirect it",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		showVersion, _ := cmd.Flags().GetBool("version")
+
 		if showVersion {
 			fmt.Println("Dev version", version.DevVersion)
-			fmt.Println("Git version", version.GitVersion)
 			return nil
 		}
 
@@ -30,7 +33,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-// Execute runs the root command for the scraper service.
+// Execute runs the root command for the Fightbettr service.
 // It executes the necessary logic for the command-line interface,
 // handling errors and logging them if they occur.
 func Execute() {
@@ -42,15 +45,23 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgPath, "config", "", "Config file path (default is ./configs/proxy.yaml)")
-	rootCmd.PersistentFlags().Bool("proxy", false, "Run with proxy")
-	rootCmd.PersistentFlags().Bool("add", false, "Add results to previus fighters collection")
-	rootCmd.PersistentFlags().Int("start", 0, "start page")
+	rootCmd.PersistentFlags().StringVar(&cfgPath, "config", "", "Config file path (default is ./config.yaml)")
+	rootCmd.PersistentFlags().String("name", version.Name, "Application name label")
+	rootCmd.PersistentFlags().Bool("log_json", false, "Enable JSON formatted logs output")
+	rootCmd.PersistentFlags().Int("log_level", int(zapcore.DebugLevel), "Log level")
 
 	bindViperPersistentFlag(rootCmd, "config_path", "config")
-	bindViperPersistentFlag(rootCmd, "proxy", "proxy")
-	bindViperPersistentFlag(rootCmd, "add", "add")
-	bindViperPersistentFlag(rootCmd, "start", "start")
+	bindViperPersistentFlag(rootCmd, "app.name", "name")
+	bindViperPersistentFlag(rootCmd, "log_json", "log_json")
+	bindViperPersistentFlag(rootCmd, "log_level", "log_level")
+
+	initZapLogger()
+}
+
+// initZapLogger initializes the zap logger.
+func initZapLogger() {
+	lg.Initialize(zapcore.DebugLevel, "logs/log.json")
+	logger = lg.GetSugared()
 }
 
 // initConfig initializes the service configuration.
@@ -63,7 +74,7 @@ func initConfig() {
 	} else {
 		viper.AddConfigPath("./configs")
 		viper.SetConfigType("yaml")
-		viper.SetConfigName("proxy")
+		viper.SetConfigName("config")
 	}
 
 	viper.AutomaticEnv()
@@ -78,8 +89,12 @@ func setConfigDefaults() {
 	viper.SetDefault("app.env", "dev")
 	viper.SetDefault("app.name", version.Name)
 	viper.SetDefault("app.version", version.DevVersion)
-	viper.SetDefault("app.build_date", version.BuildDate)
 	viper.SetDefault("app.run_date", time.Unix(version.RunDate, 0).Format(time.RFC1123))
+
+	// http server
+	viper.SetDefault("http.addr", "127.0.0.1:9091")
+	viper.SetDefault("http.port", "9091")
+	viper.SetDefault("http.ssl.enabled", false)
 }
 
 // bindViperPersistentFlag binds a Viper configuration flag to a persistent Cobra command flag.

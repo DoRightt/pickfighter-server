@@ -132,8 +132,8 @@ func getData(e *colly.HTMLElement) {
 	statString := profileEl.Find("p.hero-profile__division-body").Text()
 
 	fighter := model.Fighter{
-		Name:       profileEl.Find("h1.hero-profile__name").Text(),
-		NickName:   profileEl.Find("p.hero-profile__nickname").Text(),
+		Name:       strings.TrimSpace(profileEl.Find("h1.hero-profile__name").Text()),
+		NickName:   strings.TrimSpace(profileEl.Find("p.hero-profile__nickname").Text()),
 		FighterUrl: e.Request.URL.String(),
 		ImageUrl:   profileEl.Find(".hero-profile__image-wrap img").AttrOr("src", ""),
 	}
