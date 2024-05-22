@@ -30,7 +30,7 @@ func init() {
 	rootCmd.AddCommand(serveCmd)
 }
 
-// serveCmd represents the serve command. It is used to run the HTTP server with specified API routes.
+// serveCmd represents the serve command. It is used to run the gRPC server with specified API routes.
 var serveCmd = &cobra.Command{
 	Use:              "serve",
 	Short:            "Run gRPC Server",

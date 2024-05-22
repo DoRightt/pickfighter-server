@@ -26,16 +26,14 @@ type fightersRepository interface {
 
 // Controller defines a metadata service controller.
 type Controller struct {
-	repo fightersRepository
-	// Router *mux.Router // DEL
+	repo   fightersRepository
 	Logger logger.FbLogger
 }
 
 // New creates a Fighters service controller.
 func New(repo fightersRepository) *Controller {
 	return &Controller{
-		repo: repo,
-		// Router: mux.NewRouter(), // DEL
+		repo:   repo,
 		Logger: logger.GetSugared(),
 	}
 }
