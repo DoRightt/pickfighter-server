@@ -10,6 +10,9 @@ coverage.out
 
 /hack
 
+/auth/configs
+/auth/logs
+
 /fightbettr/configs
 /fightbettr/logs
 
