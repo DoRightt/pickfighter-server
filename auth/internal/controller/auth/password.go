@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"time"
 
+	internalErr "fightbettr.com/auth/pkg/errors"
 	"fightbettr.com/auth/pkg/model"
 	"fightbettr.com/auth/pkg/utils"
 	"github.com/jackc/pgx/v5"
@@ -16,36 +17,32 @@ func (c *Controller) PasswordReset(ctx context.Context, req *model.ResetPassword
 		Email: req.Email,
 	})
 	if err != nil {
-		// TODO handle errors
-		// if err == pgx.ErrNoRows {
-		// 	httplib.ErrorResponseJSON(w, http.StatusNotFound, http.StatusNotFound, err)
-		// 	return
-		// } else {
-		c.Logger.Errorf("Failed to find user credentials: %s", err)
-		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.UserCredentials, err)
-		// return
-		// }
-		return false, err
+		if err == pgx.ErrNoRows {
+			// not found error
+			return false, internalErr.New(internalErr.UserCredentials, err, 407)
+		} else {
+			// internal error
+			c.Logger.Errorf("Failed to find user credentials: %s", err)
+			return false, internalErr.New(internalErr.UserCredentials, err, 408)
+		}
 	}
 
 	user, err := c.repo.FindUser(ctx, &model.UserRequest{
 		UserId: credentials.UserId,
 	})
 	if err != nil {
-		// TODO handle error
+		// internal error
 		c.Logger.Errorf("Failed to find user: %s", err)
-		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.Profile, err)
-		return false, err
+		return false, internalErr.New(internalErr.Profile, err, 501)
 	}
 
 	tx, err := c.repo.BeginTx(ctx, pgx.TxOptions{
 		IsoLevel: pgx.Serializable,
 	})
 	if err != nil {
-		// TODO handle error
+		// bad request error
 		c.Logger.Errorf("Failed to create registration transaction: %s", err)
-		// httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Tx, err)
-		return false, err
+		return false, internalErr.New(internalErr.Tx, err, 107)
 	}
 
 	rn := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -58,17 +55,15 @@ func (c *Controller) PasswordReset(ctx context.Context, req *model.ResetPassword
 	credentials.TokenExpire = tokenExpire
 
 	if err := c.repo.ResetPassword(ctx, &credentials); err != nil {
-		// TODO handle error
+		// internal error
 		c.Logger.Errorf("Failed to reset user credentials: %s", err)
-		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.TxCommit, err)
-		return false, err
+		return false, internalErr.New(internalErr.TxCommit, err, 108)
 	}
 
-	if txErr := tx.Commit(ctx); txErr != nil {
-		// TODO handle error
-		c.Logger.Errorf("Failed to commit registration transaction: %s", txErr)
-		// httplib.ErrorResponseJSON(w, http.StatusBadRequest, 11, txErr)
-		return false, err
+	if err := tx.Commit(ctx); err != nil {
+		// bad request error
+		c.Logger.Errorf("Failed to commit registration transaction: %s", err)
+		return false, internalErr.New(internalErr.TxCommit, err, 109)
 	}
 
 	// TODO
@@ -89,26 +84,23 @@ func (c *Controller) PasswordRecover(ctx context.Context, req *model.RecoverPass
 		Token: req.Token,
 	})
 	if err != nil {
-		// TODO handle service errors
-		// if err == pgx.ErrNoRows {
-		// 	httplib.ErrorResponseJSON(w, http.StatusNotFound, http.StatusNotFound, err)
-		// 	return
-		// } else {
-		c.Logger.Errorf("Failed to find user credentials: %s", err)
-		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.UserCredentials, err)
-		// return
-		// }
-		return false, err
+		if err == pgx.ErrNoRows {
+			// not found error
+			return false, internalErr.New(internalErr.UserCredentialsToken, err, 409)
+		} else {
+			// internal error
+			c.Logger.Errorf("Failed to find user credentials: %s", err)
+			return false, internalErr.New(internalErr.UserCredentials, err, 410)
+		}
 	}
 
 	tx, err := c.repo.BeginTx(ctx, pgx.TxOptions{
 		IsoLevel: pgx.Serializable,
 	})
 	if err != nil {
-		// TODO handle service errors
+		// bad request error
 		c.Logger.Errorf("Failed to create registration transaction: %s", err)
-		// httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Tx, err)
-		return false, err
+		return false, internalErr.New(internalErr.Tx, err, 110)
 	}
 
 	salt := utils.GetRandomString(saltLength)
@@ -120,24 +112,21 @@ func (c *Controller) PasswordRecover(ctx context.Context, req *model.RecoverPass
 	if err := c.repo.ConfirmCredentialsToken(ctx, tx, model.UserCredentialsRequest{
 		UserId: credentials.UserId,
 	}); err != nil {
-		// TODO handle service errors
+		// internal error
 		c.Logger.Errorf("Failed to reset user credentials: %s", err)
-		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.UserCredentials, err)
-		return false, err
+		return false, internalErr.New(internalErr.UserCredentials, err, 411)
 	}
 
 	if err := c.repo.UpdatePassword(ctx, tx, credentials); err != nil {
-		// TODO handle service errors
+		// internal error
 		c.Logger.Errorf("Failed to update user password: %s", err)
-		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.UserCredentialsReset, err)
-		return false, err
+		return false, internalErr.New(internalErr.UserCredentialsReset, err, 412)
 	}
 
 	if txErr := tx.Commit(ctx); txErr != nil {
-		// TODO handle service errors
+		// bad request error
 		c.Logger.Errorf("Failed to commit registration transaction: %s", txErr)
-		// httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.TxCommit, txErr)
-		return false, err
+		return false, internalErr.New(internalErr.TxCommit, err, 111)
 	}
 
 	return true, nil

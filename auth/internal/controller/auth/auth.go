@@ -50,20 +50,16 @@ func (c *Controller) RegisterConfirm(ctx context.Context, req *model.UserCredent
 		Token: req.Token,
 	})
 	if err != nil {
-		// TODO handle error
 		if err == pgx.ErrNoRows {
 			return false, internalErr.New(internalErr.UserCredentialsToken, err, 401)
 		} else {
 			c.Logger.Errorf("Failed to get user credentials: %s", err)
-			return false, internalErr.NewDefault(internalErr.UserCredentialsToken, 402)
+			return false, internalErr.NewDefault(internalErr.UserCredentials, 402)
 		}
 	}
 
 	if time.Now().Unix() >= creds.TokenExpire {
-		// TODO handle error
-		// 	httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.TokenExpired,
-		// 		fmt.Errorf("token expired, try to reset password"))
-		return false, err
+		return false, internalErr.NewDefault(internalErr.TokenExpired, 601)
 	}
 
 	if err := c.repo.ConfirmCredentialsToken(ctx, nil, model.UserCredentialsRequest{
@@ -71,10 +67,8 @@ func (c *Controller) RegisterConfirm(ctx context.Context, req *model.UserCredent
 		Token:     creds.Token,
 		TokenType: creds.TokenType,
 	}); err != nil {
-		// TODO handle error
 		c.Logger.Errorf("Failed to update user credentials: %s", err)
-		// 	httplib.ErrorResponseJSON(w, http.StatusInternalServerError, 111, err)
-		return false, err
+		return false, internalErr.New(internalErr.UserCredentialsUpdate, err, 403)
 	}
 
 	return true, nil
@@ -86,30 +80,22 @@ func (c *Controller) Login(ctx context.Context, req *model.AuthenticateRequest) 
 	})
 
 	if err != nil {
-		// TODO Handle errors
-		// if err == pgx.ErrNoRows {
-		// 	httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.UserCredentialsNotExists,
-		// 		fmt.Errorf("%s", "User with specified login credentials not exists"))
-		// 	return
-		// } else {
-		c.Logger.Errorf("Failed to get user credentials: %s", err)
-		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.UserCredentials, err)
-		// }
-		return nil, err
+		if err == pgx.ErrNoRows {
+			return nil, internalErr.New(internalErr.UserCredentialsNotExists, err, 404)
+		} else {
+			c.Logger.Errorf("Failed to get user credentials: %s", err)
+			return nil, internalErr.New(internalErr.UserCredentials, err, 405)
+		}
+
 	}
 
 	if !creds.Active {
-		// TODO Handle errors
-		// httplib.ErrorResponseJSON(w, http.StatusForbidden, internalErr.UserCredentialsIsNotActive,
-		// 	fmt.Errorf("%s", "User is not activated"))
-		return nil, err
+		return nil, internalErr.NewDefault(internalErr.UserCredentialsIsNotActive, 406)
 	}
 
 	p := utils.GenerateSaltedHash(req.Password, creds.Salt)
 	if p != creds.Password {
-		// TODO Handle errors
-		// httplib.ErrorResponseJSON(w, http.StatusBadRequest, 1, fmt.Errorf("%s", "Wrong password"))
-		return nil, err
+		return nil, internalErr.NewDefault(internalErr.AuthFormPasswordWrong, 204)
 	}
 
 	if req.RememberMe {
@@ -120,9 +106,8 @@ func (c *Controller) Login(ctx context.Context, req *model.AuthenticateRequest) 
 
 	token, err := c.createJWTToken(ctx, &creds, req)
 	if err != nil {
-		// TODO Handle error
-		// c.Logger.Errorf("Unable to create session for google JWT: %s", err)
-		return nil, err
+		c.Logger.Errorf("Unable to create session for google JWT: %s", err)
+		return nil, internalErr.New(internalErr.Token, err, 602)
 	}
 
 	return token, nil
