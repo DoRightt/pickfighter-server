@@ -71,8 +71,6 @@ func runServe(cmd *cobra.Command, args []string) {
 
 	route := args[0]
 
-	fmt.Println(port, ctx, route, "DEBUG")
-
 	app := service.New()
 
 	registry, err := consul.NewRegistry("localhost:8500")

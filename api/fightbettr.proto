@@ -11,7 +11,6 @@ service AuthService {
     rpc RegisterConfirm(RegisterConfirmRequest) returns (RegisterConfirmResponse);
 
     rpc Login(AuthenticateRequest) returns (AuthenticateResponse);
-    rpc Logout(LogoutRequest) returns (LogoutResponse);
 
     rpc PasswordReset(PasswordResetRequest) returns (PasswordResetResponse);
     rpc PasswordRecover(PasswordRecoveryRequest) returns (PasswordRecoveryResponse);
@@ -58,14 +57,6 @@ message AuthenticateResponse {
     int32 tokenId = 1;
     string accessToken = 2;
     google.protobuf.Timestamp ExpirationTime = 3;
-}
-
-message LogoutRequest {
-     google.protobuf.Empty request = 1;
-}
-
-message LogoutResponse {
-     google.protobuf.Empty response = 1;
 }
 
 message PasswordResetRequest {
