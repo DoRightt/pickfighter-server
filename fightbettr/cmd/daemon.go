@@ -10,6 +10,7 @@ import (
 	"fightbettr.com/fb-server/pkg/sigx"
 	"fightbettr.com/fb-server/pkg/version"
 	"fightbettr.com/fightbettr/internal/controller/fightbettr"
+	authgateway "fightbettr.com/fightbettr/internal/gateway/auth/grpc"
 	fightersgateway "fightbettr.com/fightbettr/internal/gateway/fighters/grpc"
 	httphandler "fightbettr.com/fightbettr/internal/handler/http"
 	service "fightbettr.com/fightbettr/internal/service/fightbettr"
@@ -96,8 +97,9 @@ func runServe(cmd *cobra.Command, args []string) {
 
 	defer registry.Deregister(ctx, instanceID, serviceName)
 
+	authGateway := authgateway.New(registry)
 	fightersGateway := fightersgateway.New(registry)
-	ctl := fightbettr.New(fightersGateway)
+	ctl := fightbettr.New(authGateway, fightersGateway)
 	h := httphandler.New(ctl)
 	app := service.New(h)
 
