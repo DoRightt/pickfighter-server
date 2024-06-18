@@ -36,6 +36,9 @@ func (h *Handler) GetFighters(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// Register handles the registration of a new user.
+// It expects a JSON request with user details, including name, email, password, and terms agreement.
+// Upon successful registration, it initiates a confirmation email and returns the user's ID.
 func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -68,6 +71,9 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	httplib.ResponseJSON(w, result)
 }
 
+// ConfirmRegistration handles the confirmation of user registration by validating the provided token.
+// Users receive a confirmation token upon successful registration, and this endpoint is used to confirm
+// and activate their accounts
 func (h *Handler) ConfirmRegistration(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -92,6 +98,9 @@ func (h *Handler) ConfirmRegistration(w http.ResponseWriter, r *http.Request) {
 	httplib.ResponseJSON(w, httplib.SuccessfulResult())
 }
 
+// Login handles the user login process, authenticating the user based on the provided credentials.
+// It validates the email or username and password, checks user activation status,
+// generates a JWT token for the authenticated user, and sets an authentication cookie.
 func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 30*time.Second)
 	defer cancel()
@@ -148,6 +157,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	httplib.ResponseJSON(w, result)
 }
 
+// Logout handles the user logout process by setting an expired cookie.
 func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) {
 	// ctx := r.Context()
 
@@ -170,6 +180,13 @@ func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) {
 	httplib.ResponseJSON(w, httplib.SuccessfulResultMap())
 }
 
+// ResetPassword handles the process of resetting a user's password.
+// It expects a JSON request containing the user's email address.
+// If the email is valid and associated with an existing user, a reset token is generated,
+// and an email containing the reset link is sent to the user.
+// The reset token is also stored in the database for verification during the password reset process.
+// A successful response is returned if the email exists, and the reset process is initiated.
+// In case of errors, appropriate error responses are sent with details in the response body.
 func (h *Handler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	// TODO add other fields except email
 	ctx := r.Context()
@@ -200,6 +217,11 @@ func (h *Handler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	httplib.ResponseJSON(w, httplib.SuccessfulResult())
 }
 
+// RecoverPassword handles the process of recovering a user's password based on a provided reset token.
+// It expects a JSON request containing the reset token, new password, and confirmation password.
+// If the token is valid, the password is updated, and the token is marked as used.
+// The response includes a successful result if the password recovery process is completed.
+// In case of errors, appropriate error responses are sent with details in the response body.
 func (h *Handler) RecoverPassword(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -258,6 +280,9 @@ func (h *Handler) RecoverPassword(w http.ResponseWriter, r *http.Request) {
 	httplib.ResponseJSON(w, httplib.SuccessfulResult())
 }
 
+// GetCurrentUser retrieves information about the currently authenticated user.
+// It extracts the user ID from the request context, queries the database for the user's details,
+// and responds with a JSON representation of the user.
 func (h *Handler) GetCurrentUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
