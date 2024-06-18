@@ -10,6 +10,9 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+// Register creates user credentials in a transactional context,
+// commits the transaction upon success, and asynchronously sends an email confirmation.
+// It returns the user ID upon successful registration.
 func (c *Controller) Register(ctx context.Context, req *model.RegisterRequest) (int32, error) {
 	tx, err := c.repo.BeginTx(ctx, pgx.TxOptions{
 		IsoLevel: pgx.Serializable,
@@ -45,6 +48,9 @@ func (c *Controller) Register(ctx context.Context, req *model.RegisterRequest) (
 	return credentials.UserId, nil
 }
 
+// RegisterConfirm verifies the user credentials token,
+// checks if the token is expired, and confirms the user's registration.
+// It returns true if the token is valid and registration is confirmed successfully.
 func (c *Controller) RegisterConfirm(ctx context.Context, req *model.UserCredentialsRequest) (bool, error) {
 	creds, err := c.repo.FindUserCredentials(ctx, model.UserCredentialsRequest{
 		Token: req.Token,
@@ -74,6 +80,9 @@ func (c *Controller) RegisterConfirm(ctx context.Context, req *model.UserCredent
 	return true, nil
 }
 
+// Login verifies user credentials by email and password,
+// generates a JWT token for authentication, and returns it.
+// Returns an error if credentials are invalid or token generation fails.
 func (c *Controller) Login(ctx context.Context, req *model.AuthenticateRequest) (*model.AuthenticateResult, error) {
 	creds, err := c.repo.FindUserCredentials(ctx, model.UserCredentialsRequest{
 		Email: req.Email,

@@ -12,6 +12,9 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+// PasswordReset resets the password for a user identified by email.
+// It generates a reset token, updates user credentials, and sends an email notification.
+// Returns true on successful password reset; otherwise returns an error.
 func (c *Controller) PasswordReset(ctx context.Context, req *model.ResetPasswordRequest) (bool, error) {
 	credentials, err := c.repo.FindUserCredentials(ctx, model.UserCredentialsRequest{
 		Email: req.Email,
@@ -79,6 +82,9 @@ func (c *Controller) PasswordReset(ctx context.Context, req *model.ResetPassword
 	return true, nil
 }
 
+// PasswordRecover resets the password for a user using a recovery token.
+// It validates the token, updates the user's password and salt, and commits the transaction.
+// Returns true on successful password recovery; otherwise returns an error.
 func (c *Controller) PasswordRecover(ctx context.Context, req *model.RecoverPasswordRequest) (bool, error) {
 	credentials, err := c.repo.FindUserCredentials(ctx, model.UserCredentialsRequest{
 		Token: req.Token,
