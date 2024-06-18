@@ -19,6 +19,9 @@ func New(registry discovery.Registry) *Gateway {
 	return &Gateway{registry}
 }
 
+// Register registers a new user via the auth-service.
+// It establishes a gRPC connection, sends the registration request,
+// and returns the user's credentials if successful.
 func (g *Gateway) Register(ctx context.Context, req *authmodel.RegisterRequest) (*authmodel.UserCredentials, error) {
 	conn, err := grpcutil.ServiceConnection(ctx, "auth-service", g.registry)
 	if err != nil {
@@ -57,6 +60,9 @@ func (g *Gateway) ConfirmRegistration(ctx context.Context, token string) (bool, 
 	return true, nil
 }
 
+// Login authenticates a user via the auth-service.
+// It establishes a gRPC connection, sends the authentication request,
+// and returns the authentication result if successful.
 func (g *Gateway) Login(ctx context.Context, req *authmodel.AuthenticateRequest) (*authmodel.AuthenticateResult, error) {
 	conn, err := grpcutil.ServiceConnection(ctx, "auth-service", g.registry)
 	if err != nil {
@@ -77,6 +83,9 @@ func (g *Gateway) Login(ctx context.Context, req *authmodel.AuthenticateRequest)
 	return token, nil
 }
 
+// ResetPassword initiates a password reset process via the auth-service.
+// It establishes a gRPC connection, sends the password reset request,
+// and returns true if the request was successfully processed.
 func (g *Gateway) ResetPassword(ctx context.Context, req *authmodel.ResetPasswordRequest) (bool, error) {
 	conn, err := grpcutil.ServiceConnection(ctx, "auth-service", g.registry)
 	if err != nil {
@@ -95,6 +104,9 @@ func (g *Gateway) ResetPassword(ctx context.Context, req *authmodel.ResetPasswor
 	return true, nil
 }
 
+// PasswordRecover initiates the password recovery process via the auth-service.
+// It establishes a gRPC connection, sends the password recovery request,
+// and returns true if the request was successfully processed.
 func (g *Gateway) PasswordRecover(ctx context.Context, req *authmodel.RecoverPasswordRequest) (bool, error) {
 	conn, err := grpcutil.ServiceConnection(ctx, "auth-service", g.registry)
 	if err != nil {
@@ -113,6 +125,9 @@ func (g *Gateway) PasswordRecover(ctx context.Context, req *authmodel.RecoverPas
 	return true, nil
 }
 
+// GetCurrentUser retrieves the current authenticated user's profile via the auth-service.
+// It establishes a gRPC connection, sends a profile request,
+// and returns the user's profile if successfully retrieved.
 func (g *Gateway) GetCurrentUser(ctx context.Context) (*authmodel.User, error) {
 	conn, err := grpcutil.ServiceConnection(ctx, "auth-service", g.registry)
 	if err != nil {

@@ -18,6 +18,7 @@ type ApiService struct {
 	Logger      lg.FbLogger
 }
 
+// New gets logger and returns new instance of ApiService
 func New(h HttpHandler) ApiService {
 	logger := lg.GetSugared()
 
@@ -28,10 +29,12 @@ func New(h HttpHandler) ApiService {
 	}
 }
 
+// Run starts the API service's HTTP server.
 func (s *ApiService) Run(ctx context.Context) error {
 	return s.Handler.RunHTTPServer(ctx)
 }
 
+// GracefulShutdown logs the received signal and exits the service.
 func (s *ApiService) GracefulShutdown(ctx context.Context, sig string) {
 	s.Logger.Warnf("Graceful shutdown. Signal received: %s", sig)
 
