@@ -60,6 +60,10 @@ func (e *InternalError) GetCode() int {
 	return int(e.Code)
 }
 
+func (e *InternalError) GetMessage() string {
+	return e.Message
+}
+
 func New(code int) *InternalError {
 	switch code {
 	case Tx:

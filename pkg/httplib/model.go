@@ -3,9 +3,13 @@ package httplib
 import (
 	"fmt"
 	"net/http"
-	internalErr "fightbettr.com/fb-server/pkg/errors"
 	"time"
 )
+
+type InternalError interface {
+	GetCode() int
+	GetMessage() string
+}
 
 // ApiError represents a structure for encoding API error responses in JSON format.
 type ApiError struct {
@@ -48,7 +52,7 @@ func NewApiError(code int, msg string) *ApiError {
 
 // NewApiErrFromInternalErr creates and returns a new instance of ApiError based on an internal error.
 // It sets the HTTP status code to the specified value or defaults to http.StatusBadRequest if not provided.
-func NewApiErrFromInternalErr(e *internalErr.InternalError, code ...int) *ApiError {
+func NewApiErrFromInternalErr(e InternalError, code ...int) *ApiError {
 	var status int
 
 	if len(code) > 0 {
@@ -60,7 +64,7 @@ func NewApiErrFromInternalErr(e *internalErr.InternalError, code ...int) *ApiErr
 	return &ApiError{
 		HttpStatus: status,
 		ErrorCode:  e.GetCode(),
-		Message:    e.Message,
+		Message:    e.GetMessage(),
 		Timestamp:  time.Now().Format(time.RFC1123),
 	}
 }

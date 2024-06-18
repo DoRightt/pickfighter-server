@@ -2,9 +2,11 @@ package httplib
 
 import (
 	"net/http"
-	internalErr "fightbettr.com/fb-server/pkg/errors"
 	"testing"
 	"time"
+
+	// TODO errors pkg should be higher
+	internalErr "fightbettr.com/fightbettr/pkg/errors"
 )
 
 func TestApiError(t *testing.T) {
@@ -94,8 +96,8 @@ func TestNewApiError(t *testing.T) {
 }
 
 func TestNewApiErrorWithCode(t *testing.T) {
-	internalErr := &internalErr.InternalError{
-		Code:    123,
+	internalErr := &internalErr.Error{
+		ErrCode: 123,
 		Message: "Test internal error",
 	}
 
@@ -112,8 +114,8 @@ func TestNewApiErrorWithCode(t *testing.T) {
 	if apiErrorWithCode.HttpStatus != http.StatusOK {
 		t.Errorf("NewApiErrFromInternalErr() HttpStatus = %d; expected %d", apiError.HttpStatus, http.StatusBadRequest)
 	}
-	if apiError.ErrorCode != internalErr.Code {
-		t.Errorf("NewApiErrFromInternalErr() ErrorCode = %d; expected %d", apiError.ErrorCode, internalErr.Code)
+	if apiError.ErrorCode != internalErr.ErrCode {
+		t.Errorf("NewApiErrFromInternalErr() ErrorCode = %d; expected %d", apiError.ErrorCode, internalErr.ErrCode)
 	}
 	if apiError.Message != internalErr.Message {
 		t.Errorf("NewApiErrFromInternalErr() Message = %s; expected %s", apiError.Message, internalErr.Message)
