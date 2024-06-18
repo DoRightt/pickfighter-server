@@ -119,6 +119,16 @@ func (h *Handler) RunHTTPServer(ctx context.Context) error {
 // It associates each route with the corresponding handler method from the service.
 // The routes include user registration, login, logout, password reset, password recovery, and profile retrieval.
 func (h *Handler) ApplyRoutes() {
+	// auth
+	h.router.HandleFunc("/register", h.Register).Methods(http.MethodPost)
+	h.router.HandleFunc("/register/confirm", h.ConfirmRegistration).Methods(http.MethodPost)
+	h.router.HandleFunc("/login", h.Login).Methods(http.MethodPost)
+	h.router.HandleFunc("/logout", h.Logout).Methods(http.MethodGet) // IfLoggedIn Middleware should be here
+	h.router.HandleFunc("/password/reset", h.ResetPassword).Methods(http.MethodPost)
+	h.router.HandleFunc("/password/recover", h.RecoverPassword).Methods(http.MethodPost)
+
+	// profile
+	h.router.HandleFunc("/profile", h.GetCurrentUser).Methods(http.MethodGet) // IfLoggedIn Middleware should be here
 
 	// fighters
 	h.router.HandleFunc("/fighters", h.GetFighters).Methods(http.MethodGet)

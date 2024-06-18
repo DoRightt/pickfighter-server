@@ -7,14 +7,12 @@ import (
 	"strings"
 	"time"
 
+	"fightbettr.com/auth/internal/controller/auth"
+	grpchandler "fightbettr.com/auth/internal/handler/grpc"
+	"fightbettr.com/auth/internal/repository/psql"
+	service "fightbettr.com/auth/internal/service/auth"
+	"fightbettr.com/auth/pkg/model"
 	"fightbettr.com/fb-server/pkg/sigx"
-	"fightbettr.com/fb-server/pkg/version"
-	"fightbettr.com/fightbettr/internal/controller/fightbettr"
-	authgateway "fightbettr.com/fightbettr/internal/gateway/auth/grpc"
-	fightersgateway "fightbettr.com/fightbettr/internal/gateway/fighters/grpc"
-	httphandler "fightbettr.com/fightbettr/internal/handler/http"
-	service "fightbettr.com/fightbettr/internal/service/fightbettr"
-	"fightbettr.com/fightbettr/pkg/model"
 	"fightbettr.com/pkg/discovery"
 	"fightbettr.com/pkg/discovery/consul"
 	"github.com/spf13/cobra"
@@ -23,7 +21,7 @@ import (
 )
 
 var allowedApiRoutes = []string{
-	model.GatewayService,
+	model.AuthService,
 }
 
 var errEmptyApiRoute = fmt.Errorf("one of the api routes (%s) should be specified", strings.Join(allowedApiRoutes, ","))
@@ -32,10 +30,10 @@ func init() {
 	rootCmd.AddCommand(serveCmd)
 }
 
-// serveCmd represents the serve command. It is used to run the HTTP server with specified API routes.
+// serveCmd represents the serve command. It is used to run the gRPC server with specified API routes.
 var serveCmd = &cobra.Command{
 	Use:              "serve",
-	Short:            "Run HTTP Server",
+	Short:            "Run gRPC Server",
 	Long:             ``,
 	TraverseChildren: true,
 	Args:             validateServerArgs,
@@ -68,26 +66,25 @@ func validateServerArgs(cmd *cobra.Command, args []string) error {
 // It initializes the application, sets up service and runs the HTTP server.
 func runServe(cmd *cobra.Command, args []string) {
 	port := viper.GetInt("http.port")
-	serviceName := version.Name
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	route := args[0]
 
+	app := service.New()
+
 	registry, err := consul.NewRegistry("localhost:8500")
 	if err != nil {
 		panic(err)
 	}
-
-	instanceID := discovery.GenerateInstanceID(serviceName)
-
-	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("localhost:%d", port)); err != nil {
+	instanceID := discovery.GenerateInstanceID(app.ServiceName)
+	if err := registry.Register(ctx, instanceID, app.ServiceName, fmt.Sprintf("localhost:%d", port)); err != nil {
 		panic(err)
 	}
 
 	go func() {
 		for {
-			if err := registry.ReportHealthyState(instanceID, serviceName); err != nil {
+			if err := registry.ReportHealthyState(instanceID, app.ServiceName); err != nil {
 				logger.Error("Failed to report healthy state", zap.Error(err))
 			}
 
@@ -95,13 +92,17 @@ func runServe(cmd *cobra.Command, args []string) {
 		}
 	}()
 
-	defer registry.Deregister(ctx, instanceID, serviceName)
+	defer registry.Deregister(ctx, instanceID, app.ServiceName)
 
-	authGateway := authgateway.New(registry)
-	fightersGateway := fightersgateway.New(registry)
-	ctl := fightbettr.New(authGateway, fightersGateway)
-	h := httphandler.New(ctl)
-	app := service.New(h)
+	repo, err := psql.New(ctx, logger)
+	if err != nil {
+		logger.Errorf("Unable to start postgresql connection: %s", err)
+		app.GracefulShutdown(ctx, err.Error())
+	}
+	ctl := auth.New(repo)
+	h := grpchandler.New(ctl)
+
+	app.Init(h)
 
 	viper.Set("api.route", route)
 
@@ -114,7 +115,7 @@ func runServe(cmd *cobra.Command, args []string) {
 		app.GracefulShutdown(ctx, signal.String())
 	})
 
-	if err := app.Run(ctx); err != nil {
+	if err := app.Run(); err != nil {
 		app.GracefulShutdown(ctx, err.Error())
 	}
 }

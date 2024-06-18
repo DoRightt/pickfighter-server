@@ -3,10 +3,11 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
 	"time"
 
-	lg "fightbettr.com/fightbettr/pkg/logger"
-	"fightbettr.com/fightbettr/pkg/version"
+	lg "fightbettr.com/auth/pkg/logger"
+	"fightbettr.com/auth/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
@@ -17,10 +18,10 @@ var (
 	logger  lg.FbLogger
 )
 
-// rootCmd is the main Cobra command representing the root of the Fightbettr service.
+// rootCmd is the main Cobra command representing the root of the Auth service.
 var rootCmd = &cobra.Command{
-	Use:   "Fightbettr Service",
-	Short: "This CLI works with data to manage and redirect it",
+	Use:   "Auth Service",
+	Short: "This CLI works with User data and Users credentials",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		showVersion, _ := cmd.Flags().GetBool("version")
 
@@ -33,7 +34,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-// Execute runs the root command for the Fightbettr service.
+// Execute runs the root command for the Auth service.
 // It executes the necessary logic for the command-line interface,
 // handling errors and logging them if they occur.
 func Execute() {
@@ -93,9 +94,26 @@ func setConfigDefaults() {
 	viper.SetDefault("app.run_date", time.Unix(version.RunDate, 0).Format(time.RFC1123))
 
 	// http server
-	viper.SetDefault("http.addr", "127.0.0.1:9091")
-	viper.SetDefault("http.port", "9091")
+	viper.SetDefault("http.addr", "127.0.0.1:9092")
+	viper.SetDefault("http.port", "9092")
 	viper.SetDefault("http.ssl.enabled", false)
+
+	// auth config
+	viper.SetDefault("auth.cookie_name", "fb_api_token")
+	viper.SetDefault("auth.jwt.cert", "")
+	viper.SetDefault("auth.jwt.key", "")
+
+	// postgres
+	viper.SetDefault("postgres.main.url", os.Getenv("POSTGRES_URL"))
+	viper.SetDefault("postgres.main.host", "localhost")
+	viper.SetDefault("postgres.main.port", "5432")
+	viper.SetDefault("postgres.main.name", "postgres")
+	viper.SetDefault("postgres.main.user", "postgres")
+
+	// email
+	viper.SetDefault("mail.sender_address", os.Getenv("SEND_FROM_ADDRESS")) // TODO
+	viper.SetDefault("mail.sender_name", os.Getenv("SEND_FROM_NAME"))       // TODO
+	viper.SetDefault("mail.app_password", os.Getenv("MAIL_APP_PASSWORD"))   // TODO
 }
 
 // bindViperPersistentFlag binds a Viper configuration flag to a persistent Cobra command flag.

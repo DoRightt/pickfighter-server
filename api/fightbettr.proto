@@ -1,7 +1,109 @@
 syntax = "proto3";
 option go_package = "/gen";
 
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+// * * * * * Auth Service * * * * *
+
+service AuthService {
+    rpc Register(RegisterRequest) returns (RegisterResponse);
+    rpc RegisterConfirm(RegisterConfirmRequest) returns (RegisterConfirmResponse);
+
+    rpc Login(AuthenticateRequest) returns (AuthenticateResponse);
+
+    rpc PasswordReset(PasswordResetRequest) returns (PasswordResetResponse);
+    rpc PasswordRecover(PasswordRecoveryRequest) returns (PasswordRecoveryResponse);
+    
+    rpc Profile(ProfileRequest) returns (ProfileResponse);
+}
+
+message RegisterRequest {
+    string email = 1;
+	string password = 2;
+	string name = 3;
+	string token = 4;
+	bool termsOk = 5;
+}
+
+message RegisterResponse {
+    int32 id = 1;
+}
+
+message RegisterConfirmRequest {
+    string token = 1;
+}
+
+message RegisterConfirmResponse {
+    google.protobuf.Empty response = 1;
+}
+
+message AuthenticateRequest {
+    string email = 1;
+	string password = 2;
+
+	bool rememberMe = 3;
+	string userAgent = 4;
+	string ipAddress = 5;
+
+	string subject = 6;
+	int64 expiresIn = 7;
+	repeated string audience = 8;
+
+	int32 method = 9;
+}
+
+message AuthenticateResponse {
+    int32 tokenId = 1;
+    string accessToken = 2;
+    google.protobuf.Timestamp ExpirationTime = 3;
+}
+
+message PasswordResetRequest {
+    string email = 1;
+}
+
+message PasswordResetResponse {
+    google.protobuf.Empty response = 1;
+}
+
+message PasswordRecoveryRequest {
+    string token = 1;
+    string password = 2;
+    string confirmPassword = 3;
+}
+
+message PasswordRecoveryResponse {
+     google.protobuf.Empty response = 1;
+}
+
+message ProfileRequest {
+    int32 userId = 1;
+    string name = 2;
+}
+
+message ProfileResponse {
+    User user = 1;
+}
+
+message User {
+    int32 userId = 1;
+    string name = 2;
+    string email = 3;
+    string rank = 4;
+    string claim = 5;
+    uint64 roles = 6;
+    uint64 flags = 7;
+    int64 createdAt = 8;
+    int64 updatedAt = 9;
+}
+
 // * * * * * Fighter Service * * * * *
+
+service FightersService {
+    rpc SearchFightersCount(FightersRequest) returns (FightersCountResponse);
+    rpc SearchFighters(FightersRequest) returns (FightersResponse);
+}
 
 message Fighter {
     int32 fighterId = 1;
@@ -59,11 +161,6 @@ message FightersResponse {
 
 message FightersCountResponse {
     int32 count = 1;
-}
-
-service FightersService {
-    rpc SearchFightersCount(FightersRequest) returns (FightersCountResponse);
-    rpc SearchFighters(FightersRequest) returns (FightersResponse);
 }
 
 // * * * * * * * * * * * * * * * * *
