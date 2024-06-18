@@ -84,6 +84,7 @@ func initConfig() {
 	}
 }
 
+// setConfigDefaults sets default values for various configuration options.
 func setConfigDefaults() {
 	// app defaults
 	viper.SetDefault("app.env", "dev")
