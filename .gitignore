@@ -13,6 +13,9 @@ coverage.out
 /auth/configs
 /auth/logs
 
+/events/configs
+/events/logs
+
 /fightbettr/configs
 /fightbettr/logs
 
