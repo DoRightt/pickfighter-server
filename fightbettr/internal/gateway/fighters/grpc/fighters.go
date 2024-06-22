@@ -9,12 +9,12 @@ import (
 	"fightbettr.com/pkg/discovery"
 )
 
-// Gateway defines an gRPC gateway for a rating service.
+// Gateway defines an gRPC gateway for a fighters service.
 type Gateway struct {
 	registry discovery.Registry
 }
 
-// New creates a new gRPC gateway for a rating service.
+// New creates a new gRPC gateway for a fighters service.
 func New(registry discovery.Registry) *Gateway {
 	return &Gateway{registry}
 }
