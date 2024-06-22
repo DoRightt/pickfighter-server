@@ -4,6 +4,7 @@ import (
 	"context"
 
 	authmodel "fightbettr.com/auth/pkg/model"
+	eventmodel "fightbettr.com/events/pkg/model"
 	fightersmodel "fightbettr.com/fighters/pkg/model"
 )
 
@@ -20,19 +21,28 @@ type authGateway interface {
 	GetCurrentUser(ctx context.Context) (*authmodel.User, error)
 }
 
+type eventGateway interface {
+	CreateEvent(ctx context.Context, req *eventmodel.EventRequest) (*eventmodel.Event, error)
+	SearchEvents(ctx context.Context) (*eventmodel.EventsResponse, error)
+}
+
 // Controller defines a gateway service controller.
 type Controller struct {
 	authGateway     authGateway
+	eventGateway    eventGateway
 	fightersGateway fightersGateway
 }
 
 // New creates new Controller instance
-func New(authGateway authGateway, fightersGateway fightersGateway) *Controller {
+func New(authGateway authGateway, eventGateway eventGateway, fightersGateway fightersGateway) *Controller {
 	return &Controller{
 		authGateway,
+		eventGateway,
 		fightersGateway,
 	}
 }
+
+// * * * * * Fighters Controller Methods * * * * *
 
 // SearchFighters searches for fighters with the given status using the fightersGateway.
 func (c *Controller) SearchFighters(ctx context.Context, status string) ([]*fightersmodel.Fighter, error) {
@@ -44,7 +54,9 @@ func (c *Controller) SearchFighters(ctx context.Context, status string) ([]*figh
 	return fighters, nil
 }
 
-// Register handles the registration of a new user. It takes a context and a 
+// * * * * * Auth Controller Methods * * * * *
+
+// Register handles the registration of a new user. It takes a context and a
 // RegisterRequest, and returns the registered UserCredentials or an error.
 func (c *Controller) Register(ctx context.Context, req *authmodel.RegisterRequest) (*authmodel.UserCredentials, error) {
 	credentials, err := c.authGateway.Register(ctx, req)
@@ -103,4 +115,24 @@ func (c *Controller) GetCurrentUser(ctx context.Context) (*authmodel.User, error
 	}
 
 	return user, nil
+}
+
+// * * * * * Events Controller Methods * * * * *
+
+func (c *Controller) CreateEvent(ctx context.Context, req *eventmodel.EventRequest) (*eventmodel.Event, error) {
+	user, err := c.eventGateway.CreateEvent(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (c *Controller) SearchEvents(ctx context.Context) (*eventmodel.EventsResponse, error) {
+	events, err := c.eventGateway.SearchEvents(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return events, nil
 }
