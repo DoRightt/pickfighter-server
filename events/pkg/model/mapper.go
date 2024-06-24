@@ -4,10 +4,17 @@ import (
 	"fightbettr.com/gen"
 )
 
-func EventRequestFromProto(p *gen.CreateEventRequest) *EventsRequest {
-	return &EventsRequest{
+func EventRequestFromProto(p *gen.CreateEventRequest) *EventRequest {
+	return &EventRequest{
 		Name:   p.Name,
 		Fights: FightsFromProto(p.Fights),
+	}
+}
+
+func EventRequestToProto(req *EventRequest) *gen.CreateEventRequest {
+	return &gen.CreateEventRequest{
+		Name:   req.Name,
+		Fights: FightsToProto(req.Fights),
 	}
 }
 
@@ -51,7 +58,22 @@ func FightsToProto(fights []Fight) []*gen.Fight {
 	return protoFights
 }
 
-func EventsToProto(events []Event) []*gen.Event {
+func EventsFromProto(p []*gen.Event) []*Event {
+	events := make([]*Event, len(p))
+
+	for i, v := range p {
+		events[i] = &Event{
+			EventId: v.EventId,
+			Name:    v.Name,
+			IsDone:  v.IsDone,
+			Fights:  FightsFromProto(v.Fights),
+		}
+	}
+
+	return events
+}
+
+func EventsToProto(events []*Event) []*gen.Event {
 	protoEvents := make([]*gen.Event, len(events))
 
 	for i, v := range events {
@@ -75,7 +97,31 @@ func BetRequestFromProto(p *gen.CreateBetRequest) *Bet {
 	}
 }
 
-func BetsToProto(bets []Bet) []*gen.Bet {
+func BetRequestToProto(bet *Bet) *gen.CreateBetRequest {
+	return &gen.CreateBetRequest{
+		BetId:     bet.BetId,
+		FightId:   bet.FightId,
+		UserId:    bet.UserId,
+		FighterId: bet.FighterId,
+	}
+}
+
+func BetsFromProto(p []*gen.Bet) []*Bet {
+	bets := make([]*Bet, len(p))
+
+	for i, v := range p {
+		bets[i] = &Bet{
+			BetId:     v.BetId,
+			FightId:   v.FightId,
+			UserId:    v.UserId,
+			FighterId: v.FighterId,
+		}
+	}
+
+	return bets
+}
+
+func BetsToProto(bets []*Bet) []*gen.Bet {
 	protoBets := make([]*gen.Bet, len(bets))
 
 	for i, v := range bets {
