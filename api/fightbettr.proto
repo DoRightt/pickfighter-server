@@ -124,7 +124,8 @@ message GetEventsRequest {
 }
 
 message GetEventsResponse {
-    repeated Event events = 1;
+    int32 Count = 1;
+    repeated Event events = 2;
 }
 
 message CreateBetRequest {
@@ -139,11 +140,12 @@ message CreateBetResponse {
 }
 
 message BetsRequest {
-    google.protobuf.Empty response = 1;
+    int32 userId = 1;
 }
 
 message BetsResponse {
-    repeated Bet bets = 1;
+    int32 Count = 1;
+    repeated Bet bets = 2;
 }
 
 message FightResultRequest {
