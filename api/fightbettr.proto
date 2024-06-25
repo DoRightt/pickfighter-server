@@ -155,7 +155,7 @@ message FightResultRequest {
 }
 
 message FightResultResponse {
-     google.protobuf.Empty response = 1;
+     int32 fightId = 1;
 }
 
 message Fight {
