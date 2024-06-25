@@ -10,12 +10,16 @@ import (
 	"time"
 
 	"fightbettr.com/auth/pkg/model"
+	eventmodel "fightbettr.com/events/pkg/model"
 	"fightbettr.com/pkg/httplib"
 	"fightbettr.com/pkg/utils"
+	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/spf13/viper"
 
 	internalErr "fightbettr.com/fightbettr/pkg/errors"
 )
+
+// * * * * * Fighters Handlers * * * * *
 
 // GetFighters handles HTTP requests to retrieve fighters based on status.
 func (h *Handler) GetFighters(w http.ResponseWriter, r *http.Request) {
@@ -35,6 +39,8 @@ func (h *Handler) GetFighters(w http.ResponseWriter, r *http.Request) {
 		Count:   int32(len(fighters)),
 	})
 }
+
+// * * * * * Auth Handlers * * * * *
 
 // Register handles the registration of a new user.
 // It expects a JSON request with user details, including name, email, password, and terms agreement.
@@ -296,4 +302,130 @@ func (h *Handler) GetCurrentUser(w http.ResponseWriter, r *http.Request) {
 	httplib.ResponseJSON(w, model.UserResult{
 		User: *user,
 	})
+}
+
+// * * * * * Event Handlers * * * * *
+
+func (h *Handler) CreateEvent(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	decoder := json.NewDecoder(r.Body)
+	var req eventmodel.EventRequest
+	if err := decoder.Decode(&req); err != nil {
+		// TODO handle errors from service
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
+	}
+
+	event, err := h.ctrl.CreateEvent(ctx, &req)
+	if err != nil {
+		// TODO handle errors from service
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
+	}
+
+	result := httplib.SuccessfulResult()
+	result.Id = event.EventId
+
+	httplib.ResponseJSON(w, result)
+}
+
+func (h *Handler) GetEvents(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	res, err := h.ctrl.SearchEvents(ctx)
+	if err != nil {
+		// TODO handle errors from service
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
+	}
+
+	httplib.ResponseJSON(w, httplib.ListResult{
+		Results: res.Events,
+		Count:   res.Count,
+	})
+}
+
+func (h *Handler) CreateBet(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	decoder := json.NewDecoder(r.Body)
+	var req eventmodel.Bet
+	if err := decoder.Decode(&req); err != nil {
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
+	}
+
+	token, ok := ctx.Value(model.ContextJWTPointer).(jwt.Token)
+	if !ok {
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, 320,
+			fmt.Errorf("unable to find request context token"))
+		return
+	}
+
+	userId, ok := token.Get(string(model.ContextUserId))
+	if !ok {
+		httplib.ErrorResponseJSON(w, http.StatusUnauthorized, http.StatusUnauthorized,
+			fmt.Errorf("illegal token, user id must be specified"))
+		return
+	}
+
+	req.UserId = int32(userId.(float64))
+
+	betId, err := h.ctrl.CreateBet(ctx, &req)
+	if err != nil {
+		// TODO handle errors from service
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Bets, err)
+	}
+
+	result := httplib.SuccessfulResult()
+	result.Id = betId
+
+	httplib.ResponseJSON(w, result)
+}
+
+func (h *Handler) GetBets(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	token, ok := ctx.Value(model.ContextJWTPointer).(jwt.Token)
+	if !ok {
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, 320,
+			fmt.Errorf("unable to find request context token"))
+		return
+	}
+
+	userId, ok := token.Get(string(model.ContextUserId))
+	if !ok {
+		httplib.ErrorResponseJSON(w, http.StatusUnauthorized, http.StatusUnauthorized,
+			fmt.Errorf("illegal token, user id must be specified"))
+		return
+	}
+
+	resp, err := h.ctrl.SearchBets(ctx, userId.(int32))
+	if err != nil {
+		// TODO handle errors from service
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Bets, err)
+	}
+
+	httplib.ResponseJSON(w, httplib.ListResult{
+		Results: resp.Bets,
+		Count:   resp.Count,
+	})
+}
+
+func (h *Handler) AddResult(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	decoder := json.NewDecoder(r.Body)
+	var req eventmodel.FightResultRequest
+	if err := decoder.Decode(&req); err != nil {
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
+	}
+
+	id, err := h.ctrl.SetResult(ctx, &req)
+	if err != nil {
+		// TODO handle errors from service
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Bets, err)
+	}
+
+	result := httplib.SuccessfulResult()
+	result.Id = id
+
+	httplib.ResponseJSON(w, result)
 }
