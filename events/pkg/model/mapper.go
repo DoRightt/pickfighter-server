@@ -143,3 +143,11 @@ func FightResultFromProto(p *gen.FightResultRequest) *FightResultRequest {
 		NotContest: p.NotContest,
 	}
 }
+
+func FightResultToProto(req *FightResultRequest) *gen.FightResultRequest {
+	return &gen.FightResultRequest{
+		FightId:    req.FightId,
+		WinnerId:   req.WinnerId,
+		NotContest: req.NotContest,
+	}
+}
