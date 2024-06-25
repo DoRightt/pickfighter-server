@@ -24,6 +24,9 @@ type authGateway interface {
 type eventGateway interface {
 	CreateEvent(ctx context.Context, req *eventmodel.EventRequest) (*eventmodel.Event, error)
 	SearchEvents(ctx context.Context) (*eventmodel.EventsResponse, error)
+	CreateBet(ctx context.Context, req *eventmodel.Bet) (*eventmodel.Bet, error)
+	SearchBets(ctx context.Context, userId int32) (*eventmodel.BetsResponse, error)
+	SetResult(ctx context.Context, req *eventmodel.FightResultRequest) (int32, error)
 }
 
 // Controller defines a gateway service controller.
@@ -120,12 +123,12 @@ func (c *Controller) GetCurrentUser(ctx context.Context) (*authmodel.User, error
 // * * * * * Events Controller Methods * * * * *
 
 func (c *Controller) CreateEvent(ctx context.Context, req *eventmodel.EventRequest) (*eventmodel.Event, error) {
-	user, err := c.eventGateway.CreateEvent(ctx, req)
+	event, err := c.eventGateway.CreateEvent(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
-	return user, nil
+	return event, nil
 }
 
 func (c *Controller) SearchEvents(ctx context.Context) (*eventmodel.EventsResponse, error) {
@@ -135,4 +138,31 @@ func (c *Controller) SearchEvents(ctx context.Context) (*eventmodel.EventsRespon
 	}
 
 	return events, nil
+}
+
+func (c *Controller) CreateBet(ctx context.Context, req *eventmodel.Bet) (*eventmodel.Bet, error) {
+	bet, err := c.eventGateway.CreateBet(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return bet, nil
+}
+
+func (c *Controller) SearchBets(ctx context.Context, userId int32) (*eventmodel.BetsResponse, error) {
+	bets, err := c.eventGateway.SearchBets(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return bets, nil
+}
+
+func (c *Controller) SetResult(ctx context.Context, req *eventmodel.FightResultRequest) (int32, error) {
+	id, err := c.eventGateway.SetResult(ctx, req)
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
 }
