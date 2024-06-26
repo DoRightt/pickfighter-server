@@ -12,12 +12,14 @@ coverage.out
 
 /auth/configs
 /auth/logs
+/auth/hack
 
 /events/configs
 /events/logs
 
 /fightbettr/configs
 /fightbettr/logs
+/fightbettr/hack
 
 /scraper/logs
 /scraper/collection
