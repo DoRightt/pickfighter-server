@@ -54,7 +54,7 @@ message AuthenticateRequest {
 }
 
 message AuthenticateResponse {
-    int32 tokenId = 1;
+    string tokenId = 1;
     string accessToken = 2;
     google.protobuf.Timestamp ExpirationTime = 3;
 }
@@ -242,6 +242,7 @@ message FighterStats {
 
 message FightersRequest {
     string status = 1;
+    repeated int32 fightersIds = 2;
 }
 
 message FightersResponse {
