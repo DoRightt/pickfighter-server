@@ -86,7 +86,7 @@ func (r *Repository) SearchEvents(ctx context.Context) ([]*eventmodel.Event, err
 		e.event_id, e.name, e.is_done AS is_event_done, 
 		f.fight_id, f.is_done AS is_fight_done, f.not_contest, 
 		f.created_at, f.fight_date, f.result,
-		f.fighter_red_id, f.fighter_blue_id,
+		f.fighter_red_id, f.fighter_blue_id
 	FROM
 		filtered_events e
 	LEFT JOIN
