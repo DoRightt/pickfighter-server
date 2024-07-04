@@ -21,11 +21,17 @@ func (c *Controller) CreateEvent(ctx context.Context, req *model.EventRequest) (
 	event, err := c.handleEventCreation(ctx, tx, req)
 	if err != nil {
 		c.Logger.Errorf("Error while user credentials creation: %s", err)
+		if txErr := tx.Rollback(ctx); txErr != nil {
+			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+		}
 		return 0, err
 	}
 
 	if txErr := tx.Commit(ctx); txErr != nil {
 		c.Logger.Errorf("Unable to commit transaction: %s", err)
+		if txErr := tx.Rollback(ctx); txErr != nil {
+			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+		}
 		cErr := internalErr.New(internalErr.TxCommit, err, 113)
 		return 0, cErr
 	}

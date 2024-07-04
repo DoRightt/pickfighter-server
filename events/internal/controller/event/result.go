@@ -20,12 +20,18 @@ func (c *Controller) SetFightResult(ctx context.Context, req *model.FightResultR
 
 	err = c.repo.SetFightResult(ctx, tx, req)
 	if err != nil {
+		if txErr := tx.Rollback(ctx); txErr != nil {
+			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+		}
 		intErr := internalErr.New(internalErr.EventsFightResult, err, 904)
 		return 0, intErr
 	}
 
 	err = c.checkEventIsDone(ctx, tx, req.FightId)
 	if err != nil {
+		if txErr := tx.Rollback(ctx); txErr != nil {
+			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+		}
 		intErr := internalErr.New(internalErr.EventIsDone, err, 905)
 		return 0, intErr
 	}
