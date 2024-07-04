@@ -4,11 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"os"
 
 	"fightbettr.com/fighters/internal/repository/psql"
+	internalErr "fightbettr.com/fighters/pkg/errors"
 	lg "fightbettr.com/fighters/pkg/logger"
 	"fightbettr.com/fighters/pkg/model"
+	"fightbettr.com/pkg/httplib"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5"
@@ -115,7 +118,6 @@ func createFighter(ctx context.Context, rep *psql.Repository, fighter model.Figh
 	if err != nil {
 		l.Errorf("Unable to begin transaction: %s", err)
 	}
-	defer tx.Rollback(ctx)
 
 	fighterId, err := rep.CreateNewFighter(ctx, tx, fighter)
 	if err != nil {
@@ -123,12 +125,12 @@ func createFighter(ctx context.Context, rep *psql.Repository, fighter model.Figh
 			l.Errorf("Unable to rollback transaction: %s", txErr)
 		}
 		if err.(*pgconn.PgError).Code == pgerrcode.UniqueViolation {
-			// intErr := internalErr.New(internalErr.TxNotUnique)
-			// return httplib.NewApiErrFromInternalErr(intErr)
+			intErr := internalErr.NewDefault(internalErr.TxNotUnique, 122)
+			return httplib.NewApiErrFromInternalErr(intErr)
 		} else {
-			// intErr := internalErr.New(internalErr.TxUnknown)
+			intErr := internalErr.NewDefault(internalErr.TxUnknown, 123)
 			l.Errorf("Failed to create fighter during registration transaction: %s", err)
-			// return httplib.NewApiErrFromInternalErr(intErr, http.StatusInternalServerError)
+			return httplib.NewApiErrFromInternalErr(intErr, http.StatusInternalServerError)
 		}
 	}
 
@@ -159,7 +161,6 @@ func updateFighter(ctx context.Context, rep *psql.Repository, fighter model.Figh
 	if err != nil {
 		l.Errorf("Unable to begin transaction: %s", err)
 	}
-	defer tx.Rollback(ctx)
 
 	updatedId, err := rep.UpdateFighter(ctx, tx, fighter)
 	if err != nil {
@@ -167,12 +168,12 @@ func updateFighter(ctx context.Context, rep *psql.Repository, fighter model.Figh
 			l.Errorf("Unable to rollback transaction: %s", txErr)
 		}
 		if err.(*pgconn.PgError).Code == pgerrcode.UniqueViolation {
-			// intErr := internalErr.New(internalErr.TxNotUnique)
-			// return httplib.NewApiErrFromInternalErr(intErr)
+			intErr := internalErr.NewDefault(internalErr.TxNotUnique, 120)
+			return httplib.NewApiErrFromInternalErr(intErr)
 		} else {
-			// intErr := internalErr.New(internalErr.TxUnknown)
+			intErr := internalErr.NewDefault(internalErr.TxUnknown, 121)
 			l.Errorf("Failed to update fighter during registration transaction: %s", err)
-			// return httplib.NewApiErrFromInternalErr(intErr, http.StatusInternalServerError)
+			return httplib.NewApiErrFromInternalErr(intErr, http.StatusInternalServerError)
 		}
 	}
 
@@ -180,6 +181,9 @@ func updateFighter(ctx context.Context, rep *psql.Repository, fighter model.Figh
 
 	if err := rep.UpdateFighterStats(ctx, tx, fighter.Stats); err != nil {
 		l.Errorf("Error while updating stats: %s", err)
+		if txErr := tx.Rollback(ctx); txErr != nil {
+			l.Errorf("Unable to rollback transaction: %s", txErr)
+		}
 	}
 
 	if txErr := tx.Commit(ctx); txErr != nil {
