@@ -87,10 +87,3 @@ func (c *Controller) SearchFighters(ctx context.Context, req *model.FightersRequ
 
 	return fighters, nil
 }
-
-func (c *Controller) GracefulShutdown(ctx context.Context, sig string) {
-	c.Logger.Warnf("Graceful shutdown. Signal received: %s", sig)
-	if c.repo != nil {
-		c.repo.GracefulShutdown()
-	}
-}

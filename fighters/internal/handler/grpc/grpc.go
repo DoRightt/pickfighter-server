@@ -65,7 +65,3 @@ func (h *Handler) SearchFighters(ctx context.Context, req *gen.FightersRequest) 
 		Fighters: model.FightersToProto(f),
 	}, nil
 }
-
-func (h *Handler) GracefulShutdown(ctx context.Context, sig string) {
-	h.ctrl.GracefulShutdown(ctx, sig)
-}

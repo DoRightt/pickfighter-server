@@ -1,12 +1,9 @@
 package service
 
 import (
-	"context"
 	"fmt"
 	"net"
-	"os"
 	"strings"
-	"sync"
 
 	grpchandler "fightbettr.com/fighters/internal/handler/grpc"
 	lg "fightbettr.com/fighters/pkg/logger"
@@ -58,20 +55,4 @@ func (s *ApiService) Run() error {
 	fmt.Printf("Server is listening at: %s\n", srvAddr)
 
 	return s.Server.Serve(lis)
-}
-
-func (s *ApiService) GracefulShutdown(ctx context.Context, sig string) {
-	var wg sync.WaitGroup
-	wg.Add(1)
-
-	go func() {
-		defer wg.Done()
-		s.Handler.GracefulShutdown(ctx, sig)
-	}()
-
-	wg.Wait()
-
-	s.Server.GracefulStop()
-
-	os.Exit(0)
 }
