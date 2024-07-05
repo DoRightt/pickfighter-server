@@ -4,7 +4,8 @@ import (
 	"context"
 	"time"
 
-	"fightbettr.com/auth/pkg/model"
+	authmodel "fightbettr.com/auth/pkg/model"
+	"fightbettr.com/pkg/model"
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -20,8 +21,8 @@ import (
 // The token is signed using RS256 algorithm with the configured signing key.
 // Function returns resulting authentication token information (model.AuthenticateRequest),
 // including token ID, access token, and expiration time.
-func (c *Controller) createJWTToken(ctx context.Context, creds *model.UserCredentials, req *model.AuthenticateRequest) (*model.AuthenticateResult, error) {
-	u, err := c.repo.FindUser(ctx, &model.UserRequest{
+func (c *Controller) createJWTToken(ctx context.Context, creds *authmodel.UserCredentials, req *authmodel.AuthenticateRequest) (*authmodel.AuthenticateResult, error) {
+	u, err := c.repo.FindUser(ctx, &authmodel.UserRequest{
 		UserId: creds.UserId,
 	})
 	if err != nil {
@@ -80,7 +81,7 @@ func (c *Controller) createJWTToken(ctx context.Context, creds *model.UserCreden
 		return nil, err
 	}
 
-	result := model.AuthenticateResult{
+	result := authmodel.AuthenticateResult{
 		TokenId:        tokenId.String(),
 		AccessToken:    string(payload),
 		ExpirationTime: time.Now().Add(time.Duration(req.ExpiresIn) * time.Second),

@@ -110,10 +110,9 @@ func setConfigDefaults() {
 	viper.SetDefault("postgres.main.name", "postgres")
 	viper.SetDefault("postgres.main.user", "postgres")
 
-	// email
-	viper.SetDefault("mail.sender_address", os.Getenv("SEND_FROM_ADDRESS")) // TODO
-	viper.SetDefault("mail.sender_name", os.Getenv("SEND_FROM_NAME"))       // TODO
-	viper.SetDefault("mail.app_password", os.Getenv("MAIL_APP_PASSWORD"))   // TODO
+	// web
+	viper.SetDefault("web.host", "http://localhost")
+	viper.SetDefault("web.port", "4200")
 }
 
 // bindViperPersistentFlag binds a Viper configuration flag to a persistent Cobra command flag.

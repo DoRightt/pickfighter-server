@@ -109,8 +109,7 @@ func (h *Handler) PasswordRecover(ctx context.Context, req *gen.PasswordRecovery
 // It verifies the presence of the user ID in the context, retrieves the user profile through the controller,
 // and returns the profile information or an error if fetching the profile fails.
 func (h *Handler) Profile(ctx context.Context, req *gen.ProfileRequest) (*gen.ProfileResponse, error) {
-	// TODO req TBD
-	currentUserId := ctx.Value(model.ContextUserId).(int32)
+	currentUserId := req.UserId
 	if currentUserId == 0 {
 		return nil, status.Errorf(codes.InvalidArgument, "request has no id")
 	}
@@ -122,9 +121,4 @@ func (h *Handler) Profile(ctx context.Context, req *gen.ProfileRequest) (*gen.Pr
 	}
 
 	return model.UserToProto(user), nil
-}
-
-// GracefulShutdown initiates a graceful shutdown of the service by delegating the signal handling to the controller.
-func (h *Handler) GracefulShutdown(ctx context.Context, sig string) {
-	h.ctrl.GracefulShutdown(ctx, sig)
 }
