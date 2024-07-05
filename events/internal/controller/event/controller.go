@@ -42,12 +42,3 @@ func New(repo eventRepository) *Controller {
 		Logger: lg.GetSugared(),
 	}
 }
-
-// GracefulShutdown initiates a graceful shutdown of the controller,
-// logging the received signal and shutting down the associated repository if available.
-func (c *Controller) GracefulShutdown(ctx context.Context, sig string) {
-	c.Logger.Warnf("Graceful shutdown. Signal received: %s", sig)
-	if c.repo != nil {
-		c.repo.GracefulShutdown()
-	}
-}

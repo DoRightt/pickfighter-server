@@ -21,6 +21,9 @@ func (c *Controller) CreateBet(ctx context.Context, req *eventmodel.Bet) (int32,
 	betId, err := c.repo.TxCreateBet(ctx, tx, req)
 	if err != nil {
 		c.Logger.Errorf("Error while user credentials creation: %s", err)
+		if txErr := tx.Rollback(ctx); txErr != nil {
+			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+		}
 		return 0, err
 	}
 

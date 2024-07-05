@@ -97,8 +97,10 @@ func runServe(cmd *cobra.Command, args []string) {
 	repo, err := psql.New(ctx, logger)
 	if err != nil {
 		logger.Errorf("Unable to start postgresql connection: %s", err)
-		app.GracefulShutdown(ctx, err.Error())
+		return
 	}
+	defer repo.GracefulShutdown()
+
 	ctl := event.New(repo)
 	h := grpchandler.New(ctl)
 
@@ -109,13 +111,16 @@ func runServe(cmd *cobra.Command, args []string) {
 	sigx.Listen(func(signal os.Signal) {
 		time.AfterFunc(15*time.Second, func() {
 			logger.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
+			cancel()
+			
+			os.Exit(1)
 		})
-		cancel()
 
-		app.GracefulShutdown(ctx, signal.String())
+		app.Server.GracefulStop()
 	})
 
 	if err := app.Run(); err != nil {
-		app.GracefulShutdown(ctx, err.Error())
+		logger.Fatal("app error: %s", err)
+		app.Server.GracefulStop()
 	}
 }

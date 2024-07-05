@@ -84,8 +84,3 @@ func (h *Handler) SetResult(ctx context.Context, req *gen.FightResultRequest) (*
 
 	return &gen.FightResultResponse{}, nil
 }
-
-// GracefulShutdown initiates a graceful shutdown of the service by delegating the signal handling to the controller.
-func (h *Handler) GracefulShutdown(ctx context.Context, sig string) {
-	h.ctrl.GracefulShutdown(ctx, sig)
-}
