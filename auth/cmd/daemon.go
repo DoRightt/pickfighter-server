@@ -91,7 +91,6 @@ func runServe(cmd *cobra.Command, args []string) {
 			time.Sleep(1 * time.Second)
 		}
 	}()
-
 	defer registry.Deregister(ctx, instanceID, app.ServiceName)
 
 	repo, err := psql.New(ctx, logger)
@@ -115,7 +114,7 @@ func runServe(cmd *cobra.Command, args []string) {
 		time.AfterFunc(15*time.Second, func() {
 			app.Logger.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
 			cancel()
-			
+
 			os.Exit(1)
 		})
 

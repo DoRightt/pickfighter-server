@@ -15,9 +15,9 @@ import (
 	fightersgateway "fightbettr.com/fightbettr/internal/gateway/fighters/grpc"
 	httphandler "fightbettr.com/fightbettr/internal/handler/http"
 	service "fightbettr.com/fightbettr/internal/service/fightbettr"
-	"fightbettr.com/fightbettr/pkg/model"
 	"fightbettr.com/pkg/discovery"
 	"fightbettr.com/pkg/discovery/consul"
+	"fightbettr.com/pkg/model"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -110,8 +110,10 @@ func runServe(cmd *cobra.Command, args []string) {
 	sigx.Listen(func(signal os.Signal) {
 		time.AfterFunc(15*time.Second, func() {
 			logger.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
+			cancel()
+
+			os.Exit(1)
 		})
-		cancel()
 
 		app.GracefulShutdown(ctx, signal.String())
 	})
