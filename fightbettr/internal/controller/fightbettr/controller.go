@@ -5,11 +5,12 @@ import (
 
 	authmodel "fightbettr.com/auth/pkg/model"
 	eventmodel "fightbettr.com/events/pkg/model"
+	gatewaymodel "fightbettr.com/fightbettr/pkg/model"
 	fightersmodel "fightbettr.com/fighters/pkg/model"
 )
 
 type fightersGateway interface {
-	SearchFighters(ctx context.Context, status fightersmodel.FighterStatus) ([]*fightersmodel.Fighter, error)
+	SearchFighters(ctx context.Context, req fightersmodel.FightersRequest) ([]*fightersmodel.Fighter, error)
 }
 
 type authGateway interface {
@@ -48,8 +49,8 @@ func New(authGateway authGateway, eventGateway eventGateway, fightersGateway fig
 // * * * * * Fighters Controller Methods * * * * *
 
 // SearchFighters searches for fighters with the given status using the fightersGateway.
-func (c *Controller) SearchFighters(ctx context.Context, status string) ([]*fightersmodel.Fighter, error) {
-	fighters, err := c.fightersGateway.SearchFighters(ctx, fightersmodel.FighterStatus(status))
+func (c *Controller) SearchFighters(ctx context.Context, req fightersmodel.FightersRequest) ([]*fightersmodel.Fighter, error) {
+	fighters, err := c.fightersGateway.SearchFighters(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -131,13 +132,26 @@ func (c *Controller) CreateEvent(ctx context.Context, req *eventmodel.EventReque
 	return event, nil
 }
 
-func (c *Controller) SearchEvents(ctx context.Context) (*eventmodel.EventsResponse, error) {
-	events, err := c.eventGateway.SearchEvents(ctx)
+func (c *Controller) SearchEvents(ctx context.Context) (*gatewaymodel.EventsResponse, error) {
+	resp, err := c.eventGateway.SearchEvents(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return events, nil
+	fighterIds := c.getFightersIds(resp.Events)
+
+	fReq := fightersmodel.FightersRequest{
+		FightersIds: fighterIds,
+	}
+
+	fighters, err := c.fightersGateway.SearchFighters(ctx, fReq)
+	if err != nil {
+		return nil, err
+	}
+
+	events := c.eventsPretify(resp.Events, fighters)
+
+	return &gatewaymodel.EventsResponse{Count: resp.Count, Events: events}, nil
 }
 
 func (c *Controller) CreateBet(ctx context.Context, req *eventmodel.Bet) (*eventmodel.Bet, error) {
