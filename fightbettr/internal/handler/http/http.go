@@ -119,27 +119,25 @@ func (h *Handler) RunHTTPServer(ctx context.Context) error {
 // It associates each route with the corresponding handler method from the service.
 // The routes include user registration, login, logout, password reset, password recovery, and profile retrieval.
 func (h *Handler) ApplyRoutes() {
-	// TODO middlewares
-
 	// auth
 	h.router.HandleFunc("/register", h.Register).Methods(http.MethodPost)
 	h.router.HandleFunc("/register/confirm", h.ConfirmRegistration).Methods(http.MethodPost)
 	h.router.HandleFunc("/login", h.Login).Methods(http.MethodPost)
-	h.router.HandleFunc("/logout", h.Logout).Methods(http.MethodGet) // IfLoggedIn Middleware should be here
+	h.router.HandleFunc("/logout", h.IfLoggedIn(h.Logout)).Methods(http.MethodGet)
 	h.router.HandleFunc("/password/reset", h.ResetPassword).Methods(http.MethodPost)
 	h.router.HandleFunc("/password/recover", h.RecoverPassword).Methods(http.MethodPost)
 
 	// profile
-	h.router.HandleFunc("/profile", h.GetCurrentUser).Methods(http.MethodGet) // IfLoggedIn Middleware should be here
+	h.router.HandleFunc("/profile", h.IfLoggedIn(h.GetCurrentUser)).Methods(http.MethodGet)
 
 	// events
-	h.router.HandleFunc("/create/event", h.CreateEvent).Methods(http.MethodPost) // CheckIsAdmin Middleware should be here
+	h.router.HandleFunc("/create/event", h.CheckIsAdmin(h.CreateEvent)).Methods(http.MethodPost)
 	h.router.HandleFunc("/events", h.GetEvents).Methods(http.MethodGet)
 
-	h.router.HandleFunc("/create/bet", h.CreateBet).Methods(http.MethodPost) // IfLoggedIn Middleware should be here
-	h.router.HandleFunc("/bets", h.GetBets).Methods(http.MethodGet) // IfLoggedIn Middleware should be here
+	h.router.HandleFunc("/create/bet", h.IfLoggedIn(h.CreateBet)).Methods(http.MethodPost)
+	h.router.HandleFunc("/bets", h.IfLoggedIn(h.GetBets)).Methods(http.MethodGet)
 
-	h.router.HandleFunc("/create/result", h.AddResult).Methods(http.MethodPost) // CheckIsAdmin Middleware should be here
+	h.router.HandleFunc("/create/result", h.CheckIsAdmin(h.AddResult)).Methods(http.MethodPost)
 
 	// fighters
 	h.router.HandleFunc("/fighters", h.GetFighters).Methods(http.MethodGet)
