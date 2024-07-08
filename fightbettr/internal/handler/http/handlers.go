@@ -9,9 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"fightbettr.com/auth/pkg/model"
+	authmodel "fightbettr.com/auth/pkg/model"
 	eventmodel "fightbettr.com/events/pkg/model"
+	fightersmodel "fightbettr.com/fighters/pkg/model"
 	"fightbettr.com/pkg/httplib"
+	"fightbettr.com/pkg/model"
 	"fightbettr.com/pkg/utils"
 	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/spf13/viper"
@@ -27,7 +29,7 @@ func (h *Handler) GetFighters(w http.ResponseWriter, r *http.Request) {
 
 	status := utils.Capitalize(r.FormValue("status"))
 
-	fighters, err := h.ctrl.SearchFighters(ctx, status)
+	fighters, err := h.ctrl.SearchFighters(ctx, fightersmodel.FightersRequest{Status: status})
 	if err != nil {
 		log.Printf("Repository get error: %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -49,7 +51,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	decoder := json.NewDecoder(r.Body)
-	var req model.RegisterRequest
+	var req authmodel.RegisterRequest
 	if err := decoder.Decode(&req); err != nil {
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.AuthDecode, err)
 	}
@@ -112,7 +114,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 
 	decoder := json.NewDecoder(r.Body)
-	var req model.AuthenticateRequest
+	var req authmodel.AuthenticateRequest
 	if err := decoder.Decode(&req); err != nil {
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.AuthDecode, err)
 		return
@@ -146,9 +148,17 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	token, err := h.ctrl.Login(ctx, &req)
 	if err != nil {
 		// TODO handle error
+		httplib.ErrorResponseJSON(
+			w,
+			http.StatusBadRequest,
+			internalErr.Auth,
+			err,
+		)
+		return
 	}
 
 	authCookieName := viper.GetString("auth.cookie_name")
+
 	http.SetCookie(w, &http.Cookie{
 		Name:    authCookieName,
 		Value:   token.AccessToken,
@@ -198,7 +208,7 @@ func (h *Handler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	decoder := json.NewDecoder(r.Body)
-	var req model.ResetPasswordRequest
+	var req authmodel.ResetPasswordRequest
 	if err := decoder.Decode(&req); err != nil {
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.AuthDecode, err)
 		return
@@ -232,7 +242,7 @@ func (h *Handler) RecoverPassword(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	decoder := json.NewDecoder(r.Body)
-	var req model.RecoverPasswordRequest
+	var req authmodel.RecoverPasswordRequest
 	if err := decoder.Decode(&req); err != nil {
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.AuthDecode, err)
 		return
@@ -299,7 +309,7 @@ func (h *Handler) GetCurrentUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	httplib.ResponseJSON(w, model.UserResult{
+	httplib.ResponseJSON(w, authmodel.UserResult{
 		User: *user,
 	})
 }
@@ -354,7 +364,7 @@ func (h *Handler) CreateBet(w http.ResponseWriter, r *http.Request) {
 
 	token, ok := ctx.Value(model.ContextJWTPointer).(jwt.Token)
 	if !ok {
-		httplib.ErrorResponseJSON(w, http.StatusBadRequest, 320,
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, 322,
 			fmt.Errorf("unable to find request context token"))
 		return
 	}
@@ -385,7 +395,7 @@ func (h *Handler) GetBets(w http.ResponseWriter, r *http.Request) {
 
 	token, ok := ctx.Value(model.ContextJWTPointer).(jwt.Token)
 	if !ok {
-		httplib.ErrorResponseJSON(w, http.StatusBadRequest, 320,
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, 323,
 			fmt.Errorf("unable to find request context token"))
 		return
 	}
@@ -397,10 +407,18 @@ func (h *Handler) GetBets(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := h.ctrl.SearchBets(ctx, userId.(int32))
+	id, ok := userId.(float64)
+	if !ok {
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, 324,
+			fmt.Errorf("unable to convert user id"))
+		return
+	}
+	
+	resp, err := h.ctrl.SearchBets(ctx, int32(id))
 	if err != nil {
 		// TODO handle errors from service
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Bets, err)
+		return
 	}
 
 	httplib.ResponseJSON(w, httplib.ListResult{
