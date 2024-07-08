@@ -103,5 +103,6 @@ type Fighter struct {
 
 // FightersRequest represents a request for fighters
 type FightersRequest struct {
-	Status string `json:"status"`
+	Status      string  `json:"status"`
+	FightersIds []int32 `json:"fighter_ids"`
 }

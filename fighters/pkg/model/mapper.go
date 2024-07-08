@@ -123,3 +123,15 @@ func FighterStatsrFromProto(f *gen.FighterStats) *FighterStats {
 		WinByDec:             int(f.WinByDec),
 	}
 }
+
+func FightersReqToProto(freq FightersRequest) *gen.FightersRequest {
+	req := &gen.FightersRequest{
+		Status: freq.Status,
+	}
+
+	if freq.FightersIds != nil && len(freq.FightersIds) > 0 {
+		req.FightersIds = freq.FightersIds
+	}
+
+	return req
+}

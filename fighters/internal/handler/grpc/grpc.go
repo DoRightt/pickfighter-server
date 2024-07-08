@@ -23,7 +23,7 @@ func New(ctrl *fighters.Controller) *Handler {
 }
 
 // SearchFightersCount retrieves the count of fighters based on the provided request.
-// It converts the request to the internal model, calls the controller's method, and returns the count. 
+// It converts the request to the internal model, calls the controller's method, and returns the count.
 func (h *Handler) SearchFightersCount(ctx context.Context, req *gen.FightersRequest) (*gen.FightersCountResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "nil request")
@@ -50,7 +50,8 @@ func (h *Handler) SearchFighters(ctx context.Context, req *gen.FightersRequest) 
 	}
 
 	fReq := &model.FightersRequest{
-		Status: req.Status,
+		Status:      req.Status,
+		FightersIds: req.FightersIds,
 	}
 
 	f, err := h.ctrl.SearchFighters(ctx, fReq)
@@ -63,8 +64,4 @@ func (h *Handler) SearchFighters(ctx context.Context, req *gen.FightersRequest) 
 	return &gen.FightersResponse{
 		Fighters: model.FightersToProto(f),
 	}, nil
-}
-
-func (h *Handler) GracefulShutdown(ctx context.Context, sig string) {
-	h.ctrl.GracefulShutdown(ctx, sig)
 }

@@ -2,7 +2,10 @@ package model
 
 // Services names used in the application
 const (
-	AuthService = "auth"
+	GatewayService  = "gateway"
+	AuthService     = "auth"
+	EventService    = "events"
+	FightersService = "fighters"
 )
 
 // ContextField represents keys used to store values in the context.

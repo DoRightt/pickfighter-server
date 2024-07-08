@@ -4,11 +4,13 @@ import (
 	"context"
 
 	authmodel "fightbettr.com/auth/pkg/model"
+	eventmodel "fightbettr.com/events/pkg/model"
+	gatewaymodel "fightbettr.com/fightbettr/pkg/model"
 	fightersmodel "fightbettr.com/fighters/pkg/model"
 )
 
 type fightersGateway interface {
-	SearchFighters(ctx context.Context, status fightersmodel.FighterStatus) ([]*fightersmodel.Fighter, error)
+	SearchFighters(ctx context.Context, req fightersmodel.FightersRequest) ([]*fightersmodel.Fighter, error)
 }
 
 type authGateway interface {
@@ -20,23 +22,35 @@ type authGateway interface {
 	GetCurrentUser(ctx context.Context) (*authmodel.User, error)
 }
 
+type eventGateway interface {
+	CreateEvent(ctx context.Context, req *eventmodel.EventRequest) (*eventmodel.Event, error)
+	SearchEvents(ctx context.Context) (*eventmodel.EventsResponse, error)
+	CreateBet(ctx context.Context, req *eventmodel.Bet) (*eventmodel.Bet, error)
+	SearchBets(ctx context.Context, userId int32) (*eventmodel.BetsResponse, error)
+	SetResult(ctx context.Context, req *eventmodel.FightResultRequest) (int32, error)
+}
+
 // Controller defines a gateway service controller.
 type Controller struct {
 	authGateway     authGateway
+	eventGateway    eventGateway
 	fightersGateway fightersGateway
 }
 
 // New creates new Controller instance
-func New(authGateway authGateway, fightersGateway fightersGateway) *Controller {
+func New(authGateway authGateway, eventGateway eventGateway, fightersGateway fightersGateway) *Controller {
 	return &Controller{
 		authGateway,
+		eventGateway,
 		fightersGateway,
 	}
 }
 
+// * * * * * Fighters Controller Methods * * * * *
+
 // SearchFighters searches for fighters with the given status using the fightersGateway.
-func (c *Controller) SearchFighters(ctx context.Context, status string) ([]*fightersmodel.Fighter, error) {
-	fighters, err := c.fightersGateway.SearchFighters(ctx, fightersmodel.FighterStatus(status))
+func (c *Controller) SearchFighters(ctx context.Context, req fightersmodel.FightersRequest) ([]*fightersmodel.Fighter, error) {
+	fighters, err := c.fightersGateway.SearchFighters(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +58,9 @@ func (c *Controller) SearchFighters(ctx context.Context, status string) ([]*figh
 	return fighters, nil
 }
 
-// Register handles the registration of a new user. It takes a context and a 
+// * * * * * Auth Controller Methods * * * * *
+
+// Register handles the registration of a new user. It takes a context and a
 // RegisterRequest, and returns the registered UserCredentials or an error.
 func (c *Controller) Register(ctx context.Context, req *authmodel.RegisterRequest) (*authmodel.UserCredentials, error) {
 	credentials, err := c.authGateway.Register(ctx, req)
@@ -103,4 +119,64 @@ func (c *Controller) GetCurrentUser(ctx context.Context) (*authmodel.User, error
 	}
 
 	return user, nil
+}
+
+// * * * * * Events Controller Methods * * * * *
+
+func (c *Controller) CreateEvent(ctx context.Context, req *eventmodel.EventRequest) (*eventmodel.Event, error) {
+	event, err := c.eventGateway.CreateEvent(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return event, nil
+}
+
+func (c *Controller) SearchEvents(ctx context.Context) (*gatewaymodel.EventsResponse, error) {
+	resp, err := c.eventGateway.SearchEvents(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	fighterIds := c.getFightersIds(resp.Events)
+
+	fReq := fightersmodel.FightersRequest{
+		FightersIds: fighterIds,
+	}
+
+	fighters, err := c.fightersGateway.SearchFighters(ctx, fReq)
+	if err != nil {
+		return nil, err
+	}
+
+	events := c.eventsPretify(resp.Events, fighters)
+
+	return &gatewaymodel.EventsResponse{Count: resp.Count, Events: events}, nil
+}
+
+func (c *Controller) CreateBet(ctx context.Context, req *eventmodel.Bet) (*eventmodel.Bet, error) {
+	bet, err := c.eventGateway.CreateBet(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return bet, nil
+}
+
+func (c *Controller) SearchBets(ctx context.Context, userId int32) (*eventmodel.BetsResponse, error) {
+	bets, err := c.eventGateway.SearchBets(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return bets, nil
+}
+
+func (c *Controller) SetResult(ctx context.Context, req *eventmodel.FightResultRequest) (int32, error) {
+	id, err := c.eventGateway.SetResult(ctx, req)
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
 }

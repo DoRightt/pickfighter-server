@@ -294,6 +294,244 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
+	EventService_CreateEvent_FullMethodName = "/EventService/CreateEvent"
+	EventService_GetEvents_FullMethodName   = "/EventService/GetEvents"
+	EventService_CreateBet_FullMethodName   = "/EventService/CreateBet"
+	EventService_GetBets_FullMethodName     = "/EventService/GetBets"
+	EventService_SetResult_FullMethodName   = "/EventService/SetResult"
+)
+
+// EventServiceClient is the client API for EventService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type EventServiceClient interface {
+	CreateEvent(ctx context.Context, in *CreateEventRequest, opts ...grpc.CallOption) (*CreateEventResponse, error)
+	GetEvents(ctx context.Context, in *GetEventsRequest, opts ...grpc.CallOption) (*GetEventsResponse, error)
+	CreateBet(ctx context.Context, in *CreateBetRequest, opts ...grpc.CallOption) (*CreateBetResponse, error)
+	GetBets(ctx context.Context, in *BetsRequest, opts ...grpc.CallOption) (*BetsResponse, error)
+	SetResult(ctx context.Context, in *FightResultRequest, opts ...grpc.CallOption) (*FightResultResponse, error)
+}
+
+type eventServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewEventServiceClient(cc grpc.ClientConnInterface) EventServiceClient {
+	return &eventServiceClient{cc}
+}
+
+func (c *eventServiceClient) CreateEvent(ctx context.Context, in *CreateEventRequest, opts ...grpc.CallOption) (*CreateEventResponse, error) {
+	out := new(CreateEventResponse)
+	err := c.cc.Invoke(ctx, EventService_CreateEvent_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *eventServiceClient) GetEvents(ctx context.Context, in *GetEventsRequest, opts ...grpc.CallOption) (*GetEventsResponse, error) {
+	out := new(GetEventsResponse)
+	err := c.cc.Invoke(ctx, EventService_GetEvents_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *eventServiceClient) CreateBet(ctx context.Context, in *CreateBetRequest, opts ...grpc.CallOption) (*CreateBetResponse, error) {
+	out := new(CreateBetResponse)
+	err := c.cc.Invoke(ctx, EventService_CreateBet_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *eventServiceClient) GetBets(ctx context.Context, in *BetsRequest, opts ...grpc.CallOption) (*BetsResponse, error) {
+	out := new(BetsResponse)
+	err := c.cc.Invoke(ctx, EventService_GetBets_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *eventServiceClient) SetResult(ctx context.Context, in *FightResultRequest, opts ...grpc.CallOption) (*FightResultResponse, error) {
+	out := new(FightResultResponse)
+	err := c.cc.Invoke(ctx, EventService_SetResult_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// EventServiceServer is the server API for EventService service.
+// All implementations must embed UnimplementedEventServiceServer
+// for forward compatibility
+type EventServiceServer interface {
+	CreateEvent(context.Context, *CreateEventRequest) (*CreateEventResponse, error)
+	GetEvents(context.Context, *GetEventsRequest) (*GetEventsResponse, error)
+	CreateBet(context.Context, *CreateBetRequest) (*CreateBetResponse, error)
+	GetBets(context.Context, *BetsRequest) (*BetsResponse, error)
+	SetResult(context.Context, *FightResultRequest) (*FightResultResponse, error)
+	mustEmbedUnimplementedEventServiceServer()
+}
+
+// UnimplementedEventServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedEventServiceServer struct {
+}
+
+func (UnimplementedEventServiceServer) CreateEvent(context.Context, *CreateEventRequest) (*CreateEventResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateEvent not implemented")
+}
+func (UnimplementedEventServiceServer) GetEvents(context.Context, *GetEventsRequest) (*GetEventsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetEvents not implemented")
+}
+func (UnimplementedEventServiceServer) CreateBet(context.Context, *CreateBetRequest) (*CreateBetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBet not implemented")
+}
+func (UnimplementedEventServiceServer) GetBets(context.Context, *BetsRequest) (*BetsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBets not implemented")
+}
+func (UnimplementedEventServiceServer) SetResult(context.Context, *FightResultRequest) (*FightResultResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetResult not implemented")
+}
+func (UnimplementedEventServiceServer) mustEmbedUnimplementedEventServiceServer() {}
+
+// UnsafeEventServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to EventServiceServer will
+// result in compilation errors.
+type UnsafeEventServiceServer interface {
+	mustEmbedUnimplementedEventServiceServer()
+}
+
+func RegisterEventServiceServer(s grpc.ServiceRegistrar, srv EventServiceServer) {
+	s.RegisterService(&EventService_ServiceDesc, srv)
+}
+
+func _EventService_CreateEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateEventRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventServiceServer).CreateEvent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EventService_CreateEvent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventServiceServer).CreateEvent(ctx, req.(*CreateEventRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EventService_GetEvents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetEventsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventServiceServer).GetEvents(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EventService_GetEvents_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventServiceServer).GetEvents(ctx, req.(*GetEventsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EventService_CreateBet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateBetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventServiceServer).CreateBet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EventService_CreateBet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventServiceServer).CreateBet(ctx, req.(*CreateBetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EventService_GetBets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BetsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventServiceServer).GetBets(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EventService_GetBets_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventServiceServer).GetBets(ctx, req.(*BetsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EventService_SetResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FightResultRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventServiceServer).SetResult(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EventService_SetResult_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventServiceServer).SetResult(ctx, req.(*FightResultRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// EventService_ServiceDesc is the grpc.ServiceDesc for EventService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var EventService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "EventService",
+	HandlerType: (*EventServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateEvent",
+			Handler:    _EventService_CreateEvent_Handler,
+		},
+		{
+			MethodName: "GetEvents",
+			Handler:    _EventService_GetEvents_Handler,
+		},
+		{
+			MethodName: "CreateBet",
+			Handler:    _EventService_CreateBet_Handler,
+		},
+		{
+			MethodName: "GetBets",
+			Handler:    _EventService_GetBets_Handler,
+		},
+		{
+			MethodName: "SetResult",
+			Handler:    _EventService_SetResult_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "fightbettr.proto",
+}
+
+const (
 	FightersService_SearchFightersCount_FullMethodName = "/FightersService/SearchFightersCount"
 	FightersService_SearchFighters_FullMethodName      = "/FightersService/SearchFighters"
 )

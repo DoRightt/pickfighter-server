@@ -96,6 +96,11 @@ func setConfigDefaults() {
 	viper.SetDefault("http.addr", "127.0.0.1:9091")
 	viper.SetDefault("http.port", "9091")
 	viper.SetDefault("http.ssl.enabled", false)
+
+	// auth config
+	viper.SetDefault("auth.cookie_name", "fb_api_token")
+	viper.SetDefault("auth.jwt.cert", "")
+	viper.SetDefault("auth.jwt.key", "")
 }
 
 // bindViperPersistentFlag binds a Viper configuration flag to a persistent Cobra command flag.

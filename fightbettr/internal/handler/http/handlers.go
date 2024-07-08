@@ -9,13 +9,19 @@ import (
 	"strings"
 	"time"
 
-	"fightbettr.com/auth/pkg/model"
+	authmodel "fightbettr.com/auth/pkg/model"
+	eventmodel "fightbettr.com/events/pkg/model"
+	fightersmodel "fightbettr.com/fighters/pkg/model"
 	"fightbettr.com/pkg/httplib"
+	"fightbettr.com/pkg/model"
 	"fightbettr.com/pkg/utils"
+	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/spf13/viper"
 
 	internalErr "fightbettr.com/fightbettr/pkg/errors"
 )
+
+// * * * * * Fighters Handlers * * * * *
 
 // GetFighters handles HTTP requests to retrieve fighters based on status.
 func (h *Handler) GetFighters(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +29,7 @@ func (h *Handler) GetFighters(w http.ResponseWriter, r *http.Request) {
 
 	status := utils.Capitalize(r.FormValue("status"))
 
-	fighters, err := h.ctrl.SearchFighters(ctx, status)
+	fighters, err := h.ctrl.SearchFighters(ctx, fightersmodel.FightersRequest{Status: status})
 	if err != nil {
 		log.Printf("Repository get error: %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -36,6 +42,8 @@ func (h *Handler) GetFighters(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// * * * * * Auth Handlers * * * * *
+
 // Register handles the registration of a new user.
 // It expects a JSON request with user details, including name, email, password, and terms agreement.
 // Upon successful registration, it initiates a confirmation email and returns the user's ID.
@@ -43,7 +51,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	decoder := json.NewDecoder(r.Body)
-	var req model.RegisterRequest
+	var req authmodel.RegisterRequest
 	if err := decoder.Decode(&req); err != nil {
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.AuthDecode, err)
 	}
@@ -106,7 +114,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 
 	decoder := json.NewDecoder(r.Body)
-	var req model.AuthenticateRequest
+	var req authmodel.AuthenticateRequest
 	if err := decoder.Decode(&req); err != nil {
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.AuthDecode, err)
 		return
@@ -140,9 +148,17 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	token, err := h.ctrl.Login(ctx, &req)
 	if err != nil {
 		// TODO handle error
+		httplib.ErrorResponseJSON(
+			w,
+			http.StatusBadRequest,
+			internalErr.Auth,
+			err,
+		)
+		return
 	}
 
 	authCookieName := viper.GetString("auth.cookie_name")
+
 	http.SetCookie(w, &http.Cookie{
 		Name:    authCookieName,
 		Value:   token.AccessToken,
@@ -192,7 +208,7 @@ func (h *Handler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	decoder := json.NewDecoder(r.Body)
-	var req model.ResetPasswordRequest
+	var req authmodel.ResetPasswordRequest
 	if err := decoder.Decode(&req); err != nil {
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.AuthDecode, err)
 		return
@@ -226,7 +242,7 @@ func (h *Handler) RecoverPassword(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	decoder := json.NewDecoder(r.Body)
-	var req model.RecoverPasswordRequest
+	var req authmodel.RecoverPasswordRequest
 	if err := decoder.Decode(&req); err != nil {
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.AuthDecode, err)
 		return
@@ -293,7 +309,141 @@ func (h *Handler) GetCurrentUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	httplib.ResponseJSON(w, model.UserResult{
+	httplib.ResponseJSON(w, authmodel.UserResult{
 		User: *user,
 	})
+}
+
+// * * * * * Event Handlers * * * * *
+
+func (h *Handler) CreateEvent(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	decoder := json.NewDecoder(r.Body)
+	var req eventmodel.EventRequest
+	if err := decoder.Decode(&req); err != nil {
+		// TODO handle errors from service
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
+	}
+
+	event, err := h.ctrl.CreateEvent(ctx, &req)
+	if err != nil {
+		// TODO handle errors from service
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
+	}
+
+	result := httplib.SuccessfulResult()
+	result.Id = event.EventId
+
+	httplib.ResponseJSON(w, result)
+}
+
+func (h *Handler) GetEvents(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	res, err := h.ctrl.SearchEvents(ctx)
+	if err != nil {
+		// TODO handle errors from service
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
+	}
+
+	httplib.ResponseJSON(w, httplib.ListResult{
+		Results: res.Events,
+		Count:   res.Count,
+	})
+}
+
+func (h *Handler) CreateBet(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	decoder := json.NewDecoder(r.Body)
+	var req eventmodel.Bet
+	if err := decoder.Decode(&req); err != nil {
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
+	}
+
+	token, ok := ctx.Value(model.ContextJWTPointer).(jwt.Token)
+	if !ok {
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, 322,
+			fmt.Errorf("unable to find request context token"))
+		return
+	}
+
+	userId, ok := token.Get(string(model.ContextUserId))
+	if !ok {
+		httplib.ErrorResponseJSON(w, http.StatusUnauthorized, http.StatusUnauthorized,
+			fmt.Errorf("illegal token, user id must be specified"))
+		return
+	}
+
+	req.UserId = int32(userId.(float64))
+
+	betId, err := h.ctrl.CreateBet(ctx, &req)
+	if err != nil {
+		// TODO handle errors from service
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Bets, err)
+	}
+
+	result := httplib.SuccessfulResult()
+	result.Id = betId
+
+	httplib.ResponseJSON(w, result)
+}
+
+func (h *Handler) GetBets(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	token, ok := ctx.Value(model.ContextJWTPointer).(jwt.Token)
+	if !ok {
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, 323,
+			fmt.Errorf("unable to find request context token"))
+		return
+	}
+
+	userId, ok := token.Get(string(model.ContextUserId))
+	if !ok {
+		httplib.ErrorResponseJSON(w, http.StatusUnauthorized, http.StatusUnauthorized,
+			fmt.Errorf("illegal token, user id must be specified"))
+		return
+	}
+
+	id, ok := userId.(float64)
+	if !ok {
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, 324,
+			fmt.Errorf("unable to convert user id"))
+		return
+	}
+	
+	resp, err := h.ctrl.SearchBets(ctx, int32(id))
+	if err != nil {
+		// TODO handle errors from service
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Bets, err)
+		return
+	}
+
+	httplib.ResponseJSON(w, httplib.ListResult{
+		Results: resp.Bets,
+		Count:   resp.Count,
+	})
+}
+
+func (h *Handler) AddResult(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	decoder := json.NewDecoder(r.Body)
+	var req eventmodel.FightResultRequest
+	if err := decoder.Decode(&req); err != nil {
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
+	}
+
+	id, err := h.ctrl.SetResult(ctx, &req)
+	if err != nil {
+		// TODO handle errors from service
+		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Bets, err)
+	}
+
+	result := httplib.SuccessfulResult()
+	result.Id = id
+
+	httplib.ResponseJSON(w, result)
 }

@@ -47,6 +47,13 @@ const (
 
 	DB        = 800
 	DBGetUser = 801
+
+	Events            = 900
+	EventsFightResult = 901
+	EventIsDone       = 902
+
+	Bets      = 1200
+	CountBets = 1201
 )
 
 var defaultErrors = DefaultMessagesList{
@@ -77,6 +84,11 @@ var defaultErrors = DefaultMessagesList{
 	JSON:                       Error{ErrCode: JSON, Message: "[JSON]: JSON unknown error"},
 	JSONDecoder:                Error{ErrCode: JSONDecoder, Message: "[JSON]: Decoder error"},
 	DBGetUser:                  Error{ErrCode: DBGetUser, Message: "[DB]: Failed to get user"},
+	Events:                     Error{ErrCode: Events, Message: "[Events]: Decode error"},
+	EventsFightResult:          Error{ErrCode: EventsFightResult, Message: "[Events]: Failed to set fight result"},
+	EventIsDone:                Error{ErrCode: EventIsDone, Message: "[Events]: Failed to set event done"},
+	Bets:                       Error{ErrCode: EventIsDone, Message: "[Bets]: Error"},
+	CountBets:                  Error{ErrCode: EventIsDone, Message: "[Bets]: Failed to get bets count"},
 }
 
 var unknownError = Error{ErrCode: 9999, Message: "Unknown Error"}

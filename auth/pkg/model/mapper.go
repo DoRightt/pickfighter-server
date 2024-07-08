@@ -1,9 +1,6 @@
 package model
 
 import (
-	"fmt"
-	"strconv"
-
 	"fightbettr.com/gen"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -73,17 +70,10 @@ func AuthenticateResultFromProto(p *gen.AuthenticateResponse) *AuthenticateResul
 }
 
 func AuthenticateResultToProto(req *AuthenticateResult) *gen.AuthenticateResponse {
-	tokenId, err := strconv.ParseInt(req.TokenId, 10, 32)
-	if err != nil {
-		// TODO handle error
-		fmt.Println("Error:", err)
-		return nil
-	}
-
 	return &gen.AuthenticateResponse{
 		// UserId:         p.UserId,
 		// Code:           p.Code,
-		TokenId:        int32(tokenId),
+		TokenId:        req.TokenId,
 		AccessToken:    req.AccessToken,
 		ExpirationTime: timestamppb.New(req.ExpirationTime),
 	}

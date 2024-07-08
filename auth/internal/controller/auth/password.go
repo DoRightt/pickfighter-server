@@ -60,6 +60,9 @@ func (c *Controller) PasswordReset(ctx context.Context, req *model.ResetPassword
 	if err := c.repo.ResetPassword(ctx, &credentials); err != nil {
 		// internal error
 		c.Logger.Errorf("Failed to reset user credentials: %s", err)
+		if txErr := tx.Rollback(ctx); txErr != nil {
+			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+		}
 		return false, internalErr.New(internalErr.TxCommit, err, 108)
 	}
 
@@ -120,12 +123,18 @@ func (c *Controller) PasswordRecover(ctx context.Context, req *model.RecoverPass
 	}); err != nil {
 		// internal error
 		c.Logger.Errorf("Failed to reset user credentials: %s", err)
+		if txErr := tx.Rollback(ctx); txErr != nil {
+			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+		}
 		return false, internalErr.New(internalErr.UserCredentials, err, 411)
 	}
 
 	if err := c.repo.UpdatePassword(ctx, tx, credentials); err != nil {
 		// internal error
 		c.Logger.Errorf("Failed to update user password: %s", err)
+		if txErr := tx.Rollback(ctx); txErr != nil {
+			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+		}
 		return false, internalErr.New(internalErr.UserCredentialsReset, err, 412)
 	}
 

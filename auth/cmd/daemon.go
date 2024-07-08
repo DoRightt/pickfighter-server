@@ -11,10 +11,10 @@ import (
 	grpchandler "fightbettr.com/auth/internal/handler/grpc"
 	"fightbettr.com/auth/internal/repository/psql"
 	service "fightbettr.com/auth/internal/service/auth"
-	"fightbettr.com/auth/pkg/model"
 	"fightbettr.com/fb-server/pkg/sigx"
 	"fightbettr.com/pkg/discovery"
 	"fightbettr.com/pkg/discovery/consul"
+	"fightbettr.com/pkg/model"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -91,31 +91,38 @@ func runServe(cmd *cobra.Command, args []string) {
 			time.Sleep(1 * time.Second)
 		}
 	}()
-
 	defer registry.Deregister(ctx, instanceID, app.ServiceName)
 
 	repo, err := psql.New(ctx, logger)
 	if err != nil {
 		logger.Errorf("Unable to start postgresql connection: %s", err)
-		app.GracefulShutdown(ctx, err.Error())
+		return
 	}
+	defer repo.GracefulShutdown()
+
 	ctl := auth.New(repo)
 	h := grpchandler.New(ctl)
 
-	app.Init(h)
+	if err := app.Init(h); err != nil {
+		app.Server.GracefulStop()
+		app.Logger.Fatal("error while app initialization: %s", err)
+	}
 
 	viper.Set("api.route", route)
 
 	sigx.Listen(func(signal os.Signal) {
 		time.AfterFunc(15*time.Second, func() {
-			logger.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
-		})
-		cancel()
+			app.Logger.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
+			cancel()
 
-		app.GracefulShutdown(ctx, signal.String())
+			os.Exit(1)
+		})
+
+		app.Server.GracefulStop()
 	})
 
 	if err := app.Run(); err != nil {
-		app.GracefulShutdown(ctx, err.Error())
+		app.Logger.Fatal("app error: %s", err)
+		app.Server.GracefulStop()
 	}
 }

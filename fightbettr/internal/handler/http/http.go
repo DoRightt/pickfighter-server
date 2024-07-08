@@ -123,12 +123,21 @@ func (h *Handler) ApplyRoutes() {
 	h.router.HandleFunc("/register", h.Register).Methods(http.MethodPost)
 	h.router.HandleFunc("/register/confirm", h.ConfirmRegistration).Methods(http.MethodPost)
 	h.router.HandleFunc("/login", h.Login).Methods(http.MethodPost)
-	h.router.HandleFunc("/logout", h.Logout).Methods(http.MethodGet) // IfLoggedIn Middleware should be here
+	h.router.HandleFunc("/logout", h.IfLoggedIn(h.Logout)).Methods(http.MethodGet)
 	h.router.HandleFunc("/password/reset", h.ResetPassword).Methods(http.MethodPost)
 	h.router.HandleFunc("/password/recover", h.RecoverPassword).Methods(http.MethodPost)
 
 	// profile
-	h.router.HandleFunc("/profile", h.GetCurrentUser).Methods(http.MethodGet) // IfLoggedIn Middleware should be here
+	h.router.HandleFunc("/profile", h.IfLoggedIn(h.GetCurrentUser)).Methods(http.MethodGet)
+
+	// events
+	h.router.HandleFunc("/create/event", h.CheckIsAdmin(h.CreateEvent)).Methods(http.MethodPost)
+	h.router.HandleFunc("/events", h.GetEvents).Methods(http.MethodGet)
+
+	h.router.HandleFunc("/create/bet", h.IfLoggedIn(h.CreateBet)).Methods(http.MethodPost)
+	h.router.HandleFunc("/bets", h.IfLoggedIn(h.GetBets)).Methods(http.MethodGet)
+
+	h.router.HandleFunc("/create/result", h.CheckIsAdmin(h.AddResult)).Methods(http.MethodPost)
 
 	// fighters
 	h.router.HandleFunc("/fighters", h.GetFighters).Methods(http.MethodGet)

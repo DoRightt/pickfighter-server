@@ -7,14 +7,15 @@ import (
 	"fightbettr.com/gen"
 	"fightbettr.com/internal/grpcutil"
 	"fightbettr.com/pkg/discovery"
+	"fightbettr.com/pkg/model"
 )
 
-// Gateway defines an gRPC gateway for a rating service.
+// Gateway defines an gRPC gateway for a auth service.
 type Gateway struct {
 	registry discovery.Registry
 }
 
-// New creates a new gRPC gateway for a rating service.
+// New creates a new gRPC gateway for a auth service.
 func New(registry discovery.Registry) *Gateway {
 	return &Gateway{registry}
 }
@@ -137,7 +138,9 @@ func (g *Gateway) GetCurrentUser(ctx context.Context) (*authmodel.User, error) {
 
 	client := gen.NewAuthServiceClient(conn)
 
-	profileReq := &gen.ProfileRequest{} // TBD
+	userId := ctx.Value(model.ContextUserId).(int32)
+	profileReq := &gen.ProfileRequest{UserId: userId}
+
 	resp, err := client.Profile(ctx, profileReq)
 	if err != nil {
 		return nil, err

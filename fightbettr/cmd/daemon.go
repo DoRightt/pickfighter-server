@@ -11,12 +11,13 @@ import (
 	"fightbettr.com/fb-server/pkg/version"
 	"fightbettr.com/fightbettr/internal/controller/fightbettr"
 	authgateway "fightbettr.com/fightbettr/internal/gateway/auth/grpc"
+	eventgateway "fightbettr.com/fightbettr/internal/gateway/events/grpc"
 	fightersgateway "fightbettr.com/fightbettr/internal/gateway/fighters/grpc"
 	httphandler "fightbettr.com/fightbettr/internal/handler/http"
 	service "fightbettr.com/fightbettr/internal/service/fightbettr"
-	"fightbettr.com/fightbettr/pkg/model"
 	"fightbettr.com/pkg/discovery"
 	"fightbettr.com/pkg/discovery/consul"
+	"fightbettr.com/pkg/model"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -98,8 +99,9 @@ func runServe(cmd *cobra.Command, args []string) {
 	defer registry.Deregister(ctx, instanceID, serviceName)
 
 	authGateway := authgateway.New(registry)
+	eventGateway := eventgateway.New(registry)
 	fightersGateway := fightersgateway.New(registry)
-	ctl := fightbettr.New(authGateway, fightersGateway)
+	ctl := fightbettr.New(authGateway, eventGateway, fightersGateway)
 	h := httphandler.New(ctl)
 	app := service.New(h)
 
@@ -108,8 +110,10 @@ func runServe(cmd *cobra.Command, args []string) {
 	sigx.Listen(func(signal os.Signal) {
 		time.AfterFunc(15*time.Second, func() {
 			logger.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
+			cancel()
+
+			os.Exit(1)
 		})
-		cancel()
 
 		app.GracefulShutdown(ctx, signal.String())
 	})

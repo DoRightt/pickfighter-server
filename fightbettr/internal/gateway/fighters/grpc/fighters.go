@@ -9,12 +9,12 @@ import (
 	"fightbettr.com/pkg/discovery"
 )
 
-// Gateway defines an gRPC gateway for a rating service.
+// Gateway defines an gRPC gateway for a fighters service.
 type Gateway struct {
 	registry discovery.Registry
 }
 
-// New creates a new gRPC gateway for a rating service.
+// New creates a new gRPC gateway for a fighters service.
 func New(registry discovery.Registry) *Gateway {
 	return &Gateway{registry}
 }
@@ -22,7 +22,7 @@ func New(registry discovery.Registry) *Gateway {
 // SearchFighters searches for fighters with the given status.
 // It establishes a gRPC connection to the Fighters service, sends a search request,
 // and returns a list of fighters.
-func (g *Gateway) SearchFighters(ctx context.Context, status fightersmodel.FighterStatus) ([]*fightersmodel.Fighter, error) {
+func (g *Gateway) SearchFighters(ctx context.Context, req fightersmodel.FightersRequest) ([]*fightersmodel.Fighter, error) {
 	conn, err := grpcutil.ServiceConnection(ctx, "fighters-service", g.registry)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,8 @@ func (g *Gateway) SearchFighters(ctx context.Context, status fightersmodel.Fight
 
 	client := gen.NewFightersServiceClient(conn)
 
-	resp, err := client.SearchFighters(ctx, &gen.FightersRequest{Status: string(status)})
+	fReq := fightersmodel.FightersReqToProto(req)
+	resp, err := client.SearchFighters(ctx, fReq)
 	if err != nil {
 		return nil, err
 	}

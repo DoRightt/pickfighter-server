@@ -54,7 +54,7 @@ message AuthenticateRequest {
 }
 
 message AuthenticateResponse {
-    int32 tokenId = 1;
+    string tokenId = 1;
     string accessToken = 2;
     google.protobuf.Timestamp ExpirationTime = 3;
 }
@@ -97,6 +97,95 @@ message User {
     int64 createdAt = 8;
     int64 updatedAt = 9;
 }
+
+// * * * * * Event Service * * * * *
+
+service EventService {
+    rpc CreateEvent(CreateEventRequest) returns (CreateEventResponse);
+    rpc GetEvents(GetEventsRequest) returns (GetEventsResponse);
+
+    rpc CreateBet(CreateBetRequest) returns (CreateBetResponse);
+    rpc GetBets(BetsRequest) returns (BetsResponse);
+
+    rpc SetResult(FightResultRequest) returns (FightResultResponse);
+}
+
+message CreateEventRequest {
+    string name = 1;
+    repeated Fight fights = 2;
+}
+
+message CreateEventResponse {
+    int32 eventId = 1;
+}
+
+message GetEventsRequest {
+    google.protobuf.Empty response = 1;
+}
+
+message GetEventsResponse {
+    int32 Count = 1;
+    repeated Event events = 2;
+}
+
+message CreateBetRequest {
+    int32 betId = 1;
+    int32 fightId = 2;
+    int32 userId = 3;
+    int32 fighterId = 4;
+}
+
+message CreateBetResponse {
+    int32 betId = 1;
+}
+
+message BetsRequest {
+    int32 userId = 1;
+}
+
+message BetsResponse {
+    int32 Count = 1;
+    repeated Bet bets = 2;
+}
+
+message FightResultRequest {
+    int32 fightId = 1;
+    int32 winnerId = 2;
+    bool notContest = 3;
+}
+
+message FightResultResponse {
+     int32 fightId = 1;
+}
+
+message Fight {
+    int32 fightId = 1;
+    int32 eventId = 2;
+    int32 fighterRedId = 3;
+    int32 fighterBlueId = 4;
+    bool isDone = 5;
+    bool isCanceled = 6;
+    bool notContest = 7;
+    int32 result = 8;
+    int64 createdAt = 9;
+    int64 fightDate = 10;
+}
+
+message Event {
+    int32 eventId = 1;
+    string name = 2;
+    repeated Fight fights = 3;
+    bool isDone = 4;
+}
+
+// TODO change Bet and BetRequest models
+message Bet {
+    int32 betId = 1;
+    int32 fightId = 2;
+    int32 userId = 3;
+    int32 fighterId = 4;
+}
+
 
 // * * * * * Fighter Service * * * * *
 
@@ -153,6 +242,7 @@ message FighterStats {
 
 message FightersRequest {
     string status = 1;
+    repeated int32 fightersIds = 2;
 }
 
 message FightersResponse {

@@ -25,6 +25,9 @@ func (c *Controller) Register(ctx context.Context, req *model.RegisterRequest) (
 
 	credentials, err := c.createUserCredentials(ctx, tx, req)
 	if err != nil {
+		if txErr := tx.Rollback(ctx); txErr != nil {
+			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+		}
 		c.Logger.Errorf("Error while user credentials creation: %s", err)
 		return 0, err
 	}

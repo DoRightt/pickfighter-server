@@ -97,5 +97,13 @@ func (r *Repository) performFightersQuery(req *model.FightersRequest) []string {
 		args = append(args, fmt.Sprintf(`f.status = '%s'`, req.Status))
 	}
 
+	if req.FightersIds != nil && len(req.FightersIds) > 0 {
+		stringedIds := make([]string, len(req.FightersIds))
+		for i, id := range req.FightersIds {
+			stringedIds[i] = fmt.Sprintf("%d", id)
+		}
+		args = append(args, fmt.Sprintf(`f.fighter_id IN (%s)`, strings.Join(stringedIds, ", ")))
+	}
+
 	return args
 }
