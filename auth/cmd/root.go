@@ -98,11 +98,6 @@ func setConfigDefaults() {
 	viper.SetDefault("http.port", "9092")
 	viper.SetDefault("http.ssl.enabled", false)
 
-	// auth config
-	viper.SetDefault("auth.cookie_name", "fb_api_token")
-	viper.SetDefault("auth.jwt.cert", "")
-	viper.SetDefault("auth.jwt.key", "")
-
 	// postgres
 	viper.SetDefault("postgres.main.url", os.Getenv("POSTGRES_URL"))
 	viper.SetDefault("postgres.main.host", "localhost")

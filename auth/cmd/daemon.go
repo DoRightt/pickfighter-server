@@ -11,7 +11,7 @@ import (
 	grpchandler "fightbettr.com/auth/internal/handler/grpc"
 	"fightbettr.com/auth/internal/repository/psql"
 	service "fightbettr.com/auth/internal/service/auth"
-	"fightbettr.com/fb-server/pkg/sigx"
+	"fightbettr.com/pkg/sigx"
 	"fightbettr.com/pkg/discovery"
 	"fightbettr.com/pkg/discovery/consul"
 	"fightbettr.com/pkg/model"
@@ -103,10 +103,7 @@ func runServe(cmd *cobra.Command, args []string) {
 	ctl := auth.New(repo)
 	h := grpchandler.New(ctl)
 
-	if err := app.Init(h); err != nil {
-		app.Server.GracefulStop()
-		app.Logger.Fatal("error while app initialization: %s", err)
-	}
+	app.Init(h)
 
 	viper.Set("api.route", route)
 
