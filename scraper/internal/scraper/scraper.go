@@ -10,10 +10,10 @@ import (
 	"sync"
 	"time"
 
-	"fightbettr.com/fb-server/pkg/model"
 	"fightbettr.com/scraper/internal/scraperutil"
 	data "fightbettr.com/scraper/pkg"
 	"fightbettr.com/scraper/pkg/logger"
+	"fightbettr.com/scraper/pkg/model"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
@@ -26,6 +26,12 @@ var detailsCollector *colly.Collector
 var collection = model.FightersCollection{}
 var wg sync.WaitGroup
 var l *zap.SugaredLogger
+
+type Config struct {
+	Login    string
+	Password string
+	Proxys   []string
+}
 
 // main function responsible for initializing the web scraping process.
 // It sets up the logger, creates collector instances, defines URL and limits for the main collector,

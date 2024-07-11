@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"fightbettr.com/fb-server/pkg/version"
+	"fightbettr.com/scraper/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -22,7 +22,6 @@ var rootCmd = &cobra.Command{
 		showVersion, _ := cmd.Flags().GetBool("version")
 		if showVersion {
 			fmt.Println("Dev version", version.DevVersion)
-			fmt.Println("Git version", version.GitVersion)
 			return nil
 		}
 
@@ -78,7 +77,6 @@ func setConfigDefaults() {
 	viper.SetDefault("app.env", "dev")
 	viper.SetDefault("app.name", version.Name)
 	viper.SetDefault("app.version", version.DevVersion)
-	viper.SetDefault("app.build_date", version.BuildDate)
 	viper.SetDefault("app.run_date", time.Unix(version.RunDate, 0).Format(time.RFC1123))
 }
 

@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"strings"
 
-	fighterModel "fightbettr.com/fb-server/pkg/model"
 	"fightbettr.com/scraper/pkg/logger"
+	"fightbettr.com/scraper/pkg/model"
 )
 
 const defaultStat = "0-0-0 (W-L-D)"
@@ -14,7 +14,7 @@ const defaultStat = "0-0-0 (W-L-D)"
 // The function splits the input string, extracts individual parts, converts them to integers,
 // and sets the Wins, Loses, and Draw fields of the Fighter accordingly. If conversion errors occur,
 // it logs an error and sets the corresponding value to 0.
-func SetStatistic(f *fighterModel.Fighter, stat string) {
+func SetStatistic(f *model.Fighter, stat string) {
 	l := logger.Get()
 
 	if len(stat) == 0 {
@@ -41,31 +41,31 @@ func SetStatistic(f *fighterModel.Fighter, stat string) {
 }
 
 // SetDivision sets division based on Division type.
-func SetDivision(f *fighterModel.Fighter, d string) {
+func SetDivision(f *model.Fighter, d string) {
 	switch d {
 	case "Flyweight Division":
-		f.Division = fighterModel.Flyweight
+		f.Division = model.Flyweight
 	case "Bantamweight Division":
-		f.Division = fighterModel.Bantamweight
+		f.Division = model.Bantamweight
 	case "Featherweight Division":
-		f.Division = fighterModel.Featherweight
+		f.Division = model.Featherweight
 	case "Lightweight Division":
-		f.Division = fighterModel.Lightweight
+		f.Division = model.Lightweight
 	case "Welterweight Division":
-		f.Division = fighterModel.Welterweight
+		f.Division = model.Welterweight
 	case "Middleweight Division":
-		f.Division = fighterModel.Middleweight
+		f.Division = model.Middleweight
 	case "Light Heavyweight Division":
-		f.Division = fighterModel.Lightheavyweight
+		f.Division = model.Lightheavyweight
 	case "Heavyweight Division":
-		f.Division = fighterModel.Heavyweight
+		f.Division = model.Heavyweight
 	case "Women's Strawweight Division":
-		f.Division = fighterModel.WomensStrawweight
+		f.Division = model.WomensStrawweight
 	case "Women's Flyweight Division":
-		f.Division = fighterModel.WomensFlyweight
+		f.Division = model.WomensFlyweight
 	case "Women's Bantamweight Division":
-		f.Division = fighterModel.WomensBantamweight
+		f.Division = model.WomensBantamweight
 	case "Women's Featerweight Division":
-		f.Division = fighterModel.WomensFeatherweight
+		f.Division = model.WomensFeatherweight
 	}
 }
