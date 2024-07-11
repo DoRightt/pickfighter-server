@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
+	logs "fightbettr.com/pkg/logger"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"go.uber.org/zap"
 )
 
 type FbRepo interface {
@@ -17,7 +17,6 @@ type FbRepo interface {
 	DebugLogSqlErr(q string, err error) error
 	SanitizeString(s string) string
 	GetPool() *pgxpool.Pool
-	GetLogger() *zap.SugaredLogger
 	BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error)
 }
 
@@ -51,9 +50,8 @@ func (c *Config) GetConnString() string {
 
 // Repo is structure for interacting with the database, storing a pool, logger and config
 type Repo struct {
-	Logger *zap.SugaredLogger `json:"-" yaml:"-"`
-	Pool   *pgxpool.Pool      `json:"-" yaml:"-"`
-	Config *Config            `json:"-" yaml:"-"`
+	Pool   *pgxpool.Pool `json:"-" yaml:"-"`
+	Config *Config       `json:"-" yaml:"-"`
 }
 
 // GetPoolConfig retrieves the pgxpool.Config for the PostgreSQL connection pool.
@@ -78,16 +76,11 @@ func (db *Repo) GetPool() *pgxpool.Pool {
 	return db.Pool
 }
 
-// GetLogger returns the zap.SugaredLogger stored in the Repo.
-func (db *Repo) GetLogger() *zap.SugaredLogger {
-	return db.Logger
-}
-
 // GracefulShutdown checks whether the value is in the pool and if so, closes it and logs the message
 func (db *Repo) GracefulShutdown() {
 	if db.Pool != nil {
 		db.Pool.Close()
-		db.Logger.Infof("Successfully closed postgreSQL connection pool")
+		logs.Infof("Successfully closed postgreSQL connection pool")
 	}
 }
 

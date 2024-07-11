@@ -4,21 +4,18 @@ import (
 	"context"
 	"fmt"
 
-	"fightbettr.com/fb-server/pkg/logger"
-
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 // NewPool creates a new Repo with a configured PostgreSQL connection pool.
 // It requires a context, a SugaredLogger, and a database configuration (Config).
 // If the configuration is nil, it returns an error.
-func NewPool(ctx context.Context, lg logger.FbLogger, conf *Config) (*Repo, error) {
+func NewPool(ctx context.Context, conf *Config) (*Repo, error) {
 	if conf == nil {
 		return nil, ErrEmptyConfig
 	}
 
 	s := &Repo{
-		Logger: lg.Named("pgx_pool"),
 		Config: conf,
 	}
 
