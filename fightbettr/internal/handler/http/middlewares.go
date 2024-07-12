@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"fightbettr.com/pkg/httplib"
+	logs "fightbettr.com/pkg/logger"
 	"fightbettr.com/pkg/model"
 	"github.com/lestrrat-go/jwx/v2/jwa"
 	"github.com/lestrrat-go/jwx/v2/jwt"
@@ -20,7 +21,7 @@ func (h *Handler) verifyJWT(jwtRawValue string) (jwt.Token, error) {
 
 	token, err := jwt.Parse([]byte(jwtRawValue), jwt.WithKey(alg, viper.Get("auth.jwt.parse_key")))
 	if err != nil {
-		h.logger.Debugf("Failed to parse JWT token: %s", err)
+		logs.Debugf("Failed to parse JWT token: %s", err)
 		return nil, err
 	}
 
@@ -36,7 +37,7 @@ func (h *Handler) IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc {
 
 		cookie, err := r.Cookie(httplib.CookieName)
 		if err != nil {
-			h.logger.Debugf("access token not found: %s", err)
+			logs.Debugf("access token not found: %s", err)
 			httplib.ErrorResponseJSON(w, http.StatusUnauthorized, http.StatusUnauthorized,
 				fmt.Errorf("unauthorized request: auth cookie or headers not found"))
 			return
@@ -44,7 +45,7 @@ func (h *Handler) IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc {
 
 		token, err := h.verifyJWT(cookie.Value)
 		if err != nil {
-			h.logger.Debugf("Failed to parse JWT token: %s", err)
+			logs.Debugf("Failed to parse JWT token: %s", err)
 			httplib.ErrorResponseJSON(w, http.StatusUnauthorized, http.StatusUnauthorized,
 				fmt.Errorf("unauthorized request: invalid token format"))
 			return
@@ -106,7 +107,7 @@ func (h *Handler) CheckIsAdmin(fn http.HandlerFunc) http.HandlerFunc {
 			}
 
 		} else {
-			h.logger.Debugf("Failed to get JWT from context")
+			logs.Debugf("Failed to get JWT from context")
 		}
 
 		fn(w, r.WithContext(ctx))

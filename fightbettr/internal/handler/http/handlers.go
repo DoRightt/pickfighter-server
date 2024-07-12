@@ -413,7 +413,7 @@ func (h *Handler) GetBets(w http.ResponseWriter, r *http.Request) {
 			fmt.Errorf("unable to convert user id"))
 		return
 	}
-	
+
 	resp, err := h.ctrl.SearchBets(ctx, int32(id))
 	if err != nil {
 		// TODO handle errors from service

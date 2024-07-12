@@ -7,10 +7,10 @@ import (
 	"strings"
 
 	"fightbettr.com/fightbettr/internal/controller/fightbettr"
-	lg "fightbettr.com/fightbettr/pkg/logger"
 	"fightbettr.com/fightbettr/pkg/version"
 	"fightbettr.com/pkg/httplib"
 	"fightbettr.com/pkg/ipaddr"
+	logs "fightbettr.com/pkg/logger"
 	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
 )
@@ -51,13 +51,11 @@ const (
 type Handler struct {
 	ctrl   *fightbettr.Controller
 	router *mux.Router
-	logger lg.FbLogger
 }
 
 func New(ctrl *fightbettr.Controller) *Handler {
 	return &Handler{
 		ctrl:   ctrl,
-		logger: lg.GetSugared(),
 		router: mux.NewRouter(),
 	}
 }
@@ -86,7 +84,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx = context.WithValue(ctx, ContextKeyRemoteAddr, r.RemoteAddr)
 	ctx = context.WithValue(ctx, ContextKeyCFConnectingIP, r.Header.Get(ipaddr.CFConnectingIp))
 
-	h.logger.Infow("Handling request", "method", r.Method, "path", r.URL.Path, "query", r.URL.RawQuery)
+	logs.Infow("Handling request", "method", r.Method, "path", r.URL.Path, "query", r.URL.RawQuery)
 
 	h.router.ServeHTTP(w, r.WithContext(ctx))
 }
@@ -109,7 +107,7 @@ func (h *Handler) RunHTTPServer(ctx context.Context) error {
 		return fmt.Errorf("'%s' service address not specified", serviceName)
 	}
 
-	h.logger.Infof("Start listen '%s' http: %s", serviceName, srvAddr)
+	logs.Infof("Start listen '%s' http: %s", serviceName, srvAddr)
 	fmt.Printf("Server is listening at: %s\n", srvAddr)
 
 	return http.ListenAndServe(srvAddr, h)
