@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"fightbettr.com/fighters/pkg/logger"
+	logs "fightbettr.com/pkg/logger"
 	"fightbettr.com/fighters/pkg/model"
 	"fightbettr.com/pkg/pgxs"
 	"github.com/jackc/pgx/v5"
@@ -26,15 +26,13 @@ type fightersRepository interface {
 
 // Controller defines a metadata service controller.
 type Controller struct {
-	repo   fightersRepository
-	Logger logger.FbLogger
+	repo fightersRepository
 }
 
 // New creates a Fighters service controller.
 func New(repo fightersRepository) *Controller {
 	return &Controller{
-		repo:   repo,
-		Logger: logger.GetSugared(),
+		repo: repo,
 	}
 }
 
@@ -44,7 +42,7 @@ func New(repo fightersRepository) *Controller {
 func (c *Controller) SearchFightersCount(ctx context.Context, req *model.FightersRequest) (int32, error) {
 	count, err := c.repo.SearchFightersCount(ctx, req)
 	if err != nil {
-		c.Logger.Errorf("Failed to get fighters count: %s", err)
+		logs.Errorf("Failed to get fighters count: %s", err)
 
 		// TODO errors package for grpc. Mb it should be handled by a handler on higher level
 		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.CountFighters, err)
@@ -63,7 +61,7 @@ func (c *Controller) SearchFightersCount(ctx context.Context, req *model.Fighter
 func (c *Controller) SearchFighters(ctx context.Context, req *model.FightersRequest) ([]*model.Fighter, error) {
 	count, err := c.repo.SearchFightersCount(ctx, req)
 	if err != nil {
-		c.Logger.Errorf("Failed to get fighters count: %s", err)
+		logs.Errorf("Failed to get fighters count: %s", err)
 
 		// TODO errors package for grpc. Mb it should be handled by a handler on higher level
 		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.CountFighters, err)
@@ -77,7 +75,7 @@ func (c *Controller) SearchFighters(ctx context.Context, req *model.FightersRequ
 
 	fighters, err := c.repo.SearchFighters(ctx, req)
 	if err != nil {
-		c.Logger.Errorf("Failed to find fighters: %s", err)
+		logs.Errorf("Failed to find fighters: %s", err)
 
 		// TODO errors package for grpc. Mb it should be handled by a handler on higher level
 		// httplib.ErrorResponseJSON(w, http.StatusInternalServerError, internalErr.Fighters, err)

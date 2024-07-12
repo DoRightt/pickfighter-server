@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 
-	lg "fightbettr.com/events/pkg/logger"
 	eventmodel "fightbettr.com/events/pkg/model"
 	"fightbettr.com/pkg/pgxs"
 	"github.com/jackc/pgx/v5"
@@ -31,14 +30,12 @@ type eventRepository interface {
 
 // Controller defines a metadata service controller.
 type Controller struct {
-	repo   eventRepository
-	Logger lg.FbLogger
+	repo eventRepository
 }
 
 // New creates a Event service controller.
 func New(repo eventRepository) *Controller {
 	return &Controller{
-		repo:   repo,
-		Logger: lg.GetSugared(),
+		repo: repo,
 	}
 }

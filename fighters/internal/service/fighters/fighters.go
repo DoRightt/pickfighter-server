@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	grpchandler "fightbettr.com/fighters/internal/handler/grpc"
-	lg "fightbettr.com/fighters/pkg/logger"
+	logs "fightbettr.com/pkg/logger"
 	"fightbettr.com/fighters/pkg/version"
 	"fightbettr.com/gen"
 	"github.com/spf13/viper"
@@ -19,17 +19,14 @@ type ApiService struct {
 	ServiceName string
 	Handler     *grpchandler.Handler
 	Server      *grpc.Server
-	Logger      lg.FbLogger
 }
 
 func New() ApiService {
 	srv := grpc.NewServer(grpc.UnaryInterceptor(otelgrpc.UnaryServerInterceptor()))
-	logger := lg.GetSugared()
 
 	return ApiService{
 		ServiceName: version.Name,
 		Server:      srv,
-		Logger:      logger,
 	}
 }
 
@@ -51,7 +48,7 @@ func (s *ApiService) Run() error {
 		return err
 	}
 
-	s.Logger.Infof("Start listen '%s' http: %s", s.ServiceName, srvAddr)
+	logs.Infof("Start listen '%s' http: %s", s.ServiceName, srvAddr)
 	fmt.Printf("Server is listening at: %s\n", srvAddr)
 
 	return s.Server.Serve(lis)

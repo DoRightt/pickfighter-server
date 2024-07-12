@@ -9,6 +9,7 @@ import (
 	internalErr "fightbettr.com/auth/pkg/errors"
 	"fightbettr.com/auth/pkg/model"
 	"fightbettr.com/auth/pkg/utils"
+	logs "fightbettr.com/pkg/logger"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -25,7 +26,7 @@ func (c *Controller) PasswordReset(ctx context.Context, req *model.ResetPassword
 			return false, internalErr.New(internalErr.UserCredentials, err, 407)
 		} else {
 			// internal error
-			c.Logger.Errorf("Failed to find user credentials: %s", err)
+			logs.Errorf("Failed to find user credentials: %s", err)
 			return false, internalErr.New(internalErr.UserCredentials, err, 408)
 		}
 	}
@@ -35,7 +36,7 @@ func (c *Controller) PasswordReset(ctx context.Context, req *model.ResetPassword
 	})
 	if err != nil {
 		// internal error
-		c.Logger.Errorf("Failed to find user: %s", err)
+		logs.Errorf("Failed to find user: %s", err)
 		return false, internalErr.New(internalErr.Profile, err, 501)
 	}
 
@@ -44,7 +45,7 @@ func (c *Controller) PasswordReset(ctx context.Context, req *model.ResetPassword
 	})
 	if err != nil {
 		// bad request error
-		c.Logger.Errorf("Failed to create registration transaction: %s", err)
+		logs.Errorf("Failed to create registration transaction: %s", err)
 		return false, internalErr.New(internalErr.Tx, err, 107)
 	}
 
@@ -59,16 +60,16 @@ func (c *Controller) PasswordReset(ctx context.Context, req *model.ResetPassword
 
 	if err := c.repo.ResetPassword(ctx, &credentials); err != nil {
 		// internal error
-		c.Logger.Errorf("Failed to reset user credentials: %s", err)
+		logs.Errorf("Failed to reset user credentials: %s", err)
 		if txErr := tx.Rollback(ctx); txErr != nil {
-			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+			logs.Errorf("Unable to rollback transaction: %s", txErr)
 		}
 		return false, internalErr.New(internalErr.TxCommit, err, 108)
 	}
 
 	if err := tx.Commit(ctx); err != nil {
 		// bad request error
-		c.Logger.Errorf("Failed to commit registration transaction: %s", err)
+		logs.Errorf("Failed to commit registration transaction: %s", err)
 		return false, internalErr.New(internalErr.TxCommit, err, 109)
 	}
 
@@ -98,7 +99,7 @@ func (c *Controller) PasswordRecover(ctx context.Context, req *model.RecoverPass
 			return false, internalErr.New(internalErr.UserCredentialsToken, err, 409)
 		} else {
 			// internal error
-			c.Logger.Errorf("Failed to find user credentials: %s", err)
+			logs.Errorf("Failed to find user credentials: %s", err)
 			return false, internalErr.New(internalErr.UserCredentials, err, 410)
 		}
 	}
@@ -108,7 +109,7 @@ func (c *Controller) PasswordRecover(ctx context.Context, req *model.RecoverPass
 	})
 	if err != nil {
 		// bad request error
-		c.Logger.Errorf("Failed to create registration transaction: %s", err)
+		logs.Errorf("Failed to create registration transaction: %s", err)
 		return false, internalErr.New(internalErr.Tx, err, 110)
 	}
 
@@ -122,25 +123,25 @@ func (c *Controller) PasswordRecover(ctx context.Context, req *model.RecoverPass
 		UserId: credentials.UserId,
 	}); err != nil {
 		// internal error
-		c.Logger.Errorf("Failed to reset user credentials: %s", err)
+		logs.Errorf("Failed to reset user credentials: %s", err)
 		if txErr := tx.Rollback(ctx); txErr != nil {
-			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+			logs.Errorf("Unable to rollback transaction: %s", txErr)
 		}
 		return false, internalErr.New(internalErr.UserCredentials, err, 411)
 	}
 
 	if err := c.repo.UpdatePassword(ctx, tx, credentials); err != nil {
 		// internal error
-		c.Logger.Errorf("Failed to update user password: %s", err)
+		logs.Errorf("Failed to update user password: %s", err)
 		if txErr := tx.Rollback(ctx); txErr != nil {
-			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+			logs.Errorf("Unable to rollback transaction: %s", txErr)
 		}
 		return false, internalErr.New(internalErr.UserCredentialsReset, err, 412)
 	}
 
 	if txErr := tx.Commit(ctx); txErr != nil {
 		// bad request error
-		c.Logger.Errorf("Failed to commit registration transaction: %s", txErr)
+		logs.Errorf("Failed to commit registration transaction: %s", txErr)
 		return false, internalErr.New(internalErr.TxCommit, err, 111)
 	}
 

@@ -50,11 +50,6 @@ const (
 	WomensFeatherweight
 )
 
-// FightersCollection represents a collection of fighters as a slice
-type FightersCollection struct {
-	Fighters []Fighter
-}
-
 // FighterStats represents statistical information for a fighter
 type FighterStats struct {
 	FighterId            int32   `json:"fighter_id,omitempty"`
@@ -102,7 +97,7 @@ type Fighter struct {
 	Stats          FighterStats `json:"stats"`
 }
 
-// FightersRequest represents a request for fighters
-type FightersRequest struct {
-	Status string `json:"status"`
+// FightersCollection represents a collection of fighters as a slice
+type FightersCollection struct {
+	Fighters []Fighter
 }

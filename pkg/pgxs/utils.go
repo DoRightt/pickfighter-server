@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"strings"
 
+	logs "fightbettr.com/pkg/logger"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v5"
 )
 
 // ErrEmptyConfig is returned when the PSQL Config is empty.
 var ErrEmptyConfig = fmt.Errorf("pxgs: PSQL Config is required")
-
 
 // DebugLogSqlErr logs debug information for SQL queries and errors.
 // It takes the SQL query string 'q' and the error 'err' as parameters.
@@ -28,7 +28,7 @@ func (db *Repo) DebugLogSqlErr(q string, err error) error {
 	}
 
 	if err != pgx.ErrNoRows && !deuce {
-		db.Logger.Debugf("query: \n%s", q)
+		logs.Debugf("query: \n%s", q)
 	}
 
 	return err

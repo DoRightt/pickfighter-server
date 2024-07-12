@@ -7,17 +7,18 @@ import (
 	"strings"
 	"time"
 
-	"fightbettr.com/fb-server/pkg/sigx"
-	"fightbettr.com/fb-server/pkg/version"
 	"fightbettr.com/fightbettr/internal/controller/fightbettr"
 	authgateway "fightbettr.com/fightbettr/internal/gateway/auth/grpc"
 	eventgateway "fightbettr.com/fightbettr/internal/gateway/events/grpc"
 	fightersgateway "fightbettr.com/fightbettr/internal/gateway/fighters/grpc"
 	httphandler "fightbettr.com/fightbettr/internal/handler/http"
 	service "fightbettr.com/fightbettr/internal/service/fightbettr"
+	logs "fightbettr.com/pkg/logger"
+	"fightbettr.com/fightbettr/pkg/version"
 	"fightbettr.com/pkg/discovery"
 	"fightbettr.com/pkg/discovery/consul"
 	"fightbettr.com/pkg/model"
+	"fightbettr.com/pkg/sigx"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -89,7 +90,7 @@ func runServe(cmd *cobra.Command, args []string) {
 	go func() {
 		for {
 			if err := registry.ReportHealthyState(instanceID, serviceName); err != nil {
-				logger.Error("Failed to report healthy state", zap.Error(err))
+				logs.Error("Failed to report healthy state", zap.Error(err))
 			}
 
 			time.Sleep(1 * time.Second)
@@ -109,7 +110,7 @@ func runServe(cmd *cobra.Command, args []string) {
 
 	sigx.Listen(func(signal os.Signal) {
 		time.AfterFunc(15*time.Second, func() {
-			logger.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
+			logs.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
 			cancel()
 
 			os.Exit(1)

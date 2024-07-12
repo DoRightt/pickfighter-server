@@ -1,11 +1,19 @@
-# FB Server
+# FB App
 
 Represents APIs for fb-client
 
-### FB-Server Modules
+### FB-App
 
 -   REST Interface
 -   JWT Authentication
--   Modules
+-   Services
+    -   Fightbettr gateway
     -   Auth
-    -   Common
+    -   Events
+    -   Fighters
+    -   Scrapper
+
+-   Scripts
+    -   main
+        -   Consul script
+        -   Protogen script

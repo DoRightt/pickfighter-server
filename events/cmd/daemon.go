@@ -11,10 +11,11 @@ import (
 	grpchandler "fightbettr.com/events/internal/handler/grpc"
 	"fightbettr.com/events/internal/repository/psql"
 	service "fightbettr.com/events/internal/service/event"
-	"fightbettr.com/fb-server/pkg/sigx"
 	"fightbettr.com/pkg/discovery"
 	"fightbettr.com/pkg/discovery/consul"
+	logs "fightbettr.com/pkg/logger"
 	"fightbettr.com/pkg/model"
+	"fightbettr.com/pkg/sigx"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -85,7 +86,7 @@ func runServe(cmd *cobra.Command, args []string) {
 	go func() {
 		for {
 			if err := registry.ReportHealthyState(instanceID, app.ServiceName); err != nil {
-				logger.Error("Failed to report healthy state", zap.Error(err))
+				logs.Error("Failed to report healthy state", zap.Error(err))
 			}
 
 			time.Sleep(1 * time.Second)
@@ -94,9 +95,9 @@ func runServe(cmd *cobra.Command, args []string) {
 
 	defer registry.Deregister(ctx, instanceID, app.ServiceName)
 
-	repo, err := psql.New(ctx, logger)
+	repo, err := psql.New(ctx)
 	if err != nil {
-		logger.Errorf("Unable to start postgresql connection: %s", err)
+		logs.Errorf("Unable to start postgresql connection: %s", err)
 		return
 	}
 	defer repo.GracefulShutdown()
@@ -110,9 +111,9 @@ func runServe(cmd *cobra.Command, args []string) {
 
 	sigx.Listen(func(signal os.Signal) {
 		time.AfterFunc(15*time.Second, func() {
-			logger.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
+			logs.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
 			cancel()
-			
+
 			os.Exit(1)
 		})
 
@@ -120,7 +121,7 @@ func runServe(cmd *cobra.Command, args []string) {
 	})
 
 	if err := app.Run(); err != nil {
-		logger.Fatal("app error: %s", err)
+		logs.Fatal("app error: %s", err)
 		app.Server.GracefulStop()
 	}
 }

@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	lg "fightbettr.com/auth/pkg/logger"
+	"fightbettr.com/auth/pkg/logger"
 	"fightbettr.com/auth/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -15,7 +15,6 @@ import (
 
 var (
 	cfgPath string
-	logger  lg.FbLogger
 )
 
 // rootCmd is the main Cobra command representing the root of the Auth service.
@@ -56,13 +55,15 @@ func init() {
 	bindViperPersistentFlag(rootCmd, "log_json", "log_json")
 	bindViperPersistentFlag(rootCmd, "log_level", "log_level")
 
-	initZapLogger()
+	err := initZapLogger()
+	if err != nil {
+		log.Fatalf("error while logger initializing: %s", err)
+	}
 }
 
 // initZapLogger initializes the zap logger.
-func initZapLogger() {
-	lg.Initialize(zapcore.DebugLevel, "logs/log.json")
-	logger = lg.GetSugared()
+func initZapLogger() error {
+	return logger.Init(zapcore.DebugLevel, "logs/log.json")
 }
 
 // initConfig initializes the service configuration.
@@ -97,11 +98,6 @@ func setConfigDefaults() {
 	viper.SetDefault("http.addr", "127.0.0.1:9092")
 	viper.SetDefault("http.port", "9092")
 	viper.SetDefault("http.ssl.enabled", false)
-
-	// auth config
-	viper.SetDefault("auth.cookie_name", "fb_api_token")
-	viper.SetDefault("auth.jwt.cert", "")
-	viper.SetDefault("auth.jwt.key", "")
 
 	// postgres
 	viper.SetDefault("postgres.main.url", os.Getenv("POSTGRES_URL"))

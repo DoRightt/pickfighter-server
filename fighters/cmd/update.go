@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 
+	logs "fightbettr.com/pkg/logger"
 	"fightbettr.com/fighters/pkg/utils"
 	"github.com/spf13/cobra"
 )
@@ -26,7 +27,7 @@ func runUpdate(cmd *cobra.Command, args []string) {
 	ctx := context.Background()
 	fighters, err := utils.ReadFighterData()
 	if err != nil {
-		logger.Fatalf("Error while reading figheter data: %s", err)
+		logs.Fatalf("Error while reading figheter data: %s", err)
 	}
 
 	utils.WriteFighterData(ctx, fighters)

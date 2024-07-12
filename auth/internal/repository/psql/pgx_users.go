@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"fightbettr.com/auth/pkg/model"
+	logs "fightbettr.com/pkg/logger"
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v5"
 )
@@ -60,7 +61,7 @@ func (r *Repository) SearchUsers(ctx context.Context, req *model.UsersRequest) (
 	rows, err := r.GetPool().Query(ctx, q)
 	if err != nil {
 		if err != pgx.ErrNoRows {
-			r.GetLogger().Debugf("query: \n%s", q)
+			logs.Debugf("query: \n%s", q)
 		}
 		return nil, err
 	}
