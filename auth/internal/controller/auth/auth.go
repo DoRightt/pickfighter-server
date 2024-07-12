@@ -7,6 +7,7 @@ import (
 	internalErr "fightbettr.com/auth/pkg/errors"
 	"fightbettr.com/auth/pkg/model"
 	"fightbettr.com/auth/pkg/utils"
+	logs "fightbettr.com/pkg/logger"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -18,7 +19,7 @@ func (c *Controller) Register(ctx context.Context, req *model.RegisterRequest) (
 		IsoLevel: pgx.Serializable,
 	})
 	if err != nil {
-		c.Logger.Errorf("Unable to begin transaction: %s", err)
+		logs.Errorf("Unable to begin transaction: %s", err)
 		cErr := internalErr.New(internalErr.Tx, err, 101)
 		return 0, cErr
 	}
@@ -26,14 +27,14 @@ func (c *Controller) Register(ctx context.Context, req *model.RegisterRequest) (
 	credentials, err := c.createUserCredentials(ctx, tx, req)
 	if err != nil {
 		if txErr := tx.Rollback(ctx); txErr != nil {
-			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+			logs.Errorf("Unable to rollback transaction: %s", txErr)
 		}
-		c.Logger.Errorf("Error while user credentials creation: %s", err)
+		logs.Errorf("Error while user credentials creation: %s", err)
 		return 0, err
 	}
 
 	if err = tx.Commit(ctx); err != nil {
-		c.Logger.Errorf("Unable to commit transaction: %s", err)
+		logs.Errorf("Unable to commit transaction: %s", err)
 		cErr := internalErr.New(internalErr.TxCommit, err, 102)
 		return 0, cErr
 	}
@@ -62,7 +63,7 @@ func (c *Controller) RegisterConfirm(ctx context.Context, req *model.UserCredent
 		if err == pgx.ErrNoRows {
 			return false, internalErr.New(internalErr.UserCredentialsToken, err, 401)
 		} else {
-			c.Logger.Errorf("Failed to get user credentials: %s", err)
+			logs.Errorf("Failed to get user credentials: %s", err)
 			return false, internalErr.NewDefault(internalErr.UserCredentials, 402)
 		}
 	}
@@ -76,7 +77,7 @@ func (c *Controller) RegisterConfirm(ctx context.Context, req *model.UserCredent
 		Token:     creds.Token,
 		TokenType: creds.TokenType,
 	}); err != nil {
-		c.Logger.Errorf("Failed to update user credentials: %s", err)
+		logs.Errorf("Failed to update user credentials: %s", err)
 		return false, internalErr.New(internalErr.UserCredentialsUpdate, err, 403)
 	}
 
@@ -95,7 +96,7 @@ func (c *Controller) Login(ctx context.Context, req *model.AuthenticateRequest) 
 		if err == pgx.ErrNoRows {
 			return nil, internalErr.New(internalErr.UserCredentialsNotExists, err, 404)
 		} else {
-			c.Logger.Errorf("Failed to get user credentials: %s", err)
+			logs.Errorf("Failed to get user credentials: %s", err)
 			return nil, internalErr.New(internalErr.UserCredentials, err, 405)
 		}
 
@@ -118,7 +119,7 @@ func (c *Controller) Login(ctx context.Context, req *model.AuthenticateRequest) 
 
 	token, err := c.createJWTToken(ctx, &creds, req)
 	if err != nil {
-		c.Logger.Errorf("Unable to create session for google JWT: %s", err)
+		logs.Errorf("Unable to create session for google JWT: %s", err)
 		return nil, internalErr.New(internalErr.Token, err, 602)
 	}
 

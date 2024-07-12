@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 	"time"
@@ -11,10 +12,11 @@ import (
 	grpchandler "fightbettr.com/auth/internal/handler/grpc"
 	"fightbettr.com/auth/internal/repository/psql"
 	service "fightbettr.com/auth/internal/service/auth"
-	"fightbettr.com/pkg/sigx"
 	"fightbettr.com/pkg/discovery"
 	"fightbettr.com/pkg/discovery/consul"
+	logs "fightbettr.com/pkg/logger"
 	"fightbettr.com/pkg/model"
+	"fightbettr.com/pkg/sigx"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -85,7 +87,7 @@ func runServe(cmd *cobra.Command, args []string) {
 	go func() {
 		for {
 			if err := registry.ReportHealthyState(instanceID, app.ServiceName); err != nil {
-				logger.Error("Failed to report healthy state", zap.Error(err))
+				logs.Error("Failed to report healthy state", zap.Error(err))
 			}
 
 			time.Sleep(1 * time.Second)
@@ -93,9 +95,9 @@ func runServe(cmd *cobra.Command, args []string) {
 	}()
 	defer registry.Deregister(ctx, instanceID, app.ServiceName)
 
-	repo, err := psql.New(ctx, logger)
+	repo, err := psql.New(ctx)
 	if err != nil {
-		logger.Errorf("Unable to start postgresql connection: %s", err)
+		logs.Errorf("Unable to start postgresql connection: %s", err)
 		return
 	}
 	defer repo.GracefulShutdown()
@@ -103,13 +105,16 @@ func runServe(cmd *cobra.Command, args []string) {
 	ctl := auth.New(repo)
 	h := grpchandler.New(ctl)
 
-	app.Init(h)
+	err = app.Init(h)
+	if err != nil {
+		log.Fatalf("error while app initialization: %s", err)
+	}
 
 	viper.Set("api.route", route)
 
 	sigx.Listen(func(signal os.Signal) {
 		time.AfterFunc(15*time.Second, func() {
-			app.Logger.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
+			logs.Fatal("Failed to shutdown normally. Closed after 15 sec shutdown")
 			cancel()
 
 			os.Exit(1)
@@ -119,7 +124,7 @@ func runServe(cmd *cobra.Command, args []string) {
 	})
 
 	if err := app.Run(); err != nil {
-		app.Logger.Fatal("app error: %s", err)
+		logs.Fatal("app error: %s", err)
 		app.Server.GracefulStop()
 	}
 }

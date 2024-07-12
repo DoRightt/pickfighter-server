@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 
-	lg "fightbettr.com/auth/pkg/logger"
 	"fightbettr.com/auth/pkg/model"
 	"fightbettr.com/pkg/pgxs"
 	"github.com/jackc/pgx/v5"
@@ -30,14 +29,12 @@ type authRepository interface {
 
 // Controller defines a metadata service controller.
 type Controller struct {
-	repo   authRepository
-	Logger lg.FbLogger
+	repo authRepository
 }
 
 // New creates a Auth service controller.
 func New(repo authRepository) *Controller {
 	return &Controller{
-		repo:   repo,
-		Logger: lg.GetSugared(),
+		repo: repo,
 	}
 }

@@ -6,9 +6,10 @@ import (
 	"strings"
 
 	grpchandler "fightbettr.com/auth/internal/handler/grpc"
-	lg "fightbettr.com/auth/pkg/logger"
 	"fightbettr.com/auth/pkg/version"
 	"fightbettr.com/gen"
+	logs "fightbettr.com/pkg/logger"
+	"fightbettr.com/pkg/utils"
 	"github.com/spf13/viper"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
@@ -21,24 +22,28 @@ type ApiService struct {
 	ServiceName string
 	Handler     *grpchandler.Handler
 	Server      *grpc.Server
-	Logger      lg.FbLogger
 }
 
 func New() ApiService {
 	srv := grpc.NewServer(grpc.UnaryInterceptor(otelgrpc.UnaryServerInterceptor()))
-	logger := lg.GetSugared()
 
 	return ApiService{
 		ServiceName: version.Name,
 		Server:      srv,
-		Logger:      logger,
 	}
 }
 
-func (s *ApiService) Init(h *grpchandler.Handler) {
+func (s *ApiService) Init(h *grpchandler.Handler) error {
 	s.Handler = h
 	reflection.Register(s.Server)
 	gen.RegisterAuthServiceServer(s.Server, s.Handler)
+
+	if err := utils.LoadJwtCerts(); err != nil {
+		logs.Errorf("Unable to load JWT certificates: %s", err)
+		return err
+	}
+
+	return nil
 }
 
 func (s *ApiService) Run() error {
@@ -53,7 +58,7 @@ func (s *ApiService) Run() error {
 		return err
 	}
 
-	s.Logger.Infof("Start listen '%s' http: %s", s.ServiceName, srvAddr)
+	logs.Infof("Start listen '%s' http: %s", s.ServiceName, srvAddr)
 	fmt.Printf("Server is listening at: %s\n", srvAddr)
 
 	return s.Server.Serve(lis)

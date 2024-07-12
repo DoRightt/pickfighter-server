@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"fightbettr.com/fighters/pkg/cfg"
-	"fightbettr.com/fighters/pkg/logger"
 	"fightbettr.com/pkg/pgxs"
 )
 
@@ -17,8 +16,8 @@ type Repository struct {
 }
 
 // New creates and returns a new instance of User Repository using the provided logger
-func New(ctx context.Context, logger logger.FbLogger) (*Repository, error) {
-	db, err := pgxs.NewPool(ctx, logger, cfg.ViperPostgres())
+func New(ctx context.Context) (*Repository, error) {
+	db, err := pgxs.NewPool(ctx, cfg.ViperPostgres())
 	if err != nil {
 		return nil, err
 	}

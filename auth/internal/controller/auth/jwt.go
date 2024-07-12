@@ -5,6 +5,7 @@ import (
 	"time"
 
 	authmodel "fightbettr.com/auth/pkg/model"
+	logs "fightbettr.com/pkg/logger"
 	"fightbettr.com/pkg/model"
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -26,15 +27,15 @@ func (c *Controller) createJWTToken(ctx context.Context, creds *authmodel.UserCr
 		UserId: creds.UserId,
 	})
 	if err != nil {
-		c.Logger.Errorf("Failed to get user: %s", err)
+		logs.Errorf("Failed to get user: %s", err)
 		return nil, err
 	}
 
-	c.Logger.Debugf("Issuing JWT token for User [%d:%s:%s]", creds.UserId, creds.Email, req.Subject)
+	logs.Debugf("Issuing JWT token for User [%d:%s:%s]", creds.UserId, creds.Email, req.Subject)
 
 	tokenId, err := uuid.NewV4()
 	if err != nil {
-		c.Logger.Errorf("Unable to generate token id: %s", err)
+		logs.Errorf("Unable to generate token id: %s", err)
 		return nil, err
 	}
 
@@ -52,18 +53,18 @@ func (c *Controller) createJWTToken(ctx context.Context, creds *authmodel.UserCr
 		Expiration(now.Add(time.Duration(req.ExpiresIn) * time.Second)).
 		Build()
 	if err != nil {
-		c.Logger.Errorf("Unable to build JWT token: %s", err)
+		logs.Errorf("Unable to build JWT token: %s", err)
 		return nil, err
 	}
 
 	if err := t.Set(string(model.ContextUserId), u.UserId); err != nil {
-		c.Logger.Errorf("Unable to set JWT token userRoles: %s", err)
+		logs.Errorf("Unable to set JWT token userRoles: %s", err)
 		return nil, err
 	}
 
 	if u.Flags > 0 {
 		if err := t.Set(string(model.ContextFlags), u.Flags); err != nil {
-			c.Logger.Errorf("Unable to set JWT token private claim key: %s", err)
+			logs.Errorf("Unable to set JWT token private claim key: %s", err)
 			return nil, err
 		}
 	}
@@ -77,7 +78,7 @@ func (c *Controller) createJWTToken(ctx context.Context, creds *authmodel.UserCr
 	alg := jwa.RS256
 	payload, err := jwt.Sign(t, jwt.WithKey(alg, viper.Get("auth.jwt.signing_key"))) // TODO
 	if err != nil {
-		c.Logger.Errorf("failed to generate signed payload: %s\n", err)
+		logs.Errorf("failed to generate signed payload: %s\n", err)
 		return nil, err
 	}
 

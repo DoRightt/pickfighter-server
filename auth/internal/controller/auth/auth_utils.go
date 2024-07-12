@@ -9,6 +9,7 @@ import (
 	internalErr "fightbettr.com/auth/pkg/errors"
 	"fightbettr.com/auth/pkg/model"
 	"fightbettr.com/auth/pkg/utils"
+	logs "fightbettr.com/pkg/logger"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5"
@@ -47,13 +48,13 @@ func (c *Controller) createUserCredentials(ctx context.Context, tx pgx.Tx, req *
 	userId, err := c.repo.TxCreateUser(ctx, tx, user)
 	if err != nil {
 		if txErr := tx.Rollback(ctx); txErr != nil {
-			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+			logs.Errorf("Unable to rollback transaction: %s", txErr)
 		}
 		pgErr, isPgError := err.(*pgconn.PgError)
 		if isPgError && pgErr.Code == pgerrcode.UniqueViolation {
 			return nil, internalErr.New(internalErr.TxNotUnique, pgErr, 103)
 		} else {
-			c.Logger.Errorf("Failed to create user during registration transaction: %s", err)
+			logs.Errorf("Failed to create user during registration transaction: %s", err)
 			return nil, internalErr.New(internalErr.TxUnknown, err, 104)
 		}
 	}
@@ -79,13 +80,13 @@ func (c *Controller) createUserCredentials(ctx context.Context, tx pgx.Tx, req *
 
 	if err := c.repo.TxNewAuthCredentials(ctx, tx, userCredentials); err != nil {
 		if txErr := tx.Rollback(ctx); txErr != nil {
-			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+			logs.Errorf("Unable to rollback transaction: %s", txErr)
 		}
 		pgErr, isPgError := err.(*pgconn.PgError)
 		if isPgError && pgErr.Code == pgerrcode.UniqueViolation {
 			return nil, internalErr.New(internalErr.TxNotUnique, pgErr, 105)
 		} else {
-			c.Logger.Errorf("Failed to create user during registration transaction: %s", err)
+			logs.Errorf("Failed to create user during registration transaction: %s", err)
 			return nil, internalErr.New(internalErr.TxUnknown, err, 106)
 		}
 	}
