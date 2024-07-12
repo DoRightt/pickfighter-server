@@ -5,6 +5,7 @@ import (
 
 	internalErr "fightbettr.com/events/pkg/errors"
 	eventmodel "fightbettr.com/events/pkg/model"
+	logs "fightbettr.com/pkg/logger"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5"
@@ -18,7 +19,7 @@ func (c *Controller) handleEventCreation(ctx context.Context, tx pgx.Tx, req *ev
 	eventId, err := c.repo.TxCreateEvent(ctx, tx, req)
 	if err != nil {
 		if txErr := tx.Rollback(ctx); txErr != nil {
-			c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+			logs.Errorf("Unable to rollback transaction: %s", txErr)
 		}
 
 		if pgErr, ok := err.(*pgconn.PgError); ok {
@@ -28,7 +29,7 @@ func (c *Controller) handleEventCreation(ctx context.Context, tx pgx.Tx, req *ev
 			}
 		} else {
 			intErr := internalErr.NewDefault(internalErr.TxUnknown, 115)
-			c.Logger.Errorf("Failed to create event during registration transaction: %s", err)
+			logs.Errorf("Failed to create event during registration transaction: %s", err)
 			return nil, intErr
 		}
 	}
@@ -50,7 +51,7 @@ func (c *Controller) handleEventCreation(ctx context.Context, tx pgx.Tx, req *ev
 
 		if err := c.repo.TxCreateEventFight(ctx, tx, fight); err != nil {
 			if txErr := tx.Rollback(ctx); txErr != nil {
-				c.Logger.Errorf("Unable to rollback transaction: %s", txErr)
+				logs.Errorf("Unable to rollback transaction: %s", txErr)
 			}
 
 			if pgErr, ok := err.(*pgconn.PgError); ok {
@@ -60,7 +61,7 @@ func (c *Controller) handleEventCreation(ctx context.Context, tx pgx.Tx, req *ev
 				}
 			} else {
 				intErr := internalErr.NewDefault(internalErr.TxUnknown, 117)
-				c.Logger.Errorf("Failed to create fight during registration transaction: %s", err)
+				logs.Errorf("Failed to create fight during registration transaction: %s", err)
 				return nil, intErr
 			}
 		}

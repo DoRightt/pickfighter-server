@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	grpchandler "fightbettr.com/events/internal/handler/grpc"
-	lg "fightbettr.com/events/pkg/logger"
 	"fightbettr.com/events/pkg/version"
 	"fightbettr.com/gen"
+	logs "fightbettr.com/pkg/logger"
 	"github.com/spf13/viper"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
@@ -19,17 +19,14 @@ type ApiService struct {
 	ServiceName string
 	Handler     *grpchandler.Handler
 	Server      *grpc.Server
-	Logger      lg.FbLogger
 }
 
 func New() ApiService {
 	srv := grpc.NewServer(grpc.UnaryInterceptor(otelgrpc.UnaryServerInterceptor()))
-	logger := lg.GetSugared()
 
 	return ApiService{
 		ServiceName: version.Name,
 		Server:      srv,
-		Logger:      logger,
 	}
 }
 
@@ -51,7 +48,7 @@ func (s *ApiService) Run() error {
 		return err
 	}
 
-	s.Logger.Infof("Start listen '%s' http: %s", s.ServiceName, srvAddr)
+	logs.Infof("Start listen '%s' http: %s", s.ServiceName, srvAddr)
 	fmt.Printf("Server is listening at: %s\n", srvAddr)
 
 	return s.Server.Serve(lis)
