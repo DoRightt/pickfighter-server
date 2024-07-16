@@ -1,4 +1,4 @@
-package utils
+package cmd
 
 import (
 	"context"
@@ -9,9 +9,9 @@ import (
 
 	"fightbettr.com/fighters/internal/repository/psql"
 	internalErr "fightbettr.com/fighters/pkg/errors"
-	logs "fightbettr.com/pkg/logger"
 	"fightbettr.com/fighters/pkg/model"
 	"fightbettr.com/pkg/httplib"
+	logs "fightbettr.com/pkg/logger"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5"
@@ -146,7 +146,7 @@ func createFighter(ctx context.Context, rep *psql.Repository, fighter model.Figh
 	return nil
 }
 
-// updateFighterTx performs a transaction to update an existing fighter in the database.
+// updateFighter performs a transaction to update an existing fighter in the database.
 // It takes a context, a fighter repository, and a model.Fighter as parameters.
 // If the transaction fails, it logs the error and returns an appropriate ApiError.
 func updateFighter(ctx context.Context, rep *psql.Repository, fighter model.Fighter) error {

@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 
-	"fightbettr.com/fighters/pkg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -27,5 +26,5 @@ func runClearTable(cmd *cobra.Command, args []string) {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	utils.DeleteFighterData(ctx)
+	DeleteFighterData(ctx)
 }
