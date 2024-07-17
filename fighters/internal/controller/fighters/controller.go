@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	logs "fightbettr.com/pkg/logger"
 	"fightbettr.com/fighters/pkg/model"
+	logs "fightbettr.com/pkg/logger"
 	"fightbettr.com/pkg/pgxs"
 	"github.com/jackc/pgx/v5"
 )
@@ -13,7 +13,7 @@ import (
 // ErrNotFound is returned when a requested record is not found.
 var ErrNotFound = errors.New("not found")
 
-type fightersRepository interface {
+type FightersRepository interface {
 	pgxs.FbRepo
 	SearchFightersCount(ctx context.Context, req *model.FightersRequest) (int32, error)
 	SearchFighters(ctx context.Context, req *model.FightersRequest) ([]*model.Fighter, error)
@@ -26,11 +26,11 @@ type fightersRepository interface {
 
 // Controller defines a metadata service controller.
 type Controller struct {
-	repo fightersRepository
+	repo FightersRepository
 }
 
 // New creates a Fighters service controller.
-func New(repo fightersRepository) *Controller {
+func New(repo FightersRepository) *Controller {
 	return &Controller{
 		repo: repo,
 	}
