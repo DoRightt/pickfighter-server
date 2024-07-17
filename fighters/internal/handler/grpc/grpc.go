@@ -11,14 +11,19 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+type FightersController interface {
+	SearchFightersCount(ctx context.Context, req *model.FightersRequest) (int32, error)
+	SearchFighters(ctx context.Context, req *model.FightersRequest) ([]*model.Fighter, error)
+}
+
 // Handler defines a Fighters gRPC handler.
 type Handler struct {
 	gen.UnimplementedFightersServiceServer
-	ctrl *fighters.Controller
+	ctrl FightersController
 }
 
 // New creates a new Fighters gRPC handler.
-func New(ctrl *fighters.Controller) *Handler {
+func New(ctrl FightersController) *Handler {
 	return &Handler{ctrl: ctrl}
 }
 
