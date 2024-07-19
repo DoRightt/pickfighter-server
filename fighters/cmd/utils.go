@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"fightbettr.com/auth/pkg/cfg"
 	"fightbettr.com/fighters/internal/repository/psql"
 	internalErr "fightbettr.com/fighters/pkg/errors"
 	"fightbettr.com/fighters/pkg/model"
@@ -42,7 +43,7 @@ func ReadFighterData() ([]model.Fighter, error) {
 // and a slice of model.Fighter. It connects to the database using the configuration
 // from ViperPostgres and performs create or update operations for each fighter.
 func WriteFighterData(ctx context.Context, data []model.Fighter) error {
-	rep, err := psql.New(ctx)
+	rep, err := psql.New(ctx, cfg.ViperPostgres())
 	if err != nil {
 		logs.Errorf("Unable to start postgresql connection: %s", err)
 	}
@@ -82,7 +83,7 @@ func WriteFighterData(ctx context.Context, data []model.Fighter) error {
 
 // DeleteFighterData deletes all records from the fb_fighters and fb_fighter_stats tables.
 func DeleteFighterData(ctx context.Context) {
-	rep, err := psql.New(ctx)
+	rep, err := psql.New(ctx, cfg.ViperPostgres())
 	if err != nil {
 		logs.Errorf("Unable to start postgresql connection: %s", err)
 	}
