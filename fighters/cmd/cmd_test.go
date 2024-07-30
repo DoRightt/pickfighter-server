@@ -2,16 +2,66 @@ package cmd
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"testing"
+	"time"
 
+	"fightbettr.com/fighters/internal/repository/psql"
+	"fightbettr.com/fighters/pkg/cfg"
+	fightersmodel "fightbettr.com/fighters/pkg/model"
 	"fightbettr.com/pkg/model"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
+
+var testFighter = fightersmodel.Fighter{
+	FighterId:      999888,
+	Name:           "John Doe",
+	NickName:       "The Phantom",
+	Division:       1,
+	Status:         "Active",
+	Hometown:       "New York",
+	TrainsAt:       "MMA Gym",
+	FightingStyle:  "Boxing",
+	Age:            30,
+	Height:         72.5,
+	Weight:         185.5,
+	OctagonDebut:   "2022-03-01",
+	DebutTimestamp: 1646102400,
+	Reach:          74.0,
+	LegReach:       40.0,
+	Wins:           10,
+	Loses:          2,
+	Draw:           1,
+	FighterUrl:     "https://example.com/john_doe",
+	ImageUrl:       "https://example.com/john_doe.jpg",
+	Stats: fightersmodel.FighterStats{
+		StatId:               999888,
+		FighterId:            999888,
+		TotalSigStrLanded:    200,
+		TotalSigStrAttempted: 300,
+		StrAccuracy:          67,
+		TotalTkdLanded:       50,
+		TotalTkdAttempted:    100,
+		TkdAccuracy:          50,
+		SigStrLanded:         6.5,
+		SigStrAbs:            4.0,
+		SigStrDefense:        75,
+		TakedownDefense:      80,
+		TakedownAvg:          2.5,
+		SubmissionAvg:        1.2,
+		KnockdownAvg:         0.5,
+		AvgFightTime:         "10:30",
+		WinByKO:              5,
+		WinBySub:             3,
+		WinByDec:             2,
+	},
+}
 
 func TestExecute(t *testing.T) {
 	cmd := rootCmd
@@ -81,17 +131,135 @@ func TestReadFighterData(t *testing.T) {
 }
 
 func TestWriteFighterData(t *testing.T) {
+	initTestConfig()
+	defer viper.Reset()
 
+	ctx := context.Background()
+	config := cfg.ViperTestPostgres()
+
+	fighterData := []fightersmodel.Fighter{
+		testFighter,
+		getRandomFighter(),
+		getRandomFighter(),
+		getRandomFighter(),
+	}
+
+	err := WriteFighterData(ctx, fighterData, config)
+	assert.NoError(t, err)
 }
 
 func TestDeleteFighterData(t *testing.T) {
+	// initTestConfig()
+	// defer viper.Reset()
 
+	// ctx := context.Background()
+	// config := cfg.ViperTestPostgres()
+
+	// err := DeleteFighterData(ctx, config)
+	// assert.NoError(t, err)
 }
 
 func TestCreateFighter(t *testing.T) {
+	initTestConfig()
+	defer viper.Reset()
 
+	ctx := context.Background()
+	config := cfg.ViperTestPostgres()
+
+	repo, err := psql.New(ctx, config)
+	defer repo.GracefulShutdown()
+	assert.NoError(t, err)
+
+	err = createFighter(ctx, repo, getRandomFighter())
+	assert.NoError(t, err)
+
+	err = createFighter(ctx, repo, testFighter)
+	assert.Error(t, err)
 }
 
 func TestUpdateFighter(t *testing.T) {
+	initTestConfig()
+	defer viper.Reset()
 
+	ctx := context.Background()
+	config := cfg.ViperTestPostgres()
+
+	repo, err := psql.New(ctx, config)
+	defer repo.GracefulShutdown()
+	assert.NoError(t, err)
+
+	err = updateFighter(ctx, repo, testFighter)
+	assert.Error(t, err)
+}
+
+func initTestConfig() {
+	viper.SetConfigName("config")
+	viper.AddConfigPath("../configs")
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatalf("Error reading config file: %s\n", err)
+	}
+}
+
+func getRandomFighter() fightersmodel.Fighter {
+	fighterId := int32(getRandomNum())
+	statId := int32(getRandomNum())
+	debut := getRandomNum() * 1000
+
+	return fightersmodel.Fighter{
+		FighterId:      fighterId,
+		Name:           "Test Fighter " + randomString(5),
+		NickName:       "The Phantom",
+		Division:       1,
+		Status:         "Active",
+		Hometown:       "New York",
+		TrainsAt:       "MMA Gym",
+		FightingStyle:  "Boxing",
+		Age:            30,
+		Height:         72.5,
+		Weight:         185.5,
+		OctagonDebut:   "2022-03-01",
+		DebutTimestamp: debut,
+		Reach:          74.0,
+		LegReach:       40.0,
+		Wins:           10,
+		Loses:          2,
+		Draw:           1,
+		FighterUrl:     randomString(32),
+		ImageUrl:       randomString(32),
+		Stats: fightersmodel.FighterStats{
+			StatId:               statId,
+			FighterId:            fighterId,
+			TotalSigStrLanded:    200,
+			TotalSigStrAttempted: 300,
+			StrAccuracy:          67,
+			TotalTkdLanded:       50,
+			TotalTkdAttempted:    100,
+			TkdAccuracy:          50,
+			SigStrLanded:         6.5,
+			SigStrAbs:            4.0,
+			SigStrDefense:        75,
+			TakedownDefense:      80,
+			TakedownAvg:          2.5,
+			SubmissionAvg:        1.2,
+			KnockdownAvg:         0.5,
+			AvgFightTime:         "10:30",
+			WinByKO:              5,
+			WinBySub:             3,
+			WinByDec:             2,
+		},
+	}
+}
+
+func getRandomNum() int {
+	rand.Seed(time.Now().UnixNano())
+	return rand.Intn(99999)
+}
+
+func randomString(length int) string {
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	b := make([]byte, length)
+	for i := range b {
+		b[i] = charset[rand.Intn(len(charset))]
+	}
+	return string(b)
 }
