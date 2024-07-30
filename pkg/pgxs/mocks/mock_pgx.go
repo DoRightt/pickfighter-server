@@ -13,7 +13,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	pgconn "github.com/jackc/pgconn"
+	pgconn "github.com/jackc/pgx/v5/pgconn"
 	pgx "github.com/jackc/pgx/v5"
 	pgxpool "github.com/jackc/pgx/v5/pgxpool"
 	gomock "go.uber.org/mock/gomock"
