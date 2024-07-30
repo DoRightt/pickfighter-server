@@ -65,7 +65,7 @@ func init() {
 
 // initZapLogger initializes the zap logger.
 func initZapLogger() error {
-	return logger.Init(zapcore.DebugLevel, "logs/log.json")
+	return logger.Init(zapcore.DebugLevel, "../logs/log.json")
 }
 
 // initConfig initializes the service configuration.
