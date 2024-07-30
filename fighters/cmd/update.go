@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 
+	"fightbettr.com/fighters/pkg/cfg"
 	logs "fightbettr.com/pkg/logger"
 	"github.com/spf13/cobra"
 )
@@ -29,5 +30,6 @@ func runUpdate(cmd *cobra.Command, args []string) {
 		logs.Fatalf("Error while reading figheter data: %s", err)
 	}
 
-	WriteFighterData(ctx, fighters)
+	cfg := cfg.ViperPostgres()
+	WriteFighterData(ctx, fighters, cfg)
 }

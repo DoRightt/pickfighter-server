@@ -7,15 +7,15 @@ import (
 	"net/http"
 	"os"
 
-	"fightbettr.com/auth/pkg/cfg"
 	"fightbettr.com/fighters/internal/repository/psql"
 	internalErr "fightbettr.com/fighters/pkg/errors"
 	"fightbettr.com/fighters/pkg/model"
 	"fightbettr.com/pkg/httplib"
 	logs "fightbettr.com/pkg/logger"
-	"github.com/jackc/pgconn"
+	"fightbettr.com/pkg/pgxs"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
 // ReadFighterData reads fighter data from a JSON file and returns a slice of model.Fighter.
@@ -42,8 +42,8 @@ func ReadFighterData() ([]model.Fighter, error) {
 // WriteFighterData writes fighter data to a PostgreSQL database using the provided context,
 // and a slice of model.Fighter. It connects to the database using the configuration
 // from ViperPostgres and performs create or update operations for each fighter.
-func WriteFighterData(ctx context.Context, data []model.Fighter) error {
-	rep, err := psql.New(ctx, cfg.ViperPostgres())
+func WriteFighterData(ctx context.Context, data []model.Fighter, cfg *pgxs.Config) error {
+	rep, err := psql.New(ctx, cfg)
 	if err != nil {
 		logs.Errorf("Unable to start postgresql connection: %s", err)
 	}
@@ -82,19 +82,21 @@ func WriteFighterData(ctx context.Context, data []model.Fighter) error {
 }
 
 // DeleteFighterData deletes all records from the fb_fighters and fb_fighter_stats tables.
-func DeleteFighterData(ctx context.Context) {
-	rep, err := psql.New(ctx, cfg.ViperPostgres())
+func DeleteFighterData(ctx context.Context, cfg *pgxs.Config) error {
+	rep, err := psql.New(ctx, cfg)
 	if err != nil {
 		logs.Errorf("Unable to start postgresql connection: %s", err)
+		return err
 	}
 
-	fightersTableNames := []string{"fb_fighters", "fb_fighter_stats"}
+	fightersTableNames := []string{"fb_fighter_stats", "fb_fighters"}
 	handledTableNames := []string{}
 
 	for _, name := range fightersTableNames {
 		err = rep.DeleteRecords(ctx, name)
 		if err != nil {
 			logs.Fatalf("Error deleting records: %s", err)
+			return err
 		}
 
 		handledTableNames = append(handledTableNames, name)
@@ -103,6 +105,8 @@ func DeleteFighterData(ctx context.Context) {
 	for _, name := range handledTableNames {
 		fmt.Printf("All records from table '%s' deleted successfully\n", name)
 	}
+
+	return nil
 }
 
 // createNewFighterTx performs a transaction to create a new fighter in the database.
@@ -163,7 +167,9 @@ func updateFighter(ctx context.Context, rep *psql.Repository, fighter model.Figh
 		if txErr := tx.Rollback(ctx); txErr != nil {
 			logs.Errorf("Unable to rollback transaction: %s", txErr)
 		}
-		if err.(*pgconn.PgError).Code == pgerrcode.UniqueViolation {
+
+		pgErr, isPgError := err.(*pgconn.PgError)
+		if isPgError && pgErr.Code == pgerrcode.UniqueViolation {
 			intErr := internalErr.NewDefault(internalErr.TxNotUnique, 120)
 			return httplib.NewApiErrFromInternalErr(intErr)
 		} else {
