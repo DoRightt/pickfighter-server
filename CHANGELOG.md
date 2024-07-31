@@ -4,7 +4,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] v0.3.1
+## [Unreleased] v0.3.3
+
+## Released [v0.3.2]
+
+## 31 Jul 2024
+
+### Added
+
+-   Fighters service: cmd tests
+-   Fighters service: pkg/errors tests
+-   Fighters service: pkg/cfg test
+-   Fighters service: pkg/model tests
+-   Fighters service: internal/service/fighters tests
+-   Fighters service: internal/service/handler/grpc tests
+-   Fighters service: internal/service/controller/fighters tests
+-   Fighters service: internal/service/repository/psql tests
+-   Fighters service: added new error codes
+-   Fighters service: added script for mockgen
+-   Fighters service: added directory gen/mocks
+-   Fighters service: added viper test config generator
+-   Added tests directory in root project with Dockerfile and init.sql for test database creation
+-   Added script to run docker container with test db
+
+### Changed
+
+-   Fighters service: Error field ErrCode changed to Code
+-   Fighters service: Timestamp field in error struct is string now
+-   Fighters service: pkg/utils moved to cmd package
+-   Fighters service: psql.New constructor needs config in arguments now
+-   Fighters service: changed logs
+-   Fighters service: config argument is required for WriteFighterData and DeleteFighterData methods
+
+### Removed
+
+-   Fighters service: removed few error codes
 
 ## Released [v0.3.0]
 
@@ -28,6 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Now app works as microservice system
 
 ### Removed
+
 -   fb-service app directory
 -   Tests
 -   Mocs
@@ -144,8 +179,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   .gitignore changed
 -   GetUndoneFights method name has been changed to GetUndoneFightsCount
 
-[Unreleased](https://github.com/DoRightt/fb-app/compare/v0.3.0...main)
+[Unreleased](https://github.com/DoRightt/fb-app/v0.3.0...main)
 
-[v0.3.0]: https://github.com/DoRightt/fb-app/tree/v0.2.0...v0.3.0
-[v0.2.0]: https://github.com/DoRightt/fb-app/tree/v0.1.0...v0.2.0
+[v0.3.2]: https://github.com/DoRightt/fb-app/compare/v0.3.0...v0.3.2
+[v0.3.0]: https://github.com/DoRightt/fb-app/compare/v0.2.0...v0.3.0
+[v0.2.0]: https://github.com/DoRightt/fb-app/compare/v0.1.0...v0.2.0
 [v0.1.0]: https://github.com/DoRightt/fb-app/tree/v0.1.0
