@@ -11,9 +11,10 @@ import (
 	grpchandler "fightbettr.com/fighters/internal/handler/grpc"
 	"fightbettr.com/fighters/internal/repository/psql"
 	service "fightbettr.com/fighters/internal/service/fighters"
-	logs "fightbettr.com/pkg/logger"
+	"fightbettr.com/fighters/pkg/cfg"
 	"fightbettr.com/pkg/discovery"
 	"fightbettr.com/pkg/discovery/consul"
+	logs "fightbettr.com/pkg/logger"
 	"fightbettr.com/pkg/model"
 	"fightbettr.com/pkg/sigx"
 	"github.com/spf13/cobra"
@@ -95,7 +96,8 @@ func runServe(cmd *cobra.Command, args []string) {
 
 	defer registry.Deregister(ctx, instanceID, app.ServiceName)
 
-	repo, err := psql.New(ctx)
+	config := cfg.ViperPostgres()
+	repo, err := psql.New(ctx, config)
 	if err != nil {
 		logs.Errorf("Unable to start postgresql connection: %s", err)
 		return

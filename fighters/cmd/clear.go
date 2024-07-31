@@ -3,7 +3,7 @@ package cmd
 import (
 	"context"
 
-	"fightbettr.com/fighters/pkg/utils"
+	"fightbettr.com/auth/pkg/cfg"
 	"github.com/spf13/cobra"
 )
 
@@ -27,5 +27,6 @@ func runClearTable(cmd *cobra.Command, args []string) {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	utils.DeleteFighterData(ctx)
+	cfg := cfg.ViperPostgres()
+	DeleteFighterData(ctx, cfg)
 }

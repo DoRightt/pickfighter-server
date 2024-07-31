@@ -14,6 +14,8 @@ func FighterToProto(f *Fighter) *gen.Fighter {
 		TrainsAt:       f.TrainsAt,
 		FightingStyle:  f.FightingStyle,
 		Age:            int32(f.Age),
+		Height:         f.Height,
+		Weight:         f.Weight,
 		OctagonDebut:   f.OctagonDebut,
 		DebutTimestamp: int32(f.DebutTimestamp),
 		Reach:          f.Reach,
@@ -59,7 +61,7 @@ func FighterFromProto(f *gen.Fighter) *Fighter {
 		Draw:           int(f.Draw),
 		FighterUrl:     f.FighterUrl,
 		ImageUrl:       f.ImageUrl,
-		Stats:          *FighterStatsrFromProto(f.Stats),
+		Stats:          *FighterStatsFromProto(f.Stats),
 	}
 }
 
@@ -99,8 +101,8 @@ func FighterStatsrToProto(f *FighterStats) *gen.FighterStats {
 	}
 }
 
-// FighterStatsrFromProto converts a generated proto counterpart into a single Fighter stats struct..
-func FighterStatsrFromProto(f *gen.FighterStats) *FighterStats {
+// FighterStatsFromProto converts a generated proto counterpart into a single Fighter stats struct..
+func FighterStatsFromProto(f *gen.FighterStats) *FighterStats {
 	return &FighterStats{
 		StatId:               f.StatId,
 		FighterId:            f.FighterId,

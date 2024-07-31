@@ -48,66 +48,55 @@ const (
 	DB        = 800
 	DBGetUser = 801
 
-	Events            = 900
-	EventsFightResult = 901
-	EventIsDone       = 902
-	EventsCount       = 903
-	EventsNoRows      = 904
-
-	Bets       = 1200
-	BetsCount  = 1201
-	BetsNoRows = 1202
+	Count         = 1000
+	CountFighters = 1001
+	Fighters      = 1002
 )
 
 var defaultErrors = DefaultMessagesList{
-	Tx:                         Error{ErrCode: Tx, Message: "[Transaction] Failed transaction"},
-	TxCommit:                   Error{ErrCode: TxCommit, Message: "[Transaction] Failed to commit registration transaction"},
-	TxNotUnique:                Error{ErrCode: TxNotUnique, Message: "[Transaction] Value already exists"},
-	TxUnknown:                  Error{ErrCode: TxUnknown, Message: "[Transaction] Failed transaction"},
-	Auth:                       Error{ErrCode: Auth, Message: "[Auth] Error"},
-	AuthDecode:                 Error{ErrCode: AuthDecode, Message: "[Auth]: Decode Error"},
-	AuthForm:                   Error{ErrCode: AuthForm, Message: "[Auth]: Form data is invalid"},
-	AuthFormEmailEmpty:         Error{ErrCode: AuthFormEmailEmpty, Message: "[Auth]: Email is empty"},
-	AuthFormEmailInvalid:       Error{ErrCode: AuthFormEmailInvalid, Message: "[Auth]: Email address is invalid"},
-	AuthFormPasswordInvalid:    Error{ErrCode: AuthFormPasswordInvalid, Message: "[Auth]: Password is empty or less than 6 symbols"},
-	AuthFormPasswordWrong:      Error{ErrCode: AuthFormPasswordWrong, Message: "[Auth]: Wrong Password"},
-	AuthFormPasswordsMismatch:  Error{ErrCode: AuthFormPasswordsMismatch, Message: "[Auth]: Passwords mismatch"},
-	QueryParamsToken:           Error{ErrCode: QueryParamsToken, Message: "[Query Params]: Query parameter 'token' should be specified"},
-	UserCredentials:            Error{ErrCode: UserCredentials, Message: "[User Credentials]: Failed to get user credentials"},
-	UserCredentialsNotExists:   Error{ErrCode: UserCredentialsNotExists, Message: "[User Credentials]: User with specified login credentials not exists"},
-	UserCredentialsToken:       Error{ErrCode: UserCredentialsToken, Message: "[User Credentials]: User credentials with specified token does not exist"},
-	UserCredentialsIsNotActive: Error{ErrCode: UserCredentialsIsNotActive, Message: "[User Credentials]: User is not activated"},
-	UserCredentialsReset:       Error{ErrCode: UserCredentialsReset, Message: "[User Credentials]: Failed to update user password"},
-	UserCredentialsCreate:      Error{ErrCode: UserCredentialsCreate, Message: "[User Credentials]: Failed to create user credentials"},
-	UserCredentialsUpdate:      Error{ErrCode: UserCredentialsUpdate, Message: "[User Credentials]: Failed to update user credentials"},
-	Profile:                    Error{ErrCode: Profile, Message: "[Profile]: Failed to find user profile"},
-	Token:                      Error{ErrCode: Token, Message: "[Token]: Token unknown error"},
-	TokenEmpty:                 Error{ErrCode: TokenEmpty, Message: "[Token]: Token is empty"},
-	TokenExpired:               Error{ErrCode: TokenExpired, Message: "[Token]: Token expired, try to reset password"},
-	JSON:                       Error{ErrCode: JSON, Message: "[JSON]: JSON unknown error"},
-	JSONDecoder:                Error{ErrCode: JSONDecoder, Message: "[JSON]: Decoder error"},
-	DBGetUser:                  Error{ErrCode: DBGetUser, Message: "[DB]: Failed to get user"},
-	Events:                     Error{ErrCode: Events, Message: "[Events]: Decode error"},
-	EventsFightResult:          Error{ErrCode: EventsFightResult, Message: "[Events]: Failed to set fight result"},
-	EventIsDone:                Error{ErrCode: EventIsDone, Message: "[Events]: Failed to set event done"},
-	EventsCount:                Error{ErrCode: EventIsDone, Message: "[Events]: Failed to get events count"},
-	EventsNoRows:               Error{ErrCode: EventIsDone, Message: "[Events]: No Rows"},
-	Bets:                       Error{ErrCode: EventIsDone, Message: "[Bets]: Error"},
-	BetsCount:                  Error{ErrCode: EventIsDone, Message: "[Bets]: Failed to get bets count"},
-	BetsNoRows:                 Error{ErrCode: EventIsDone, Message: "[Bets]: No Rows"},
+	Tx:                         Error{Code: Tx, Message: "[Transaction] Failed transaction"},
+	TxCommit:                   Error{Code: TxCommit, Message: "[Transaction] Failed to commit registration transaction"},
+	TxNotUnique:                Error{Code: TxNotUnique, Message: "[Transaction] Value already exists"},
+	TxUnknown:                  Error{Code: TxUnknown, Message: "[Transaction] Failed transaction"},
+	Auth:                       Error{Code: Auth, Message: "[Auth] Error"},
+	AuthDecode:                 Error{Code: AuthDecode, Message: "[Auth]: Decode Error"},
+	AuthForm:                   Error{Code: AuthForm, Message: "[Auth]: Form data is invalid"},
+	AuthFormEmailEmpty:         Error{Code: AuthFormEmailEmpty, Message: "[Auth]: Email is empty"},
+	AuthFormEmailInvalid:       Error{Code: AuthFormEmailInvalid, Message: "[Auth]: Email address is invalid"},
+	AuthFormPasswordInvalid:    Error{Code: AuthFormPasswordInvalid, Message: "[Auth]: Password is empty or less than 6 symbols"},
+	AuthFormPasswordWrong:      Error{Code: AuthFormPasswordWrong, Message: "[Auth]: Wrong Password"},
+	AuthFormPasswordsMismatch:  Error{Code: AuthFormPasswordsMismatch, Message: "[Auth]: Passwords mismatch"},
+	QueryParamsToken:           Error{Code: QueryParamsToken, Message: "[Query Params]: Query parameter 'token' should be specified"},
+	UserCredentials:            Error{Code: UserCredentials, Message: "[User Credentials]: Failed to get user credentials"},
+	UserCredentialsNotExists:   Error{Code: UserCredentialsNotExists, Message: "[User Credentials]: User with specified login credentials not exists"},
+	UserCredentialsToken:       Error{Code: UserCredentialsToken, Message: "[User Credentials]: User credentials with specified token does not exist"},
+	UserCredentialsIsNotActive: Error{Code: UserCredentialsIsNotActive, Message: "[User Credentials]: User is not activated"},
+	UserCredentialsReset:       Error{Code: UserCredentialsReset, Message: "[User Credentials]: Failed to update user password"},
+	UserCredentialsCreate:      Error{Code: UserCredentialsCreate, Message: "[User Credentials]: Failed to create user credentials"},
+	UserCredentialsUpdate:      Error{Code: UserCredentialsUpdate, Message: "[User Credentials]: Failed to update user credentials"},
+	Profile:                    Error{Code: Profile, Message: "[Profile]: Failed to find user profile"},
+	Token:                      Error{Code: Token, Message: "[Token]: Token unknown error"},
+	TokenEmpty:                 Error{Code: TokenEmpty, Message: "[Token]: Token is empty"},
+	TokenExpired:               Error{Code: TokenExpired, Message: "[Token]: Token expired, try to reset password"},
+	JSON:                       Error{Code: JSON, Message: "[JSON]: JSON unknown error"},
+	JSONDecoder:                Error{Code: JSONDecoder, Message: "[JSON]: Decoder error"},
+	DBGetUser:                  Error{Code: DBGetUser, Message: "[DB]: Failed to get user"},
+	Count:                      Error{Code: Count, Message: "[Count]: Failed to get items count"},
+	CountFighters:              Error{Code: CountFighters, Message: "[Count]: Failed to get fighters count"},
+	Fighters:                   Error{Code: Fighters, Message: "[Fighters]: Failed to find fighters"},
 }
 
-var unknownError = Error{ErrCode: 9999, Message: "Unknown Error"}
+var unknownError = Error{Code: 9999, Message: "Unknown Error"}
 
 type Error struct {
-	ErrCode      int
+	Code         int
 	InternalCode int
 	Message      string
-	Timestamp    any
+	Timestamp    string
 }
 
 func (e *Error) GetCode() int {
-	return int(e.ErrCode)
+	return int(e.Code)
 }
 
 func (e *Error) GetMessage() string {
@@ -128,7 +117,7 @@ func NewDefault(code int, internal int) *Error {
 
 func New(code int, err error, internal int) *Error {
 	return &Error{
-		ErrCode:      code,
+		Code:         code,
 		InternalCode: internal,
 		Message:      err.Error(),
 		Timestamp:    time.Now().Format(time.RFC1123),
@@ -137,9 +126,9 @@ func New(code int, err error, internal int) *Error {
 
 func (e *Error) Error() string {
 	return fmt.Sprintf(
-		"[ERROR]: %s. \n[ERROR CODE]: %d. \n[INTERNAL CODE]: %d. \nSERVICE: %s.\nTime: %t.\n",
+		"[ERROR]: %s. \n[ERROR CODE]: %d. \n[INTERNAL CODE]: %d. \nSERVICE: %s.\nTime: %s.\n",
 		e.Message,
-		e.ErrCode,
+		e.Code,
 		e.InternalCode,
 		version.Name,
 		e.Timestamp,

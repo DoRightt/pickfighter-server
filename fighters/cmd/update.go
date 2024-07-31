@@ -3,8 +3,8 @@ package cmd
 import (
 	"context"
 
+	"fightbettr.com/fighters/pkg/cfg"
 	logs "fightbettr.com/pkg/logger"
-	"fightbettr.com/fighters/pkg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -25,10 +25,11 @@ var updateRosterCmd = &cobra.Command{
 // The table will be updated from the existing JSON file.
 func runUpdate(cmd *cobra.Command, args []string) {
 	ctx := context.Background()
-	fighters, err := utils.ReadFighterData()
+	fighters, err := ReadFighterData()
 	if err != nil {
 		logs.Fatalf("Error while reading figheter data: %s", err)
 	}
 
-	utils.WriteFighterData(ctx, fighters)
+	cfg := cfg.ViperPostgres()
+	WriteFighterData(ctx, fighters, cfg)
 }

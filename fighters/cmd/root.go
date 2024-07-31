@@ -59,11 +59,13 @@ func init() {
 	if err != nil {
 		log.Fatalf("error while logger initializing: %s", err)
 	}
+
+	rootCmd.Flags().BoolP("version", "v", false, "Shows app version")
 }
 
 // initZapLogger initializes the zap logger.
 func initZapLogger() error {
-	return logger.Init(zapcore.DebugLevel, "logs/log.json")
+	return logger.Init(zapcore.DebugLevel, "../logs/log.json")
 }
 
 // initConfig initializes the service configuration.
