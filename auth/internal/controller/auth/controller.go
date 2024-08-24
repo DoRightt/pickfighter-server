@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"fightbettr.com/auth/pkg/model"
-	"fightbettr.com/pkg/pgxs"
+	"pickfighter.com/auth/pkg/model"
+	"pickfighter.com/pkg/pgxs"
 	"github.com/jackc/pgx/v5"
 )
 

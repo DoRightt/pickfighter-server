@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"fightbettr.com/auth/pkg/model"
-	logs "fightbettr.com/pkg/logger"
+	"pickfighter.com/auth/pkg/model"
+	logs "pickfighter.com/pkg/logger"
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v5"
 )

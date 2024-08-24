@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"fightbettr.com/auth/pkg/model"
+	"pickfighter.com/auth/pkg/model"
 
 	"github.com/jackc/pgx/v5"
 )

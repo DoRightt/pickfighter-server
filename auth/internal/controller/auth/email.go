@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"fightbettr.com/auth/pkg/model"
+	"pickfighter.com/auth/pkg/model"
 	"github.com/spf13/viper"
 	"gopkg.in/gomail.v2"
 )

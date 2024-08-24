@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"fightbettr.com/auth/pkg/model"
+	"pickfighter.com/auth/pkg/model"
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v5"
 )
