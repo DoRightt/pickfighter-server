@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"fightbettr.com/scraper/pkg/version"
+	"pickfighter.com/scraper/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
