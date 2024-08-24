@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"fightbettr.com/fighters/internal/controller/fighters"
-	"fightbettr.com/fighters/pkg/model"
-	"fightbettr.com/gen"
+	"pickfighter.com/fighters/internal/controller/fighters"
+	"pickfighter.com/fighters/pkg/model"
+	"pickfighter.com/gen"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

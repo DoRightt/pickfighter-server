@@ -3,7 +3,7 @@ package psql
 import (
 	"context"
 
-	"fightbettr.com/fighters/pkg/model"
+	"pickfighter.com/fighters/pkg/model"
 
 	"github.com/jackc/pgx/v5"
 )

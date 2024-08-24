@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"fightbettr.com/fighters/pkg/model"
+	"pickfighter.com/fighters/pkg/model"
 )
 
 // SearchFightersCount retrieves the count of fighters based on the provided FightersRequest.

@@ -3,7 +3,7 @@ package model
 import (
 	"testing"
 
-	"fightbettr.com/gen"
+	"pickfighter.com/gen"
 	"github.com/stretchr/testify/assert"
 )
 

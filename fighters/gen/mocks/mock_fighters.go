@@ -13,7 +13,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	model "fightbettr.com/fighters/pkg/model"
+	model "pickfighter.com/fighters/pkg/model"
 	pgx "github.com/jackc/pgx/v5"
 	pgxpool "github.com/jackc/pgx/v5/pgxpool"
 	gomock "go.uber.org/mock/gomock"

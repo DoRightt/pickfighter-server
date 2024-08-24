@@ -3,7 +3,7 @@ package cmd
 import (
 	"context"
 
-	"fightbettr.com/auth/pkg/cfg"
+	"pickfighter.com/fighters/pkg/cfg"
 	"github.com/spf13/cobra"
 )
 

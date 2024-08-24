@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"fightbettr.com/fighters/pkg/cfg"
-	"fightbettr.com/fighters/pkg/model"
+	"pickfighter.com/fighters/pkg/cfg"
+	"pickfighter.com/fighters/pkg/model"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/spf13/viper"

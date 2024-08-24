@@ -3,7 +3,7 @@ package psql
 import (
 	"context"
 
-	"fightbettr.com/pkg/pgxs"
+	"pickfighter.com/pkg/pgxs"
 )
 
 // Repository represents a repository for interacting with fighter-related data in the database.

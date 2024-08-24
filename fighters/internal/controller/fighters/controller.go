@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"fightbettr.com/fighters/pkg/model"
-	logs "fightbettr.com/pkg/logger"
-	"fightbettr.com/pkg/pgxs"
+	"pickfighter.com/fighters/pkg/model"
+	logs "pickfighter.com/pkg/logger"
+	"pickfighter.com/pkg/pgxs"
 	"github.com/jackc/pgx/v5"
 )
 
