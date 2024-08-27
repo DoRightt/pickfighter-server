@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"fightbettr.com/events/pkg/version"
+	"pickfighter.com/events/pkg/version"
 )
 
 type DefaultMessagesList map[int]Error

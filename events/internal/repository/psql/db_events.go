@@ -3,7 +3,7 @@ package psql
 import (
 	"context"
 
-	eventmodel "fightbettr.com/events/pkg/model"
+	eventmodel "pickfighter.com/events/pkg/model"
 	"github.com/jackc/pgx/v5"
 )
 

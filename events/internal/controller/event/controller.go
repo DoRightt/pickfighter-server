@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	eventmodel "fightbettr.com/events/pkg/model"
-	"fightbettr.com/pkg/pgxs"
+	eventmodel "pickfighter.com/events/pkg/model"
+	"pickfighter.com/pkg/pgxs"
 	"github.com/jackc/pgx/v5"
 )
 
