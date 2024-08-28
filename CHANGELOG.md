@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.3.3
 
+## 28 Aug 2024
+
+### Changed
+
+-   Fightbettr name was replaced to Pickfighter
+-   Fb prefix was replaced to Pf
+
 ## Released [v0.3.2]
 
 ## 31 Jul 2024
