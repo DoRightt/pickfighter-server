@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	logs "fightbettr.com/pkg/logger"
+	logs "pickfighter.com/pkg/logger"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )

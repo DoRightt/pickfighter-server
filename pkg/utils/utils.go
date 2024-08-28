@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	logs "fightbettr.com/pkg/logger"
+	logs "pickfighter.com/pkg/logger"
 	"github.com/spf13/viper"
 )
 

@@ -1,6 +1,6 @@
 package main
 
-import "fightbettr.com/auth/cmd"
+import "pickfighter.com/auth/cmd"
 
 func main() {
 	cmd.Execute()
