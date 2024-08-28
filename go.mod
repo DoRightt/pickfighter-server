@@ -13,7 +13,7 @@ require (
 	github.com/jackc/pgconn v1.14.1
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa
 	github.com/jackc/pgtype v0.0.0-20190828014616-a8802b16cc59
-	github.com/jackc/pgx/v5 v5.4.3
+	github.com/jackc/pgx/v5 v5.6.0
 	github.com/lestrrat-go/jwx/v2 v2.0.21
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.17.0
