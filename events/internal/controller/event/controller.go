@@ -13,7 +13,7 @@ import (
 var ErrNotFound = errors.New("not found")
 
 type eventRepository interface {
-	pgxs.FbRepo
+	pgxs.PickfighterRepo
 
 	TxCreateEvent(ctx context.Context, tx pgx.Tx, e *eventmodel.EventRequest) (int32, error)
 	TxCreateEventFight(ctx context.Context, tx pgx.Tx, f eventmodel.Fight) error

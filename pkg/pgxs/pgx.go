@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type FbRepo interface {
+type PickfighterRepo interface {
 	GetPoolConfig() (*pgxpool.Config, error)
 	GracefulShutdown()
 	DeleteRecords(ctx context.Context, tableName string) error

@@ -5,11 +5,11 @@ import (
 	"log"
 	"time"
 
-	"pickfighter.com/pickfighter/pkg/logger"
-	"pickfighter.com/pickfighter/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
+	"pickfighter.com/pickfighter/pkg/logger"
+	"pickfighter.com/pickfighter/pkg/version"
 )
 
 var (
@@ -99,7 +99,7 @@ func setConfigDefaults() {
 	viper.SetDefault("http.ssl.enabled", false)
 
 	// auth config
-	viper.SetDefault("auth.cookie_name", "fb_api_token")
+	viper.SetDefault("auth.cookie_name", "pf_api_token")
 	viper.SetDefault("auth.jwt.cert", "")
 	viper.SetDefault("auth.jwt.key", "")
 }

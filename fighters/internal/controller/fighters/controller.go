@@ -14,7 +14,7 @@ import (
 var ErrNotFound = errors.New("not found")
 
 type FightersRepository interface {
-	pgxs.FbRepo
+	pgxs.PickfighterRepo
 	SearchFightersCount(ctx context.Context, req *model.FightersRequest) (int32, error)
 	SearchFighters(ctx context.Context, req *model.FightersRequest) ([]*model.Fighter, error)
 	FindFighter(ctx context.Context, req model.Fighter) (int32, error)

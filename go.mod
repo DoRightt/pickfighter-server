@@ -1,4 +1,4 @@
-module fightbettr.com
+module pickfighter.com
 
 go 1.21.0
 

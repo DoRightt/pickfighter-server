@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"pickfighter.com/fighters/pkg/cfg"
-	"pickfighter.com/fighters/pkg/model"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+	"pickfighter.com/fighters/pkg/cfg"
+	"pickfighter.com/fighters/pkg/model"
 )
 
 var testFighter = &model.Fighter{
@@ -201,7 +201,7 @@ func TestCreateNewFighter(t *testing.T) {
 			expectedError: &pgconn.PgError{
 				Severity: "ERROR",
 				Code:     "23505",
-				Message:  "duplicate key value violates unique constraint \"fb_fighters_fighter_url_uindex\"",
+				Message:  "duplicate key value violates unique constraint \"pf_fighters_fighter_url_uindex\"",
 				Detail:   "Key (fighter_url)=(https://www.ufc.com/athlete/tank-abbott) already exists.",
 			},
 		},
