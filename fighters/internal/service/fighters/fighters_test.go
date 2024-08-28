@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	grpchandler "fightbettr.com/fighters/internal/handler/grpc"
-	"fightbettr.com/fighters/pkg/version"
+	grpchandler "pickfighter.com/fighters/internal/handler/grpc"
+	"pickfighter.com/fighters/pkg/version"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )

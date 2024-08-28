@@ -7,15 +7,15 @@ import (
 	"net/http"
 	"os"
 
-	"fightbettr.com/fighters/internal/repository/psql"
-	internalErr "fightbettr.com/fighters/pkg/errors"
-	"fightbettr.com/fighters/pkg/model"
-	"fightbettr.com/pkg/httplib"
-	logs "fightbettr.com/pkg/logger"
-	"fightbettr.com/pkg/pgxs"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
+	"pickfighter.com/fighters/internal/repository/psql"
+	internalErr "pickfighter.com/fighters/pkg/errors"
+	"pickfighter.com/fighters/pkg/model"
+	"pickfighter.com/pkg/httplib"
+	logs "pickfighter.com/pkg/logger"
+	"pickfighter.com/pkg/pgxs"
 )
 
 // ReadFighterData reads fighter data from a JSON file and returns a slice of model.Fighter.
@@ -81,7 +81,7 @@ func WriteFighterData(ctx context.Context, data []model.Fighter, cfg *pgxs.Confi
 	return nil
 }
 
-// DeleteFighterData deletes all records from the fb_fighters and fb_fighter_stats tables.
+// DeleteFighterData deletes all records from the pf_fighters and pf_fighter_stats tables.
 func DeleteFighterData(ctx context.Context, cfg *pgxs.Config) error {
 	rep, err := psql.New(ctx, cfg)
 	if err != nil {
@@ -89,7 +89,7 @@ func DeleteFighterData(ctx context.Context, cfg *pgxs.Config) error {
 		return err
 	}
 
-	fightersTableNames := []string{"fb_fighter_stats", "fb_fighters"}
+	fightersTableNames := []string{"pf_fighter_stats", "pf_fighters"}
 	handledTableNames := []string{}
 
 	for _, name := range fightersTableNames {

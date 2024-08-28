@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"fightbettr.com/auth/pkg/model"
-	"fightbettr.com/pkg/pgxs"
+	"pickfighter.com/auth/pkg/model"
+	"pickfighter.com/pkg/pgxs"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -13,7 +13,7 @@ import (
 var ErrNotFound = errors.New("not found")
 
 type authRepository interface {
-	pgxs.FbRepo
+	pgxs.PickfighterRepo
 	FindUserCredentials(ctx context.Context, req model.UserCredentialsRequest) (model.UserCredentials, error)
 	TxNewAuthCredentials(ctx context.Context, tx pgx.Tx, uc model.UserCredentials) error
 	ConfirmCredentialsToken(ctx context.Context, tx pgx.Tx, req model.UserCredentialsRequest) error

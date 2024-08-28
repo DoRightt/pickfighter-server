@@ -1,7 +1,7 @@
 package model
 
 import (
-	"fightbettr.com/gen"
+	"pickfighter.com/gen"
 )
 
 func EventRequestFromProto(p *gen.CreateEventRequest) *EventRequest {

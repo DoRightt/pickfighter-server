@@ -1,7 +1,7 @@
 package migrations
 
 import (
-	"fightbettr.com/pkg/pgxs"
+	"pickfighter.com/pkg/pgxs"
 	"go.uber.org/zap"
 )
 

@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	authmodel "fightbettr.com/auth/pkg/model"
-	logs "fightbettr.com/pkg/logger"
-	"fightbettr.com/pkg/model"
+	authmodel "pickfighter.com/auth/pkg/model"
+	logs "pickfighter.com/pkg/logger"
+	"pickfighter.com/pkg/model"
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"

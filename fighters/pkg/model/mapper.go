@@ -1,6 +1,6 @@
 package model
 
-import "fightbettr.com/gen"
+import "pickfighter.com/gen"
 
 // FighterToProto converts a single Fighter struct into a generated proto counterpart.
 func FighterToProto(f *Fighter) *gen.Fighter {

@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"fightbettr.com/auth/pkg/logger"
-	"fightbettr.com/auth/pkg/version"
+	"pickfighter.com/auth/pkg/logger"
+	"pickfighter.com/auth/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"

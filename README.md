@@ -1,13 +1,13 @@
-# FB App
+# Pickfighter App
 
-Represents APIs for fb-client
+Represents APIs for Pickfighter
 
-### FB-App
+### Pickfighter-App
 
 -   REST Interface
 -   JWT Authentication
 -   Services
-    -   Fightbettr gateway
+    -   Pickfighter gateway
     -   Auth
     -   Events
     -   Fighters

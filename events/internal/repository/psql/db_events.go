@@ -3,14 +3,14 @@ package psql
 import (
 	"context"
 
-	eventmodel "fightbettr.com/events/pkg/model"
 	"github.com/jackc/pgx/v5"
+	eventmodel "pickfighter.com/events/pkg/model"
 )
 
-// TxCreateEvent creates a new event in the 'fb_events' table and returns the event ID.
+// TxCreateEvent creates a new event in the 'pf_events' table and returns the event ID.
 // It uses a transaction (tx) if provided, otherwise, it uses the repository's connection pool.
 func (r *Repository) TxCreateEvent(ctx context.Context, tx pgx.Tx, e *eventmodel.EventRequest) (int32, error) {
-	q := `INSERT INTO public.fb_events 
+	q := `INSERT INTO public.pf_events 
 	(name)
 	VALUES ($1)
 	RETURNING event_id`
@@ -41,7 +41,7 @@ func (r *Repository) SearchEventsCount(ctx context.Context) (int32, error) {
 		SELECT
 			*,
 			ROW_NUMBER() OVER (PARTITION BY is_done ORDER BY event_id) AS rn
-		FROM public.fb_events
+		FROM public.pf_events
 		WHERE is_done IN (false, true)
 	),
 	filtered_events AS (
@@ -49,7 +49,7 @@ func (r *Repository) SearchEventsCount(ctx context.Context) (int32, error) {
 			event_id,
 			is_done
 		FROM ranked_events
-		WHERE (is_done = false AND rn <= $1) OR (is_done = true AND rn > (SELECT COUNT(*) FROM public.fb_events WHERE is_done = true) - $1)
+		WHERE (is_done = false AND rn <= $1) OR (is_done = true AND rn > (SELECT COUNT(*) FROM public.pf_events WHERE is_done = true) - $1)
 	)
 	SELECT COUNT(*) FROM filtered_events`
 
@@ -73,14 +73,14 @@ func (r *Repository) SearchEvents(ctx context.Context) ([]*eventmodel.Event, err
 		SELECT
 			*,
 			ROW_NUMBER() OVER (PARTITION BY is_done ORDER BY event_id) AS rn
-		FROM public.fb_events
+		FROM public.pf_events
 		WHERE is_done IN (false, true)
 	),
 	filtered_events AS (
 		SELECT
 			event_id, name, is_done
 		FROM ranked_events
-		WHERE (is_done = false AND rn <= $1) OR (is_done = true AND rn > (SELECT COUNT(*) FROM public.fb_events WHERE is_done = true) - $1)
+		WHERE (is_done = false AND rn <= $1) OR (is_done = true AND rn > (SELECT COUNT(*) FROM public.pf_events WHERE is_done = true) - $1)
 	)
 	SELECT
 		e.event_id, e.name, e.is_done AS is_event_done, 
@@ -90,7 +90,7 @@ func (r *Repository) SearchEvents(ctx context.Context) ([]*eventmodel.Event, err
 	FROM
 		filtered_events e
 	LEFT JOIN
-		fb_fights f ON e.event_id = f.event_id`
+		pf_fights f ON e.event_id = f.event_id`
 
 	var events []*eventmodel.Event
 
@@ -142,11 +142,11 @@ func (r *Repository) SearchEvents(ctx context.Context) ([]*eventmodel.Event, err
 	return events, nil
 }
 
-// GetEventId retrieves the event ID associated with a specific fight from the fb_fights table.
+// GetEventId retrieves the event ID associated with a specific fight from the pf_fights table.
 // It takes a transaction (tx), the fight ID, and returns the corresponding event ID.
 // If the query is successful, it returns the event ID; otherwise, it returns -1 and the encountered error.
 func (r *Repository) GetEventId(ctx context.Context, tx pgx.Tx, fightId int32) (int32, error) {
-	q := "SELECT event_id FROM fb_fights WHERE fight_id = $1"
+	q := "SELECT event_id FROM pf_fights WHERE fight_id = $1"
 
 	var eventId int32
 	if tx != nil {
@@ -162,11 +162,11 @@ func (r *Repository) GetEventId(ctx context.Context, tx pgx.Tx, fightId int32) (
 	return eventId, nil
 }
 
-// GetUndoneFightsCount retrieves the count of undone fights for a specific event from the fb_fights table.
+// GetUndoneFightsCount retrieves the count of undone fights for a specific event from the pf_fights table.
 // It takes a transaction (tx), the event ID, and returns the number of fights that are not marked as done (is_done = false).
 // If the query is successful, it returns the count, otherwise, it returns an error.
 func (r *Repository) GetUndoneFightsCount(ctx context.Context, tx pgx.Tx, eventId int32) (int, error) {
-	q := "SELECT COUNT(*) FROM fb_fights WHERE event_id = $1 AND is_done = false"
+	q := "SELECT COUNT(*) FROM pf_fights WHERE event_id = $1 AND is_done = false"
 	var count int
 	err := tx.QueryRow(ctx, q, eventId).Scan(&count)
 	if err != nil {
@@ -176,12 +176,12 @@ func (r *Repository) GetUndoneFightsCount(ctx context.Context, tx pgx.Tx, eventI
 	return count, nil
 }
 
-// SetEventDone updates the 'is_done' field of an event in the fb_events table.
+// SetEventDone updates the 'is_done' field of an event in the pf_events table.
 // It takes a transaction (tx) and the event ID as parameters and sets the 'is_done'
 // column to true for the specified event. If the update is successful, it returns nil.
 // In case of an error during the update, it returns the error details.
 func (r *Repository) SetEventDone(ctx context.Context, tx pgx.Tx, eventId int32) error {
-	q := "UPDATE fb_events SET is_done = true WHERE event_id = $1"
+	q := "UPDATE pf_events SET is_done = true WHERE event_id = $1"
 
 	_, err := tx.Exec(ctx, q, eventId)
 	if err != nil {

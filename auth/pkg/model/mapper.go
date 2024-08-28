@@ -1,7 +1,7 @@
 package model
 
 import (
-	"fightbettr.com/gen"
+	"pickfighter.com/gen"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

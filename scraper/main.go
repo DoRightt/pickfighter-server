@@ -1,6 +1,6 @@
 package main
 
-import "fightbettr.com/scraper/cmd"
+import "pickfighter.com/scraper/cmd"
 
 func main() {
 	cmd.Execute()

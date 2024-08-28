@@ -1,7 +1,7 @@
 package model
 
 import (
-	fightersmodel "fightbettr.com/fighters/pkg/model"
+	fightersmodel "pickfighter.com/fighters/pkg/model"
 )
 
 // Fight is a structure with fight information and fighters ids

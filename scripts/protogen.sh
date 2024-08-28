@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the path to the .proto file
-PROTO_FILE="./api/fightbettr.proto"
+PROTO_FILE="./api/pickfighter.proto"
 
 # Check if the .proto file exists
 if [ ! -f "$PROTO_FILE" ]; then

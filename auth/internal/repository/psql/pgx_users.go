@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"strings"
 
-	"fightbettr.com/auth/pkg/model"
-	logs "fightbettr.com/pkg/logger"
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v5"
+	"pickfighter.com/auth/pkg/model"
+	logs "pickfighter.com/pkg/logger"
 )
 
 const (
 	searchUsersQuery = `SELECT u.user_id, u.name, u.claim, u.rank, u.flags, u.created_at, u.updated_at
-	FROM public.fb_users AS u`
+	FROM public.pf_users AS u`
 )
 
 // FindUser searches for a user based on the provided UserRequest.

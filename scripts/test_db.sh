@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONTAINER_NAME="test-db"
-POSTGRES_IMAGE="fb-test-postgres"
+POSTGRES_IMAGE="pf-test-postgres"
 POSTGRES_PASSWORD="password"
 
 if [ "$(docker ps -a -q -f name=${CONTAINER_NAME})" ]; then

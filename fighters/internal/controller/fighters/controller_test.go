@@ -5,9 +5,9 @@ import (
 	"errors"
 	"testing"
 
-	"fightbettr.com/fighters/gen/mocks"
-	"fightbettr.com/fighters/internal/repository/psql"
-	"fightbettr.com/fighters/pkg/model"
+	"pickfighter.com/fighters/gen/mocks"
+	"pickfighter.com/fighters/internal/repository/psql"
+	"pickfighter.com/fighters/pkg/model"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 )

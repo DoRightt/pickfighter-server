@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.33.0
 // 	protoc        v3.12.4
-// source: fightbettr.proto
+// source: pickfighter.proto
 
 package gen
 
@@ -37,7 +37,7 @@ type RegisterRequest struct {
 func (x *RegisterRequest) Reset() {
 	*x = RegisterRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[0]
+		mi := &file_pickfighter_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -50,7 +50,7 @@ func (x *RegisterRequest) String() string {
 func (*RegisterRequest) ProtoMessage() {}
 
 func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[0]
+	mi := &file_pickfighter_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -63,7 +63,7 @@ func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
 func (*RegisterRequest) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{0}
+	return file_pickfighter_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *RegisterRequest) GetEmail() string {
@@ -112,7 +112,7 @@ type RegisterResponse struct {
 func (x *RegisterResponse) Reset() {
 	*x = RegisterResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[1]
+		mi := &file_pickfighter_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -125,7 +125,7 @@ func (x *RegisterResponse) String() string {
 func (*RegisterResponse) ProtoMessage() {}
 
 func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[1]
+	mi := &file_pickfighter_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -138,7 +138,7 @@ func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterResponse.ProtoReflect.Descriptor instead.
 func (*RegisterResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{1}
+	return file_pickfighter_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *RegisterResponse) GetId() int32 {
@@ -159,7 +159,7 @@ type RegisterConfirmRequest struct {
 func (x *RegisterConfirmRequest) Reset() {
 	*x = RegisterConfirmRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[2]
+		mi := &file_pickfighter_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -172,7 +172,7 @@ func (x *RegisterConfirmRequest) String() string {
 func (*RegisterConfirmRequest) ProtoMessage() {}
 
 func (x *RegisterConfirmRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[2]
+	mi := &file_pickfighter_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -185,7 +185,7 @@ func (x *RegisterConfirmRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterConfirmRequest.ProtoReflect.Descriptor instead.
 func (*RegisterConfirmRequest) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{2}
+	return file_pickfighter_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *RegisterConfirmRequest) GetToken() string {
@@ -206,7 +206,7 @@ type RegisterConfirmResponse struct {
 func (x *RegisterConfirmResponse) Reset() {
 	*x = RegisterConfirmResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[3]
+		mi := &file_pickfighter_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -219,7 +219,7 @@ func (x *RegisterConfirmResponse) String() string {
 func (*RegisterConfirmResponse) ProtoMessage() {}
 
 func (x *RegisterConfirmResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[3]
+	mi := &file_pickfighter_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -232,7 +232,7 @@ func (x *RegisterConfirmResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterConfirmResponse.ProtoReflect.Descriptor instead.
 func (*RegisterConfirmResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{3}
+	return file_pickfighter_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *RegisterConfirmResponse) GetResponse() *empty.Empty {
@@ -261,7 +261,7 @@ type AuthenticateRequest struct {
 func (x *AuthenticateRequest) Reset() {
 	*x = AuthenticateRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[4]
+		mi := &file_pickfighter_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -274,7 +274,7 @@ func (x *AuthenticateRequest) String() string {
 func (*AuthenticateRequest) ProtoMessage() {}
 
 func (x *AuthenticateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[4]
+	mi := &file_pickfighter_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -287,7 +287,7 @@ func (x *AuthenticateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthenticateRequest.ProtoReflect.Descriptor instead.
 func (*AuthenticateRequest) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{4}
+	return file_pickfighter_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *AuthenticateRequest) GetEmail() string {
@@ -366,7 +366,7 @@ type AuthenticateResponse struct {
 func (x *AuthenticateResponse) Reset() {
 	*x = AuthenticateResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[5]
+		mi := &file_pickfighter_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -379,7 +379,7 @@ func (x *AuthenticateResponse) String() string {
 func (*AuthenticateResponse) ProtoMessage() {}
 
 func (x *AuthenticateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[5]
+	mi := &file_pickfighter_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -392,7 +392,7 @@ func (x *AuthenticateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthenticateResponse.ProtoReflect.Descriptor instead.
 func (*AuthenticateResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{5}
+	return file_pickfighter_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *AuthenticateResponse) GetTokenId() string {
@@ -427,7 +427,7 @@ type PasswordResetRequest struct {
 func (x *PasswordResetRequest) Reset() {
 	*x = PasswordResetRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[6]
+		mi := &file_pickfighter_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -440,7 +440,7 @@ func (x *PasswordResetRequest) String() string {
 func (*PasswordResetRequest) ProtoMessage() {}
 
 func (x *PasswordResetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[6]
+	mi := &file_pickfighter_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -453,7 +453,7 @@ func (x *PasswordResetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PasswordResetRequest.ProtoReflect.Descriptor instead.
 func (*PasswordResetRequest) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{6}
+	return file_pickfighter_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *PasswordResetRequest) GetEmail() string {
@@ -474,7 +474,7 @@ type PasswordResetResponse struct {
 func (x *PasswordResetResponse) Reset() {
 	*x = PasswordResetResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[7]
+		mi := &file_pickfighter_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -487,7 +487,7 @@ func (x *PasswordResetResponse) String() string {
 func (*PasswordResetResponse) ProtoMessage() {}
 
 func (x *PasswordResetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[7]
+	mi := &file_pickfighter_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -500,7 +500,7 @@ func (x *PasswordResetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PasswordResetResponse.ProtoReflect.Descriptor instead.
 func (*PasswordResetResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{7}
+	return file_pickfighter_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *PasswordResetResponse) GetResponse() *empty.Empty {
@@ -523,7 +523,7 @@ type PasswordRecoveryRequest struct {
 func (x *PasswordRecoveryRequest) Reset() {
 	*x = PasswordRecoveryRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[8]
+		mi := &file_pickfighter_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -536,7 +536,7 @@ func (x *PasswordRecoveryRequest) String() string {
 func (*PasswordRecoveryRequest) ProtoMessage() {}
 
 func (x *PasswordRecoveryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[8]
+	mi := &file_pickfighter_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -549,7 +549,7 @@ func (x *PasswordRecoveryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PasswordRecoveryRequest.ProtoReflect.Descriptor instead.
 func (*PasswordRecoveryRequest) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{8}
+	return file_pickfighter_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *PasswordRecoveryRequest) GetToken() string {
@@ -584,7 +584,7 @@ type PasswordRecoveryResponse struct {
 func (x *PasswordRecoveryResponse) Reset() {
 	*x = PasswordRecoveryResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[9]
+		mi := &file_pickfighter_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -597,7 +597,7 @@ func (x *PasswordRecoveryResponse) String() string {
 func (*PasswordRecoveryResponse) ProtoMessage() {}
 
 func (x *PasswordRecoveryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[9]
+	mi := &file_pickfighter_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -610,7 +610,7 @@ func (x *PasswordRecoveryResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PasswordRecoveryResponse.ProtoReflect.Descriptor instead.
 func (*PasswordRecoveryResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{9}
+	return file_pickfighter_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *PasswordRecoveryResponse) GetResponse() *empty.Empty {
@@ -632,7 +632,7 @@ type ProfileRequest struct {
 func (x *ProfileRequest) Reset() {
 	*x = ProfileRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[10]
+		mi := &file_pickfighter_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -645,7 +645,7 @@ func (x *ProfileRequest) String() string {
 func (*ProfileRequest) ProtoMessage() {}
 
 func (x *ProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[10]
+	mi := &file_pickfighter_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -658,7 +658,7 @@ func (x *ProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProfileRequest.ProtoReflect.Descriptor instead.
 func (*ProfileRequest) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{10}
+	return file_pickfighter_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *ProfileRequest) GetUserId() int32 {
@@ -686,7 +686,7 @@ type ProfileResponse struct {
 func (x *ProfileResponse) Reset() {
 	*x = ProfileResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[11]
+		mi := &file_pickfighter_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -699,7 +699,7 @@ func (x *ProfileResponse) String() string {
 func (*ProfileResponse) ProtoMessage() {}
 
 func (x *ProfileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[11]
+	mi := &file_pickfighter_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -712,7 +712,7 @@ func (x *ProfileResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProfileResponse.ProtoReflect.Descriptor instead.
 func (*ProfileResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{11}
+	return file_pickfighter_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *ProfileResponse) GetUser() *User {
@@ -741,7 +741,7 @@ type User struct {
 func (x *User) Reset() {
 	*x = User{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[12]
+		mi := &file_pickfighter_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -754,7 +754,7 @@ func (x *User) String() string {
 func (*User) ProtoMessage() {}
 
 func (x *User) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[12]
+	mi := &file_pickfighter_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -767,7 +767,7 @@ func (x *User) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use User.ProtoReflect.Descriptor instead.
 func (*User) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{12}
+	return file_pickfighter_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *User) GetUserId() int32 {
@@ -845,7 +845,7 @@ type CreateEventRequest struct {
 func (x *CreateEventRequest) Reset() {
 	*x = CreateEventRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[13]
+		mi := &file_pickfighter_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -858,7 +858,7 @@ func (x *CreateEventRequest) String() string {
 func (*CreateEventRequest) ProtoMessage() {}
 
 func (x *CreateEventRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[13]
+	mi := &file_pickfighter_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -871,7 +871,7 @@ func (x *CreateEventRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateEventRequest.ProtoReflect.Descriptor instead.
 func (*CreateEventRequest) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{13}
+	return file_pickfighter_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *CreateEventRequest) GetName() string {
@@ -899,7 +899,7 @@ type CreateEventResponse struct {
 func (x *CreateEventResponse) Reset() {
 	*x = CreateEventResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[14]
+		mi := &file_pickfighter_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -912,7 +912,7 @@ func (x *CreateEventResponse) String() string {
 func (*CreateEventResponse) ProtoMessage() {}
 
 func (x *CreateEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[14]
+	mi := &file_pickfighter_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -925,7 +925,7 @@ func (x *CreateEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateEventResponse.ProtoReflect.Descriptor instead.
 func (*CreateEventResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{14}
+	return file_pickfighter_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *CreateEventResponse) GetEventId() int32 {
@@ -946,7 +946,7 @@ type GetEventsRequest struct {
 func (x *GetEventsRequest) Reset() {
 	*x = GetEventsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[15]
+		mi := &file_pickfighter_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -959,7 +959,7 @@ func (x *GetEventsRequest) String() string {
 func (*GetEventsRequest) ProtoMessage() {}
 
 func (x *GetEventsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[15]
+	mi := &file_pickfighter_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -972,7 +972,7 @@ func (x *GetEventsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventsRequest.ProtoReflect.Descriptor instead.
 func (*GetEventsRequest) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{15}
+	return file_pickfighter_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetEventsRequest) GetResponse() *empty.Empty {
@@ -994,7 +994,7 @@ type GetEventsResponse struct {
 func (x *GetEventsResponse) Reset() {
 	*x = GetEventsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[16]
+		mi := &file_pickfighter_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1007,7 +1007,7 @@ func (x *GetEventsResponse) String() string {
 func (*GetEventsResponse) ProtoMessage() {}
 
 func (x *GetEventsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[16]
+	mi := &file_pickfighter_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1020,7 +1020,7 @@ func (x *GetEventsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventsResponse.ProtoReflect.Descriptor instead.
 func (*GetEventsResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{16}
+	return file_pickfighter_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetEventsResponse) GetCount() int32 {
@@ -1051,7 +1051,7 @@ type CreateBetRequest struct {
 func (x *CreateBetRequest) Reset() {
 	*x = CreateBetRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[17]
+		mi := &file_pickfighter_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1064,7 +1064,7 @@ func (x *CreateBetRequest) String() string {
 func (*CreateBetRequest) ProtoMessage() {}
 
 func (x *CreateBetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[17]
+	mi := &file_pickfighter_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1077,7 +1077,7 @@ func (x *CreateBetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateBetRequest.ProtoReflect.Descriptor instead.
 func (*CreateBetRequest) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{17}
+	return file_pickfighter_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *CreateBetRequest) GetBetId() int32 {
@@ -1119,7 +1119,7 @@ type CreateBetResponse struct {
 func (x *CreateBetResponse) Reset() {
 	*x = CreateBetResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[18]
+		mi := &file_pickfighter_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1132,7 +1132,7 @@ func (x *CreateBetResponse) String() string {
 func (*CreateBetResponse) ProtoMessage() {}
 
 func (x *CreateBetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[18]
+	mi := &file_pickfighter_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1145,7 +1145,7 @@ func (x *CreateBetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateBetResponse.ProtoReflect.Descriptor instead.
 func (*CreateBetResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{18}
+	return file_pickfighter_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *CreateBetResponse) GetBetId() int32 {
@@ -1166,7 +1166,7 @@ type BetsRequest struct {
 func (x *BetsRequest) Reset() {
 	*x = BetsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[19]
+		mi := &file_pickfighter_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1179,7 +1179,7 @@ func (x *BetsRequest) String() string {
 func (*BetsRequest) ProtoMessage() {}
 
 func (x *BetsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[19]
+	mi := &file_pickfighter_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1192,7 +1192,7 @@ func (x *BetsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BetsRequest.ProtoReflect.Descriptor instead.
 func (*BetsRequest) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{19}
+	return file_pickfighter_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *BetsRequest) GetUserId() int32 {
@@ -1214,7 +1214,7 @@ type BetsResponse struct {
 func (x *BetsResponse) Reset() {
 	*x = BetsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[20]
+		mi := &file_pickfighter_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1227,7 +1227,7 @@ func (x *BetsResponse) String() string {
 func (*BetsResponse) ProtoMessage() {}
 
 func (x *BetsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[20]
+	mi := &file_pickfighter_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1240,7 +1240,7 @@ func (x *BetsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BetsResponse.ProtoReflect.Descriptor instead.
 func (*BetsResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{20}
+	return file_pickfighter_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *BetsResponse) GetCount() int32 {
@@ -1270,7 +1270,7 @@ type FightResultRequest struct {
 func (x *FightResultRequest) Reset() {
 	*x = FightResultRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[21]
+		mi := &file_pickfighter_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1283,7 +1283,7 @@ func (x *FightResultRequest) String() string {
 func (*FightResultRequest) ProtoMessage() {}
 
 func (x *FightResultRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[21]
+	mi := &file_pickfighter_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1296,7 +1296,7 @@ func (x *FightResultRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FightResultRequest.ProtoReflect.Descriptor instead.
 func (*FightResultRequest) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{21}
+	return file_pickfighter_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *FightResultRequest) GetFightId() int32 {
@@ -1331,7 +1331,7 @@ type FightResultResponse struct {
 func (x *FightResultResponse) Reset() {
 	*x = FightResultResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[22]
+		mi := &file_pickfighter_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1344,7 +1344,7 @@ func (x *FightResultResponse) String() string {
 func (*FightResultResponse) ProtoMessage() {}
 
 func (x *FightResultResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[22]
+	mi := &file_pickfighter_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1357,7 +1357,7 @@ func (x *FightResultResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FightResultResponse.ProtoReflect.Descriptor instead.
 func (*FightResultResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{22}
+	return file_pickfighter_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *FightResultResponse) GetFightId() int32 {
@@ -1387,7 +1387,7 @@ type Fight struct {
 func (x *Fight) Reset() {
 	*x = Fight{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[23]
+		mi := &file_pickfighter_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1400,7 +1400,7 @@ func (x *Fight) String() string {
 func (*Fight) ProtoMessage() {}
 
 func (x *Fight) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[23]
+	mi := &file_pickfighter_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1413,7 +1413,7 @@ func (x *Fight) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Fight.ProtoReflect.Descriptor instead.
 func (*Fight) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{23}
+	return file_pickfighter_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *Fight) GetFightId() int32 {
@@ -1500,7 +1500,7 @@ type Event struct {
 func (x *Event) Reset() {
 	*x = Event{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[24]
+		mi := &file_pickfighter_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1513,7 +1513,7 @@ func (x *Event) String() string {
 func (*Event) ProtoMessage() {}
 
 func (x *Event) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[24]
+	mi := &file_pickfighter_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1526,7 +1526,7 @@ func (x *Event) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Event.ProtoReflect.Descriptor instead.
 func (*Event) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{24}
+	return file_pickfighter_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *Event) GetEventId() int32 {
@@ -1572,7 +1572,7 @@ type Bet struct {
 func (x *Bet) Reset() {
 	*x = Bet{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[25]
+		mi := &file_pickfighter_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1585,7 +1585,7 @@ func (x *Bet) String() string {
 func (*Bet) ProtoMessage() {}
 
 func (x *Bet) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[25]
+	mi := &file_pickfighter_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1598,7 +1598,7 @@ func (x *Bet) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Bet.ProtoReflect.Descriptor instead.
 func (*Bet) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{25}
+	return file_pickfighter_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *Bet) GetBetId() int32 {
@@ -1660,7 +1660,7 @@ type Fighter struct {
 func (x *Fighter) Reset() {
 	*x = Fighter{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[26]
+		mi := &file_pickfighter_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1673,7 +1673,7 @@ func (x *Fighter) String() string {
 func (*Fighter) ProtoMessage() {}
 
 func (x *Fighter) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[26]
+	mi := &file_pickfighter_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1686,7 +1686,7 @@ func (x *Fighter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Fighter.ProtoReflect.Descriptor instead.
 func (*Fighter) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{26}
+	return file_pickfighter_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *Fighter) GetFighterId() int32 {
@@ -1865,7 +1865,7 @@ type FighterStats struct {
 func (x *FighterStats) Reset() {
 	*x = FighterStats{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[27]
+		mi := &file_pickfighter_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1878,7 +1878,7 @@ func (x *FighterStats) String() string {
 func (*FighterStats) ProtoMessage() {}
 
 func (x *FighterStats) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[27]
+	mi := &file_pickfighter_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1891,7 +1891,7 @@ func (x *FighterStats) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FighterStats.ProtoReflect.Descriptor instead.
 func (*FighterStats) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{27}
+	return file_pickfighter_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *FighterStats) GetStatId() int32 {
@@ -2039,7 +2039,7 @@ type FightersRequest struct {
 func (x *FightersRequest) Reset() {
 	*x = FightersRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[28]
+		mi := &file_pickfighter_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2052,7 +2052,7 @@ func (x *FightersRequest) String() string {
 func (*FightersRequest) ProtoMessage() {}
 
 func (x *FightersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[28]
+	mi := &file_pickfighter_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2065,7 +2065,7 @@ func (x *FightersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FightersRequest.ProtoReflect.Descriptor instead.
 func (*FightersRequest) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{28}
+	return file_pickfighter_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *FightersRequest) GetStatus() string {
@@ -2093,7 +2093,7 @@ type FightersResponse struct {
 func (x *FightersResponse) Reset() {
 	*x = FightersResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[29]
+		mi := &file_pickfighter_proto_msgTypes[29]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2106,7 +2106,7 @@ func (x *FightersResponse) String() string {
 func (*FightersResponse) ProtoMessage() {}
 
 func (x *FightersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[29]
+	mi := &file_pickfighter_proto_msgTypes[29]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2119,7 +2119,7 @@ func (x *FightersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FightersResponse.ProtoReflect.Descriptor instead.
 func (*FightersResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{29}
+	return file_pickfighter_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *FightersResponse) GetFighters() []*Fighter {
@@ -2140,7 +2140,7 @@ type FightersCountResponse struct {
 func (x *FightersCountResponse) Reset() {
 	*x = FightersCountResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fightbettr_proto_msgTypes[30]
+		mi := &file_pickfighter_proto_msgTypes[30]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2153,7 +2153,7 @@ func (x *FightersCountResponse) String() string {
 func (*FightersCountResponse) ProtoMessage() {}
 
 func (x *FightersCountResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_fightbettr_proto_msgTypes[30]
+	mi := &file_pickfighter_proto_msgTypes[30]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2166,7 +2166,7 @@ func (x *FightersCountResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FightersCountResponse.ProtoReflect.Descriptor instead.
 func (*FightersCountResponse) Descriptor() ([]byte, []int) {
-	return file_fightbettr_proto_rawDescGZIP(), []int{30}
+	return file_pickfighter_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *FightersCountResponse) GetCount() int32 {
@@ -2176,9 +2176,9 @@ func (x *FightersCountResponse) GetCount() int32 {
 	return 0
 }
 
-var File_fightbettr_proto protoreflect.FileDescriptor
+var File_pickfighter_proto protoreflect.FileDescriptor
 
-var file_fightbettr_proto_rawDesc = []byte{
+var file_pickfighter_proto_rawDesc = []byte{
 	0x0a, 0x10, 0x66, 0x69, 0x67, 0x68, 0x74, 0x62, 0x65, 0x74, 0x74, 0x72, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x1a, 0x1b, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x62, 0x75, 0x66, 0x2f, 0x65, 0x6d, 0x70, 0x74, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a,
@@ -2492,19 +2492,19 @@ var file_fightbettr_proto_rawDesc = []byte{
 }
 
 var (
-	file_fightbettr_proto_rawDescOnce sync.Once
-	file_fightbettr_proto_rawDescData = file_fightbettr_proto_rawDesc
+	file_pickfighter_proto_rawDescOnce sync.Once
+	file_pickfighter_proto_rawDescData = file_pickfighter_proto_rawDesc
 )
 
-func file_fightbettr_proto_rawDescGZIP() []byte {
-	file_fightbettr_proto_rawDescOnce.Do(func() {
-		file_fightbettr_proto_rawDescData = protoimpl.X.CompressGZIP(file_fightbettr_proto_rawDescData)
+func file_pickfighter_proto_rawDescGZIP() []byte {
+	file_pickfighter_proto_rawDescOnce.Do(func() {
+		file_pickfighter_proto_rawDescData = protoimpl.X.CompressGZIP(file_pickfighter_proto_rawDescData)
 	})
-	return file_fightbettr_proto_rawDescData
+	return file_pickfighter_proto_rawDescData
 }
 
-var file_fightbettr_proto_msgTypes = make([]protoimpl.MessageInfo, 31)
-var file_fightbettr_proto_goTypes = []interface{}{
+var file_pickfighter_proto_msgTypes = make([]protoimpl.MessageInfo, 31)
+var file_pickfighter_proto_goTypes = []interface{}{
 	(*RegisterRequest)(nil),          // 0: RegisterRequest
 	(*RegisterResponse)(nil),         // 1: RegisterResponse
 	(*RegisterConfirmRequest)(nil),   // 2: RegisterConfirmRequest
@@ -2539,7 +2539,7 @@ var file_fightbettr_proto_goTypes = []interface{}{
 	(*empty.Empty)(nil),              // 31: google.protobuf.Empty
 	(*timestamp.Timestamp)(nil),      // 32: google.protobuf.Timestamp
 }
-var file_fightbettr_proto_depIdxs = []int32{
+var file_pickfighter_proto_depIdxs = []int32{
 	31, // 0: RegisterConfirmResponse.response:type_name -> google.protobuf.Empty
 	32, // 1: AuthenticateResponse.ExpirationTime:type_name -> google.protobuf.Timestamp
 	31, // 2: PasswordResetResponse.response:type_name -> google.protobuf.Empty
@@ -2585,13 +2585,13 @@ var file_fightbettr_proto_depIdxs = []int32{
 	0,  // [0:12] is the sub-list for field type_name
 }
 
-func init() { file_fightbettr_proto_init() }
-func file_fightbettr_proto_init() {
-	if File_fightbettr_proto != nil {
+func init() { file_pickfighter_proto_init() }
+func file_pickfighter_proto_init() {
+	if File_pickfighter_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_fightbettr_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RegisterRequest); i {
 			case 0:
 				return &v.state
@@ -2603,7 +2603,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RegisterResponse); i {
 			case 0:
 				return &v.state
@@ -2615,7 +2615,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RegisterConfirmRequest); i {
 			case 0:
 				return &v.state
@@ -2627,7 +2627,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RegisterConfirmResponse); i {
 			case 0:
 				return &v.state
@@ -2639,7 +2639,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*AuthenticateRequest); i {
 			case 0:
 				return &v.state
@@ -2651,7 +2651,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*AuthenticateResponse); i {
 			case 0:
 				return &v.state
@@ -2663,7 +2663,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PasswordResetRequest); i {
 			case 0:
 				return &v.state
@@ -2675,7 +2675,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PasswordResetResponse); i {
 			case 0:
 				return &v.state
@@ -2687,7 +2687,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PasswordRecoveryRequest); i {
 			case 0:
 				return &v.state
@@ -2699,7 +2699,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PasswordRecoveryResponse); i {
 			case 0:
 				return &v.state
@@ -2711,7 +2711,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ProfileRequest); i {
 			case 0:
 				return &v.state
@@ -2723,7 +2723,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ProfileResponse); i {
 			case 0:
 				return &v.state
@@ -2735,7 +2735,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*User); i {
 			case 0:
 				return &v.state
@@ -2747,7 +2747,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreateEventRequest); i {
 			case 0:
 				return &v.state
@@ -2759,7 +2759,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreateEventResponse); i {
 			case 0:
 				return &v.state
@@ -2771,7 +2771,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetEventsRequest); i {
 			case 0:
 				return &v.state
@@ -2783,7 +2783,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetEventsResponse); i {
 			case 0:
 				return &v.state
@@ -2795,7 +2795,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreateBetRequest); i {
 			case 0:
 				return &v.state
@@ -2807,7 +2807,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreateBetResponse); i {
 			case 0:
 				return &v.state
@@ -2819,7 +2819,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BetsRequest); i {
 			case 0:
 				return &v.state
@@ -2831,7 +2831,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BetsResponse); i {
 			case 0:
 				return &v.state
@@ -2843,7 +2843,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*FightResultRequest); i {
 			case 0:
 				return &v.state
@@ -2855,7 +2855,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*FightResultResponse); i {
 			case 0:
 				return &v.state
@@ -2867,7 +2867,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Fight); i {
 			case 0:
 				return &v.state
@@ -2879,7 +2879,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Event); i {
 			case 0:
 				return &v.state
@@ -2891,7 +2891,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Bet); i {
 			case 0:
 				return &v.state
@@ -2903,7 +2903,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Fighter); i {
 			case 0:
 				return &v.state
@@ -2915,7 +2915,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*FighterStats); i {
 			case 0:
 				return &v.state
@@ -2927,7 +2927,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*FightersRequest); i {
 			case 0:
 				return &v.state
@@ -2939,7 +2939,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*FightersResponse); i {
 			case 0:
 				return &v.state
@@ -2951,7 +2951,7 @@ func file_fightbettr_proto_init() {
 				return nil
 			}
 		}
-		file_fightbettr_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
+		file_pickfighter_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*FightersCountResponse); i {
 			case 0:
 				return &v.state
@@ -2968,18 +2968,18 @@ func file_fightbettr_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_fightbettr_proto_rawDesc,
+			RawDescriptor: file_pickfighter_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   31,
 			NumExtensions: 0,
 			NumServices:   3,
 		},
-		GoTypes:           file_fightbettr_proto_goTypes,
-		DependencyIndexes: file_fightbettr_proto_depIdxs,
-		MessageInfos:      file_fightbettr_proto_msgTypes,
+		GoTypes:           file_pickfighter_proto_goTypes,
+		DependencyIndexes: file_pickfighter_proto_depIdxs,
+		MessageInfos:      file_pickfighter_proto_msgTypes,
 	}.Build()
-	File_fightbettr_proto = out.File
-	file_fightbettr_proto_rawDesc = nil
-	file_fightbettr_proto_goTypes = nil
-	file_fightbettr_proto_depIdxs = nil
+	File_pickfighter_proto = out.File
+	file_pickfighter_proto_rawDesc = nil
+	file_pickfighter_proto_goTypes = nil
+	file_pickfighter_proto_depIdxs = nil
 }

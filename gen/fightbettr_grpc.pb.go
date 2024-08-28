@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.12.4
-// source: fightbettr.proto
+// source: pickfighter.proto
 
 package gen
 
@@ -290,7 +290,7 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "fightbettr.proto",
+	Metadata: "pickfighter.proto",
 }
 
 const (
@@ -528,7 +528,7 @@ var EventService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "fightbettr.proto",
+	Metadata: "pickfighter.proto",
 }
 
 const (
@@ -655,5 +655,5 @@ var FightersService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "fightbettr.proto",
+	Metadata: "pickfighter.proto",
 }

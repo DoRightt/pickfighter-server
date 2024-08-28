@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
-	"fightbettr.com/scraper/pkg/logger"
-	"fightbettr.com/scraper/pkg/model"
+	"pickfighter.com/scraper/pkg/logger"
+	"pickfighter.com/scraper/pkg/model"
 )
 
 func CreateNewCollection(c model.FightersCollection) {

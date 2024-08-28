@@ -17,9 +17,9 @@ coverage.out
 /events/configs
 /events/logs
 
-/fightbettr/configs
-/fightbettr/logs
-/fightbettr/hack
+/pickfighter/configs
+/pickfighter/logs
+/pickfighter/hack
 
 /scraper/logs
 /scraper/collection
