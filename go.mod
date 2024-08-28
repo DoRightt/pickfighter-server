@@ -8,7 +8,7 @@ require (
 	github.com/gocolly/colly v1.2.0
 	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/golang/protobuf v1.5.4
-	github.com/gorilla/mux v1.8.0
+	github.com/gorilla/mux v1.8.1
 	github.com/hashicorp/consul/api v1.25.1
 	github.com/jackc/pgconn v1.14.1
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa
