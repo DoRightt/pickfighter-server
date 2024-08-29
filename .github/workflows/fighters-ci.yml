@@ -1,0 +1,58 @@
+name: CI for Fighters Service
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'fighters/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'fighters/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Build
+        run: go build ./fighters
+
+      - name: Test
+        run: bash ./fighters/scripts/test.sh
+
+      - name: Check test coverage
+        run: bash ./fighters/scripts/coverage.sh
+
+      - name: Ensure coverage is above 65%
+        run: |
+          coverage=$(go tool cover -func=coverage.out | grep total: | awk '{print $3}' | sed 's/%//')
+          if (( $(echo "$coverage < 65" | bc -l) )); then
+            echo "Test coverage is below 65% ($coverage%)"
+            exit 1
+          else
+            echo "Test coverage is $coverage%"
+          fi
