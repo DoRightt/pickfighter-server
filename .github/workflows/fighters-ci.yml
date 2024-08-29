@@ -5,12 +5,12 @@ on:
     branches:
       - main
     paths:
-      - 'fighters/**'
+      - './fighters/**'
   pull_request:
     branches:
       - main
     paths:
-      - 'fighters/**'
+      - './fighters/**'
 
 jobs:
   build:
