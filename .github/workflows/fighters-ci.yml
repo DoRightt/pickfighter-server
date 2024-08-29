@@ -1,16 +1,6 @@
 name: CI for Fighters Service
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - './fighters/**'
-  pull_request:
-    branches:
-      - main
-    paths:
-      - './fighters/**'
+on: [push, workflow_dispatch]
 
 jobs:
   build:
