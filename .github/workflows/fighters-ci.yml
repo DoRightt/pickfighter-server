@@ -1,5 +1,17 @@
 name: CI for Fighters Service
 
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - 'fighters/**'
+#   pull_request:
+#     branches:
+#       - main
+#     paths:
+#       - 'fighters/**'
+
 on: [push, workflow_dispatch]
 
 jobs:
@@ -28,8 +40,11 @@ jobs:
       - name: Install dependencies
         run: go mod tidy
 
-      - name: Build
-        run: go build ./fighters
+      - name: Clean up old build files
+        run: rm -rf fighters/bin/*
+
+      - name: Build service
+        run: go build -o fighters/bin/service ./fighters
 
       - name: Test
         run: bash ./fighters/scripts/test.sh
