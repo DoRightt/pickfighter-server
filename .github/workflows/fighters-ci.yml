@@ -48,11 +48,11 @@ jobs:
 
       - name: Test
         working-directory: ./fighters
-        run: bash fighters/scripts/test.sh
+        run: bash scripts/test.sh
 
       - name: Check test coverage
         working-directory: ./fighters
-        run: bash fighters/scripts/coverage.sh
+        run: bash scripts/coverage.sh
 
       - name: Ensure coverage is above 65%
         run: |
