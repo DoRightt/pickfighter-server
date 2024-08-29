@@ -43,3 +43,16 @@ jobs:
 
       - name: Test
         run: bash ./fighters/scripts/test.sh
+
+      - name: Check test coverage
+        run: bash ./fighters/scripts/coverage.sh
+
+      - name: Ensure coverage is above 65%
+        run: |
+          coverage=$(go tool cover -func=coverage.out | grep total: | awk '{print $3}' | sed 's/%//')
+          if (( $(echo "$coverage < 65" | bc -l) )); then
+            echo "Test coverage is below 65% ($coverage%)"
+            exit 1
+          else
+            echo "Test coverage is $coverage%"
+          fi
