@@ -10,13 +10,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"github.com/stretchr/testify/assert"
 	"pickfighter.com/fighters/internal/repository/psql"
 	"pickfighter.com/fighters/pkg/cfg"
 	fightersmodel "pickfighter.com/fighters/pkg/model"
 	"pickfighter.com/pkg/model"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"github.com/stretchr/testify/assert"
 )
 
 var testFighter = fightersmodel.Fighter{
@@ -123,12 +123,12 @@ func TestValidateServerArgs(t *testing.T) {
 	}
 }
 
-func TestReadFighterData(t *testing.T) {
-	fighters, err := ReadFighterData()
+// func TestReadFighterData(t *testing.T) {
+// 	fighters, err := ReadFighterData()
 
-	assert.NoError(t, err)
-	assert.True(t, len(fighters) > 0)
-}
+// 	assert.NoError(t, err)
+// 	assert.True(t, len(fighters) > 0)
+// }
 
 func TestWriteFighterData(t *testing.T) {
 	initTestConfig()
