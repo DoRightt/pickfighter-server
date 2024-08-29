@@ -47,10 +47,10 @@ jobs:
         run: go build -o fighters/bin/service ./fighters
 
       - name: Test
-        run: bash ./fighters/scripts/test.sh
+        run: bash fighters/scripts/test.sh
 
       - name: Check test coverage
-        run: bash ./fighters/scripts/coverage.sh
+        run: bash fighters/scripts/coverage.sh
 
       - name: Ensure coverage is above 65%
         run: |
