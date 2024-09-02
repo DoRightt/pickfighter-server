@@ -10,6 +10,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -61,6 +62,15 @@ var testFighter = fightersmodel.Fighter{
 		WinBySub:             3,
 		WinByDec:             2,
 	},
+}
+
+func init() {
+	if os.Getenv("APP_ENV") != "ci" {
+		err := godotenv.Load("../../.env")
+		if err != nil {
+			log.Fatalf("Error loading .env file")
+		}
+	}
 }
 
 func TestExecute(t *testing.T) {
