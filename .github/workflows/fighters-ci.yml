@@ -15,7 +15,7 @@ name: CI for Fighters Service
 on: [push, workflow_dispatch]
 
 jobs:
-   setup-db:
+  setup-db:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
