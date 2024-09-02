@@ -25,13 +25,6 @@ var testFighter = &model.Fighter{
 	DebutTimestamp: 1715817600,
 }
 
-func init() {
-	err := godotenv.Load("../../../../.env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-}
-
 func TestNew(t *testing.T) {
 	repo, _ := New(context.Background(), cfg.ViperPostgres())
 
@@ -331,6 +324,13 @@ func TestUpdateFighterStats(t *testing.T) {
 }
 
 func initTestConfig() {
+	if os.Getenv("APP_ENV") != "ci" {
+		err := godotenv.Load("../../../../.env")
+		if err != nil {
+			log.Fatalf("Error loading .env file")
+		}
+	}
+
 	env := os.Getenv("APP_ENV")
 
 	if env == "local" {
