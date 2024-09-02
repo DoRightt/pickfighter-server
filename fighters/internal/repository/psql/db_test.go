@@ -334,8 +334,6 @@ func TestUpdateFighterStats(t *testing.T) {
 func initTestConfig() {
 	env := os.Getenv("APP_ENV")
 
-	fmt.Println("WORK", env)
-
 	if env == "local" {
 		viper.SetConfigName("config")
 		viper.AddConfigPath("../../../configs")
@@ -351,10 +349,4 @@ func initTestConfig() {
 		viper.Set("postgres.test.user", os.Getenv("POSTGRES_USER"))
 		viper.Set("postgres.test.password", os.Getenv("POSTGRES_PASSWORD"))
 	}
-
-	// viper.SetConfigName("config")
-	// viper.AddConfigPath("../../../configs")
-	// if err := viper.ReadInConfig(); err != nil {
-	// 	log.Fatalf("Error reading config file: %s\n", err)
-	// }
 }
