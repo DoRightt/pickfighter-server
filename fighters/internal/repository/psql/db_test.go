@@ -3,6 +3,7 @@ package psql
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"testing"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"pickfighter.com/fighters/pkg/cfg"
@@ -22,6 +24,13 @@ var testFighter = &model.Fighter{
 	Status:         "Active",
 	FighterUrl:     "https://www.ufc.com/athlete/fabio-agu",
 	DebutTimestamp: 1715817600,
+}
+
+func init() {
+	err := godotenv.Load("../../../../.env")
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
 }
 
 func TestNew(t *testing.T) {
@@ -324,6 +333,8 @@ func TestUpdateFighterStats(t *testing.T) {
 
 func initTestConfig() {
 	env := os.Getenv("APP_ENV")
+
+	fmt.Println("WORK", env)
 
 	if env == "local" {
 		viper.SetConfigName("config")
