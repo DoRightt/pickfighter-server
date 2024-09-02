@@ -3,7 +3,6 @@ package psql
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"testing"
