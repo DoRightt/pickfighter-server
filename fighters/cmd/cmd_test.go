@@ -64,15 +64,6 @@ var testFighter = fightersmodel.Fighter{
 	},
 }
 
-func init() {
-	if os.Getenv("APP_ENV") != "ci" {
-		err := godotenv.Load("../../.env")
-		if err != nil {
-			log.Fatalf("Error loading .env file")
-		}
-	}
-}
-
 func TestExecute(t *testing.T) {
 	cmd := rootCmd
 	cmd.SetArgs([]string{"--version"})
@@ -203,6 +194,13 @@ func TestUpdateFighter(t *testing.T) {
 }
 
 func initTestConfig() {
+	if os.Getenv("APP_ENV") != "ci" {
+		err := godotenv.Load("../../.env")
+		if err != nil {
+			log.Fatalf("Error loading .env file")
+		}
+	}
+
 	env := os.Getenv("APP_ENV")
 
 	if env == "local" {
