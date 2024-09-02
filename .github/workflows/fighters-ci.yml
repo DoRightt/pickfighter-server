@@ -39,6 +39,16 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     needs: setup-db
+    env:
+      APP_ENV: "ci"
+      POSTGRES_DATA_DIR: ${{ secrets.POSTGRES_TEST_DATA_DIR }}
+      POSTGRES_URL: ${{ secrets.POSTGRES_TEST_URL }}
+      POSTGRES_HOST: ${{ secrets.POSTGRES_TEST_HOST }}
+      POSTGRES_PORT: ${{ secrets.POSTGRES_TEST_PORT }}
+      POSTGRES_NAME: ${{ secrets.POSTGRES_TEST_NAME }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_TEST_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_TEST_PASSWORD }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
