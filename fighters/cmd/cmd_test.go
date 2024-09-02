@@ -123,12 +123,12 @@ func TestValidateServerArgs(t *testing.T) {
 	}
 }
 
-// func TestReadFighterData(t *testing.T) {
-// 	fighters, err := ReadFighterData()
+func TestReadFighterData(t *testing.T) {
+	fighters, err := ReadFighterData()
 
-// 	assert.NoError(t, err)
-// 	assert.True(t, len(fighters) > 0)
-// }
+	assert.NoError(t, err)
+	assert.True(t, len(fighters) > 0)
+}
 
 func TestWriteFighterData(t *testing.T) {
 	initTestConfig()
