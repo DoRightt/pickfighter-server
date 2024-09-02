@@ -22,7 +22,7 @@ coverage.out
 /pickfighter/hack
 
 /scraper/logs
-/scraper/collection/fighters_bckp.json
+/scraper/collection
 /scraper/configs
 
 /fighters/configs
