@@ -203,6 +203,8 @@ func initTestConfig() {
 
 	env := os.Getenv("APP_ENV")
 
+	fmt.Println(env, "TEST ENV")
+
 	if env == "local" {
 		viper.SetConfigName("config")
 		viper.AddConfigPath("../configs")
