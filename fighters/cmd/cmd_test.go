@@ -210,12 +210,15 @@ func initTestConfig() {
 			log.Fatalf("Error reading config file: %s\n", err)
 		}
 	} else if env == "ci" {
-		viper.Set("postgres.test.data_dir", os.Getenv("POSTGRES_DATA_DIR"))
-		viper.Set("postgres.test.url", os.Getenv("POSTGRES_URL"))
+		viper.Set("postgres.test.data_dir", "/var/lib/postgresql/data/test")
+		viper.Set("postgres.test.url", "postgres://postgres:password@localhost:5433/fighters_db")
 		viper.Set("postgres.test.host", "localhost")
 		viper.Set("postgres.test.port", "5433")
 		viper.Set("postgres.test.name", "fighters_db")
 		viper.Set("postgres.test.user", "postgres")
+		viper.Set("postgres.test.password", "password")
+		// viper.Set("postgres.test.data_dir", os.Getenv("POSTGRES_DATA_DIR"))
+		// viper.Set("postgres.test.url", os.Getenv("POSTGRES_URL"))
 		// viper.Set("postgres.test.host", os.Getenv("POSTGRES_HOST"))
 		// viper.Set("postgres.test.port", os.Getenv("POSTGRES_PORT"))
 		// viper.Set("postgres.test.name", os.Getenv("POSTGRES_NAME"))
