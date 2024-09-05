@@ -24,9 +24,19 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and Run PostgreSQL Container
+      # - name: Build and Run PostgreSQL Container
+      #   run: |
+      #     bash ./scripts/test_db.sh
+
+      - name: Start PostgreSQL container
         run: |
-          bash ./scripts/test_db.sh
+          docker run -d \
+          --name test-db \
+          -e POSTGRES_USER=postgres \
+          -e POSTGRES_PASSWORD=password \
+          -e POSTGRES_DB=fighters_db \
+          -p 5433:5432 \
+          postgres:13
           
       - name: Wait for DB to be ready
         run: |
@@ -76,7 +86,7 @@ jobs:
 
       - name: Build service
         run: go build -o fighters/bin/service ./fighters
-
+        
       - name: Check if DB container is running
         run: docker ps
 
