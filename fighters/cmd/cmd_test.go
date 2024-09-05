@@ -221,6 +221,10 @@ func initTestConfig() {
 		fmt.Println(viper.GetString("postgres.test.data_dir"), "TEST")
 		fmt.Println(viper.GetString("postgres.test.url"), "TEST")
 		fmt.Println(viper.GetString("ppostgres.test.host"), "TEST")
+		fmt.Println(viper.GetString("ppostgres.test.port"), "TEST")
+		fmt.Println(viper.GetString("ppostgres.test.name"), "TEST")
+		fmt.Println(viper.GetString("ppostgres.test.user"), "TEST")
+		fmt.Println(viper.GetString("ppostgres.test.password"), "TEST")
 	}
 }
 
