@@ -203,8 +203,6 @@ func initTestConfig() {
 
 	env := os.Getenv("APP_ENV")
 
-	fmt.Println(env, "TEST ENV")
-
 	if env == "local" {
 		viper.SetConfigName("config")
 		viper.AddConfigPath("../configs")
@@ -212,6 +210,9 @@ func initTestConfig() {
 			log.Fatalf("Error reading config file: %s\n", err)
 		}
 	} else if env == "ci" {
+		fmt.Println(viper.GetString("postgres.test.data_dir"), "TEST")
+		fmt.Println(viper.GetString("postgres.test.url"), "TEST")
+		fmt.Println(viper.GetString("ppostgres.test.host"), "TEST")
 		viper.Set("postgres.test.data_dir", os.Getenv("POSTGRES_DATA_DIR"))
 		viper.Set("postgres.test.url", os.Getenv("POSTGRES_URL"))
 		viper.Set("postgres.test.host", os.Getenv("POSTGRES_HOST"))
