@@ -210,9 +210,6 @@ func initTestConfig() {
 			log.Fatalf("Error reading config file: %s\n", err)
 		}
 	} else if env == "ci" {
-		fmt.Println(viper.GetString("postgres.test.data_dir"), "TEST")
-		fmt.Println(viper.GetString("postgres.test.url"), "TEST")
-		fmt.Println(viper.GetString("ppostgres.test.host"), "TEST")
 		viper.Set("postgres.test.data_dir", os.Getenv("POSTGRES_DATA_DIR"))
 		viper.Set("postgres.test.url", os.Getenv("POSTGRES_URL"))
 		viper.Set("postgres.test.host", os.Getenv("POSTGRES_HOST"))
@@ -220,6 +217,10 @@ func initTestConfig() {
 		viper.Set("postgres.test.name", os.Getenv("POSTGRES_NAME"))
 		viper.Set("postgres.test.user", os.Getenv("POSTGRES_USER"))
 		viper.Set("postgres.test.password", os.Getenv("POSTGRES_PASSWORD"))
+
+		fmt.Println(viper.GetString("postgres.test.data_dir"), "TEST")
+		fmt.Println(viper.GetString("postgres.test.url"), "TEST")
+		fmt.Println(viper.GetString("ppostgres.test.host"), "TEST")
 	}
 }
 
