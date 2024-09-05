@@ -32,7 +32,7 @@ jobs:
         run: |
           until docker exec test-db pg_isready; do
             echo "Waiting for database connection..."
-            sleep 2
+            sleep 30
           done
         shell: bash
 

@@ -224,14 +224,6 @@ func initTestConfig() {
 		// viper.Set("postgres.test.name", os.Getenv("POSTGRES_NAME"))
 		// viper.Set("postgres.test.user", os.Getenv("POSTGRES_USER"))
 		// viper.Set("postgres.test.password", os.Getenv("POSTGRES_PASSWORD"))
-
-		fmt.Println(viper.GetString("postgres.test.data_dir"), "TEST")
-		fmt.Println(viper.GetString("postgres.test.url"), "TEST")
-		fmt.Println(viper.GetString("postgres.test.host"), "TEST")
-		fmt.Println(viper.GetString("postgres.test.port"), "TEST")
-		fmt.Println(viper.GetString("postgres.test.name"), "TEST")
-		fmt.Println(viper.GetString("postgres.test.user"), "TEST")
-		fmt.Println(viper.GetString("postgres.test.password"), "TEST")
 	}
 }
 

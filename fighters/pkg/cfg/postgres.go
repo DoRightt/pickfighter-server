@@ -1,10 +1,8 @@
 package cfg
 
 import (
-	"fmt"
-
-	"github.com/spf13/viper"
 	"pickfighter.com/pkg/pgxs"
+	"github.com/spf13/viper"
 )
 
 // ViperPostgres returns the structure that returns pgxs.Cofnig based on values from viper
@@ -21,7 +19,7 @@ func ViperPostgres() *pgxs.Config {
 }
 
 func ViperTestPostgres() *pgxs.Config {
-	config := &pgxs.Config{
+	return &pgxs.Config{
 		DataDir:  viper.GetString("postgres.test.data_dir"),
 		DbUri:    viper.GetString("postgres.test.url"),
 		Host:     viper.GetString("postgres.test.host"),
@@ -30,8 +28,4 @@ func ViperTestPostgres() *pgxs.Config {
 		User:     viper.GetString("postgres.test.user"),
 		Password: viper.GetString("postgres.test.password"),
 	}
-
-	fmt.Printf("Config loaded:\nDataDir: %s\nDbUri: %s\nHost: %s\nPort: %s\nName: %s\nUser: %s\nPassword: %s\n",
-		config.DataDir, config.DbUri, config.Host, config.Port, config.Name, config.User, config.Password)
-	return config
 }
