@@ -66,13 +66,14 @@ jobs:
 
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      APP_ENV: ci
     services:
       postgres:
         image: postgres:13
         ports:
           - 5433:5432
         env:
-          APP_ENV: ci
           POSTGRES_DATA_DIR: ${{ secrets.POSTGRES_TEST_DATA_DIR }}
           POSTGRES_URL: ${{ secrets.POSTGRES_TEST_URL }}
           POSTGRES_HOST: ${{ secrets.POSTGRES_TEST_HOST }}
