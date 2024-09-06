@@ -106,7 +106,7 @@ jobs:
         run: go build -o fighters/bin/service ./fighters
         
       - name: Check if DB container is running
-        run: docker ps
+        run: docker ps -a
 
       - name: Test
         working-directory: ./fighters
