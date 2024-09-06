@@ -35,10 +35,6 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and Run PostgreSQL Container
-        run: |
-          bash ./scripts/test_db.sh
-
       # test
       - name: Clean up old containers
         run: docker rm -f test-db || true
@@ -52,6 +48,10 @@ jobs:
       #     -e POSTGRES_DB=fighters_db \
       #     -p 5433:5432 \
       #     postgres:13
+
+      - name: Build and Run PostgreSQL Container
+        run: |
+          bash ./scripts/test_db.sh
       
       - name: Check PostgreSQL logs
         run: docker logs test-db
