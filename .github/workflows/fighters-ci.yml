@@ -61,7 +61,8 @@ jobs:
 
       - name: Test DB connection
         run: |
-          docker exec -it test-db psql -U postgres -d fighters_db -c '\l'
+          docker exec test-db psql -U postgres -d fighters_db -c '\l'
+
 
   build-and-test:
     runs-on: ubuntu-latest
