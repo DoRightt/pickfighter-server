@@ -4,11 +4,13 @@ import (
 	"context"
 	"errors"
 	"log"
+	"os"
 	"testing"
 	"time"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"pickfighter.com/fighters/pkg/cfg"
@@ -322,9 +324,28 @@ func TestUpdateFighterStats(t *testing.T) {
 }
 
 func initTestConfig() {
-	viper.SetConfigName("config")
-	viper.AddConfigPath("../../../configs")
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading config file: %s\n", err)
+	if os.Getenv("APP_ENV") != "ci" {
+		err := godotenv.Load("../../../../.env")
+		if err != nil {
+			log.Fatalf("Error loading .env file")
+		}
+	}
+
+	env := os.Getenv("APP_ENV")
+
+	if env == "local" {
+		viper.SetConfigName("config")
+		viper.AddConfigPath("../../../configs")
+		if err := viper.ReadInConfig(); err != nil {
+			log.Fatalf("Error reading config file: %s\n", err)
+		}
+	} else if env == "ci" {
+		viper.Set("postgres.test.data_dir", os.Getenv("POSTGRES_DATA_DIR"))
+		viper.Set("postgres.test.url", os.Getenv("POSTGRES_URL"))
+		viper.Set("postgres.test.host", os.Getenv("POSTGRES_HOST"))
+		viper.Set("postgres.test.port", os.Getenv("POSTGRES_PORT"))
+		viper.Set("postgres.test.name", os.Getenv("POSTGRES_NAME"))
+		viper.Set("postgres.test.user", os.Getenv("POSTGRES_USER"))
+		viper.Set("postgres.test.password", os.Getenv("POSTGRES_PASSWORD"))
 	}
 }

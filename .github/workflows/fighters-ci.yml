@@ -1,24 +1,52 @@
 name: CI for Fighters Service
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'fighters/**'
   pull_request:
     branches:
       - main
     paths:
       - 'fighters/**'
+  workflow_dispatch:
 
 jobs:
-  build:
+  setup-db-and-run-tests:
     runs-on: ubuntu-latest
+
+    env:
+      APP_ENV: ci
+      POSTGRES_DATA_DIR: ${{ secrets.POSTGRES_TEST_DATA_DIR }}
+      POSTGRES_URL: ${{ secrets.POSTGRES_TEST_URL }}
+      POSTGRES_HOST: ${{ secrets.POSTGRES_TEST_HOST }}
+      POSTGRES_PORT: ${{ secrets.POSTGRES_TEST_PORT }}
+      POSTGRES_NAME: ${{ secrets.POSTGRES_TEST_NAME }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_TEST_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_TEST_PASSWORD }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Clean up old containers
+        run: docker rm -f test-db || true
+
+      - name: Build and Run PostgreSQL Container
+        run: |
+          bash ./scripts/test_db.sh
+
+      - name: Wait for DB to be ready
+        run: |
+          until docker exec test-db pg_isready; do
+            echo "Waiting for database connection..."
+            sleep 2
+          done
+        shell: bash
+
+      - name: Test DB connection
+        run: |
+          docker exec test-db psql -U postgres -d fighters_db -c '\l'
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -38,14 +66,22 @@ jobs:
       - name: Install dependencies
         run: go mod tidy
 
-      - name: Build
-        run: go build ./fighters
+      - name: Clean up old build files
+        run: rm -rf fighters/bin/*
+
+      - name: Build service
+        run: go build -o fighters/bin/service ./fighters
+        
+      - name: Check if DB container is running
+        run: docker ps -a
 
       - name: Test
-        run: bash ./fighters/scripts/test.sh
+        working-directory: ./fighters
+        run: bash scripts/test.sh
 
       - name: Check test coverage
-        run: bash ./fighters/scripts/coverage.sh
+        working-directory: ./fighters
+        run: bash scripts/coverage.sh
 
       - name: Ensure coverage is above 65%
         run: |
@@ -56,3 +92,4 @@ jobs:
           else
             echo "Test coverage is $coverage%"
           fi
+      
