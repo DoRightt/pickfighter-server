@@ -28,6 +28,10 @@ jobs:
       #   run: |
       #     bash ./scripts/test_db.sh
 
+      # test
+      - name: Clean up old containers
+        run: docker rm -f test-db || true
+
       - name: Start PostgreSQL container
         run: |
           docker run -d \
@@ -37,14 +41,27 @@ jobs:
           -e POSTGRES_DB=fighters_db \
           -p 5433:5432 \
           postgres:13
-          
+      
+      - name: Check PostgreSQL logs
+        run: docker logs test-db
+
+      - name: Check container status
+        run: docker inspect --format='{{.State.Status}}' test-db
+
+      - name: List all containers
+        run: docker ps -a
+
       - name: Wait for DB to be ready
         run: |
           until docker exec test-db pg_isready; do
             echo "Waiting for database connection..."
-            sleep 30
+            sleep 2
           done
         shell: bash
+
+      - name: Test DB connection
+        run: |
+          docker exec -it test-db psql -U postgres -d fighters_db -c '\l'
 
   build-and-test:
     runs-on: ubuntu-latest
