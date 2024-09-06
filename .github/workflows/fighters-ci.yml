@@ -72,9 +72,14 @@ jobs:
         ports:
           - 5433:5432
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: fighters_db
+          APP_ENV: ci
+          POSTGRES_DATA_DIR: ${{ secrets.POSTGRES_TEST_DATA_DIR }}
+          POSTGRES_URL: ${{ secrets.POSTGRES_TEST_URL }}
+          POSTGRES_HOST: ${{ secrets.POSTGRES_TEST_HOST }}
+          POSTGRES_PORT: ${{ secrets.POSTGRES_TEST_PORT }}
+          POSTGRES_NAME: ${{ secrets.POSTGRES_TEST_NAME }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_TEST_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_TEST_PASSWORD }}
         options:
           --health-cmd "pg_isready"
           --health-interval 10s
