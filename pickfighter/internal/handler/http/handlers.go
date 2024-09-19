@@ -9,14 +9,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/lestrrat-go/jwx/v2/jwt"
+	"github.com/spf13/viper"
 	authmodel "pickfighter.com/auth/pkg/model"
 	eventmodel "pickfighter.com/events/pkg/model"
 	fightersmodel "pickfighter.com/fighters/pkg/model"
 	"pickfighter.com/pkg/httplib"
 	"pickfighter.com/pkg/model"
 	"pickfighter.com/pkg/utils"
-	"github.com/lestrrat-go/jwx/v2/jwt"
-	"github.com/spf13/viper"
 
 	internalErr "pickfighter.com/pickfighter/pkg/errors"
 )

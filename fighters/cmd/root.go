@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
-	"pickfighter.com/fighters/pkg/logger"
-	"pickfighter.com/fighters/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
+	"pickfighter.com/fighters/pkg/logger"
+	"pickfighter.com/fighters/pkg/version"
 )
 
 var (
@@ -65,7 +65,7 @@ func init() {
 
 // initZapLogger initializes the zap logger.
 func initZapLogger() error {
-	return logger.Init(zapcore.DebugLevel, "../logs/log.json")
+	return logger.Init(zapcore.DebugLevel, "logs/log.json")
 }
 
 // initConfig initializes the service configuration.
