@@ -3,7 +3,7 @@ package version
 import "time"
 
 const (
-	DevVersion = "v0.1.0"
+	DevVersion = "v0.3.2"
 	Name       = "event-service"
 )
 
