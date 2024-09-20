@@ -151,3 +151,16 @@ func FightResultToProto(req *FightResultRequest) *gen.FightResultRequest {
 		NotContest: req.NotContest,
 	}
 }
+
+// HealthStatusToProto converts HealthStatus model to gen.HealthResponse
+func HealthStatusToProto(status *HealthStatus) *gen.HealthResponse {
+	return &gen.HealthResponse{
+		AppDevVersion: status.AppDevVersion,
+		AppName:       status.AppName,
+		AppRunDate:    status.AppRunDate,
+		AppTimeAlive:  status.AppTimeAlive,
+		Healthy:       status.Healthy,
+		Message:       status.Message,
+		Timestamp:     status.Timestamp,
+	}
+}
