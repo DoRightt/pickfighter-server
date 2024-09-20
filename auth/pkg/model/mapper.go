@@ -1,8 +1,8 @@
 package model
 
 import (
-	"pickfighter.com/gen"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"pickfighter.com/gen"
 )
 
 func RegisterRequestFromProto(p *gen.RegisterRequest) *RegisterRequest {
@@ -122,5 +122,18 @@ func UserToProto(u *User) *gen.ProfileResponse {
 			CreatedAt: u.CreatedAt,
 			UpdatedAt: u.UpdatedAt,
 		},
+	}
+}
+
+// HealthStatusToProto converts HealthStatus model to gen.HealthResponse
+func HealthStatusToProto(status *HealthStatus) *gen.HealthResponse {
+	return &gen.HealthResponse{
+		AppDevVersion: status.AppDevVersion,
+		AppName:       status.AppName,
+		AppRunDate:    status.AppRunDate,
+		AppTimeAlive:  status.AppTimeAlive,
+		Healthy:       status.Healthy,
+		Message:       status.Message,
+		Timestamp:     status.Timestamp,
 	}
 }
