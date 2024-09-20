@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.3.3
 
+## 20 Sep 2024
+
+### Added
+
+-   /health endpoint to check services (auth / event / fighters / gateway) status
+-   HealthStatus model for services
+-   HealthStatus to proto converter method
+-   HealthStatus from proto converter method
+-   HealthResponse message for proto file
+-   HealthCheck method for Auth/Event/Fighters services in proto file
+
 ## 28 Aug 2024
 
 ### Changed

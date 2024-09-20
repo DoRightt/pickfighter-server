@@ -3,11 +3,15 @@ package fighters
 import (
 	"context"
 	"errors"
+	"fmt"
+	"time"
 
+	"github.com/jackc/pgx/v5"
+	"github.com/spf13/viper"
 	"pickfighter.com/fighters/pkg/model"
+	"pickfighter.com/fighters/pkg/version"
 	logs "pickfighter.com/pkg/logger"
 	"pickfighter.com/pkg/pgxs"
-	"github.com/jackc/pgx/v5"
 )
 
 // ErrNotFound is returned when a requested record is not found.
@@ -84,4 +88,19 @@ func (c *Controller) SearchFighters(ctx context.Context, req *model.FightersRequ
 	}
 
 	return fighters, nil
+}
+
+// HealthCheck returns the current health status of the application.
+// It includes information such as the app version, start time, uptime,
+// and a message indicating the application's health.
+func (c *Controller) HealthCheck() *model.HealthStatus {
+	return &model.HealthStatus{
+		AppDevVersion: version.DevVersion,
+		AppName:       version.Name,
+		Timestamp:     time.Now().Format(time.RFC1123),
+		AppRunDate:    version.RunDate,
+		AppTimeAlive:  time.Now().Unix() - version.RunDate,
+		Healthy:       true,
+		Message:       fmt.Sprintf("[%s]: I'm fine, thanks!", viper.GetString("app.name")),
+	}
 }

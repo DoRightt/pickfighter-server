@@ -13,8 +13,8 @@ import (
 	context "context"
 	reflect "reflect"
 
-	model "pickfighter.com/fighters/pkg/model"
 	gomock "go.uber.org/mock/gomock"
+	model "pickfighter.com/fighters/pkg/model"
 )
 
 // MockFightersController is a mock of FightersController interface.
@@ -38,6 +38,20 @@ func NewMockFightersController(ctrl *gomock.Controller) *MockFightersController 
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockFightersController) EXPECT() *MockFightersControllerMockRecorder {
 	return m.recorder
+}
+
+// HealthCheck mocks base method.
+func (m *MockFightersController) HealthCheck() *model.HealthStatus {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "HealthCheck")
+	ret0, _ := ret[0].(*model.HealthStatus)
+	return ret0
+}
+
+// HealthCheck indicates an expected call of HealthCheck.
+func (mr *MockFightersControllerMockRecorder) HealthCheck() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "HealthCheck", reflect.TypeOf((*MockFightersController)(nil).HealthCheck))
 }
 
 // SearchFighters mocks base method.

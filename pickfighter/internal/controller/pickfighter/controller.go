@@ -5,12 +5,14 @@ import (
 
 	authmodel "pickfighter.com/auth/pkg/model"
 	eventmodel "pickfighter.com/events/pkg/model"
-	gatewaymodel "pickfighter.com/pickfighter/pkg/model"
 	fightersmodel "pickfighter.com/fighters/pkg/model"
+	"pickfighter.com/pickfighter/pkg/model"
+	gatewaymodel "pickfighter.com/pickfighter/pkg/model"
 )
 
 type fightersGateway interface {
 	SearchFighters(ctx context.Context, req fightersmodel.FightersRequest) ([]*fightersmodel.Fighter, error)
+	ServiceHealthCheck() (*model.HealthStatus, error)
 }
 
 type authGateway interface {
@@ -20,6 +22,7 @@ type authGateway interface {
 	ResetPassword(ctx context.Context, req *authmodel.ResetPasswordRequest) (bool, error)
 	PasswordRecover(ctx context.Context, req *authmodel.RecoverPasswordRequest) (bool, error)
 	GetCurrentUser(ctx context.Context) (*authmodel.User, error)
+	ServiceHealthCheck() (*model.HealthStatus, error)
 }
 
 type eventGateway interface {
@@ -28,6 +31,7 @@ type eventGateway interface {
 	CreateBet(ctx context.Context, req *eventmodel.Bet) (*eventmodel.Bet, error)
 	SearchBets(ctx context.Context, userId int32) (*eventmodel.BetsResponse, error)
 	SetResult(ctx context.Context, req *eventmodel.FightResultRequest) (int32, error)
+	ServiceHealthCheck() (*model.HealthStatus, error)
 }
 
 // Controller defines a gateway service controller.

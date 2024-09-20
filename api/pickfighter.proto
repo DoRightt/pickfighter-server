@@ -16,6 +16,8 @@ service AuthService {
     rpc PasswordRecover(PasswordRecoveryRequest) returns (PasswordRecoveryResponse);
     
     rpc Profile(ProfileRequest) returns (ProfileResponse);
+
+    rpc HealthCheck(google.protobuf.Empty) returns (HealthResponse);
 }
 
 message RegisterRequest {
@@ -108,6 +110,8 @@ service EventService {
     rpc GetBets(BetsRequest) returns (BetsResponse);
 
     rpc SetResult(FightResultRequest) returns (FightResultResponse);
+
+    rpc HealthCheck(google.protobuf.Empty) returns (HealthResponse);
 }
 
 message CreateEventRequest {
@@ -192,6 +196,8 @@ message Bet {
 service FightersService {
     rpc SearchFightersCount(FightersRequest) returns (FightersCountResponse);
     rpc SearchFighters(FightersRequest) returns (FightersResponse);
+
+    rpc HealthCheck(google.protobuf.Empty) returns (HealthResponse);
 }
 
 message Fighter {
@@ -254,3 +260,13 @@ message FightersCountResponse {
 }
 
 // * * * * * * * * * * * * * * * * *
+
+message HealthResponse {
+    string app_dev_version = 1;
+    string app_name = 2;
+    int64 app_run_date = 3;
+    int64 app_time_alive = 4;
+    bool healthy = 5;
+    string message = 6;
+    string timestamp = 7;
+}

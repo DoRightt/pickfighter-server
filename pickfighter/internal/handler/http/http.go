@@ -98,7 +98,7 @@ func (h *Handler) RunHTTPServer(ctx context.Context) error {
 	httplib.SetCookieName(viper.GetString("auth.cookie_name"))
 
 	// sys routes
-	// h.router.HandleFunc("/health", h.HealthCheck).Methods(http.MethodGet)
+	h.router.HandleFunc("/health", h.HealthCheck).Methods(http.MethodGet)
 
 	h.ApplyRoutes()
 

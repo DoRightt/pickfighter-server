@@ -4,16 +4,17 @@ import (
 	"context"
 	"errors"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"pickfighter.com/fighters/internal/controller/fighters"
 	"pickfighter.com/fighters/pkg/model"
 	"pickfighter.com/gen"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 type FightersController interface {
 	SearchFightersCount(ctx context.Context, req *model.FightersRequest) (int32, error)
 	SearchFighters(ctx context.Context, req *model.FightersRequest) ([]*model.Fighter, error)
+	HealthCheck() *model.HealthStatus
 }
 
 // Handler defines a Fighters gRPC handler.
