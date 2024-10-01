@@ -7,7 +7,6 @@ require (
 	github.com/ethereum/go-ethereum v1.14.8
 	github.com/gocolly/colly v1.2.0
 	github.com/gofrs/uuid v4.4.0+incompatible
-	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/mux v1.8.1
 	github.com/hashicorp/consul/api v1.29.4
 	github.com/jackc/pgconn v1.14.3
@@ -22,7 +21,7 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.54.0
 	go.uber.org/mock v0.4.0
 	go.uber.org/zap v1.27.0
-	google.golang.org/grpc v1.66.0
+	google.golang.org/grpc v1.67.0
 	google.golang.org/protobuf v1.34.2
 	gopkg.in/go-playground/assert.v1 v1.2.1
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
@@ -45,6 +44,7 @@ require (
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
+	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-hclog v1.5.0 // indirect
