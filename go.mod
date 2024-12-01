@@ -1,13 +1,13 @@
 module pickfighter.com
 
 go 1.21.0
+toolchain go1.22.5
 
 require (
 	github.com/PuerkitoBio/goquery v1.9.2
-	github.com/ethereum/go-ethereum v1.14.8
+	github.com/ethereum/go-ethereum v1.14.12
 	github.com/gocolly/colly v1.2.0
 	github.com/gofrs/uuid v4.4.0+incompatible
-	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/mux v1.8.1
 	github.com/hashicorp/consul/api v1.29.4
 	github.com/jackc/pgconn v1.14.3
@@ -35,7 +35,6 @@ require (
 	github.com/antchfx/xmlquery v1.4.0 // indirect
 	github.com/antchfx/xpath v1.3.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
-	github.com/btcsuite/btcd/btcec/v2 v2.3.4 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.3.0 // indirect
 	github.com/fatih/color v1.16.0 // indirect
@@ -45,6 +44,7 @@ require (
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
+	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-hclog v1.5.0 // indirect
