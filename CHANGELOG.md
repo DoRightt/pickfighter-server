@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.3.3
 
+## 13 Jan 2025
+
+### Added
+
+-   Version flag for services
+
 ## 20 Sep 2024
 
 ### Added
