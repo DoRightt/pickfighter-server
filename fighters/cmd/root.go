@@ -55,6 +55,8 @@ func init() {
 	bindViperPersistentFlag(rootCmd, "log_json", "log_json")
 	bindViperPersistentFlag(rootCmd, "log_level", "log_level")
 
+	rootCmd.Flags().BoolP("version", "v", false, "Shows app version")
+
 	err := initZapLogger()
 	if err != nil {
 		log.Fatalf("error while logger initializing: %s", err)
