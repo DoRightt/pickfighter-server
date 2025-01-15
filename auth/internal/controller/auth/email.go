@@ -4,54 +4,60 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
-	"pickfighter.com/auth/pkg/model"
+	"github.com/mailgun/mailgun-go/v4"
 	"github.com/spf13/viper"
-	"gopkg.in/gomail.v2"
+	"pickfighter.com/auth/pkg/model"
 )
 
 // HandleEmailEvent processes different email events based on the provided EmailData.
-// It uses the gomail package to send emails through an SMTP server. The email content
+// It uses the mailgun package to send emails. The email content
 // and recipient details are determined by the event type, such as registration or
 // password reset.
-func (c *Controller) HandleEmailEvent(ctx context.Context, data *model.EmailData) {
-	d := gomail.NewDialer("smtp.gmail.com", 587, viper.GetString("mail.sender_address"), viper.GetString("mail.app_password"))
+func (c *Controller) HandleEmailEvent(data *model.EmailData) {
+	mg := mailgun.NewMailgun(viper.GetString("mail.mailgun_domain"), viper.GetString("mail.mailgun_api"))
+
 	host := viper.GetString("web.host")
 	port := viper.GetString("web.port")
 
-	var m *gomail.Message
+	var message *mailgun.Message
 
 	switch data.Subject {
 	case model.EmailRegistration:
-		m = getVerificationMessage(data, host, port)
+		message = getVerificationMessage(data, host, port)
 	case model.EmailResetPassword:
-		m = getPasswordRecoveryMessage(data, host, port)
+		message = getPasswordRecoveryMessage(data, host, port)
 	default:
 		fmt.Println("Unexpected subject")
 	}
 
-	if err := d.DialAndSend(m); err != nil {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
+	resp, id, err := mg.Send(ctx, message)
+
+	if err != nil {
 		fmt.Println("Unable to send your email")
 		log.Fatal(err)
 	}
+
+	fmt.Printf("ID: %s Resp: %s\n", id, resp)
 }
 
 // getVerificationMessage generates a verification email message.
 // It utilizes the provided EmailData and server information (host, port) to create
 // a message with a verification link. The sender, recipient, subject, and body are
-// set accordingly in the gomail.Message.
-func getVerificationMessage(data *model.EmailData, host, port string) *gomail.Message {
-	m := gomail.NewMessage()
+// set accordingly in the mailgun.Message.
+func getVerificationMessage(data *model.EmailData, host, port string) *mailgun.Message {
+	sender := viper.GetString("mail.sender_address")
+	subject := "Please, Verify your email."
+	recipient := data.Recipient.Email
+	body := fmt.Sprintf("Hello, here is your verification link: %s:%s/register/confirm?token=%s", host, port, data.Token)
 
-	text := fmt.Sprintf("Hello, here is your verification link: %s:%s/register/confirm?token=%s", host, port, data.Token)
+	message := mailgun.NewMessage(sender, subject, body, recipient)
 
-	m.SetHeader("From", viper.GetString("mail.sender_address"))
-	m.SetHeader("To", data.Recipient.Email)
-	m.SetHeader("Subject", "Please, Verify your email.")
-
-	m.SetBody("text/plain", text)
-
-	return m
+	return message
 }
 
 // getPasswordRecoveryMessage generates a password recovery email message using the provided
@@ -59,16 +65,13 @@ func getVerificationMessage(data *model.EmailData, host, port string) *gomail.Me
 // containing the host, port, and token. The email sender and recipient addresses, as well as
 // the subject, are set in the message headers. The message body is a plain text representation
 // containing the recovery link.
-func getPasswordRecoveryMessage(data *model.EmailData, host, port string) *gomail.Message {
-	m := gomail.NewMessage()
+func getPasswordRecoveryMessage(data *model.EmailData, host, port string) *mailgun.Message {
+	sender := viper.GetString("mail.sender_address")
+	subject := "Please, Set a new password"
+	recipient := data.Recipient.Email
+	body := fmt.Sprintf("Hello, here you can change your password: %s:%s/password/recover?token=%s", host, port, data.Token)
 
-	text := fmt.Sprintf("Hello, here you can change your password: %s:%s/password/recover?token=%s", host, port, data.Token)
+	message := mailgun.NewMessage(sender, subject, body, recipient)
 
-	m.SetHeader("From", viper.GetString("mail.sender_address"))
-	m.SetHeader("To", data.Recipient.Email)
-	m.SetHeader("Subject", "Please, Set a new password")
-
-	m.SetBody("text/plain", text)
-
-	return m
+	return message
 }

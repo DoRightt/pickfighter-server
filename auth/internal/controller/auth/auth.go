@@ -39,8 +39,7 @@ func (c *Controller) Register(ctx context.Context, req *model.RegisterRequest) (
 		return 0, cErr
 	}
 
-	// TODO
-	go c.HandleEmailEvent(ctx, &model.EmailData{
+	go c.HandleEmailEvent(&model.EmailData{
 		Subject: model.EmailRegistration,
 		Recipient: model.EmailAddrSpec{
 			Email: req.Email,
