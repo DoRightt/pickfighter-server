@@ -73,8 +73,7 @@ func (c *Controller) PasswordReset(ctx context.Context, req *model.ResetPassword
 		return false, internalErr.New(internalErr.TxCommit, err, 109)
 	}
 
-	// TODO
-	go c.HandleEmailEvent(ctx, &model.EmailData{
+	go c.HandleEmailEvent(&model.EmailData{
 		Subject: model.EmailResetPassword,
 		Recipient: model.EmailAddrSpec{
 			Email: credentials.Email,
