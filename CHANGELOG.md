@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.3.3
 
+## 16 Jan 2025
+
+### Changed
+
+-   Public scheme changed to auth/fighters/events
+-   DeleteRecords method now accepts a scheme name
+
 ## 15 Jan 2025
 
 ### Changed
