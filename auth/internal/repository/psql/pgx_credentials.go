@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"pickfighter.com/auth/pkg/model"
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v5"
+	"pickfighter.com/auth/pkg/model"
 )
 
 // TxNewAuthCredentials creates new authentication credentials for a user in the 'pf_user_credentials' table.
@@ -14,7 +14,7 @@ import (
 // otherwise, it uses the repository's connection pool to execute the query.
 // The method returns an error if the database operation encounters any issues.
 func (r *Repository) TxNewAuthCredentials(ctx context.Context, tx pgx.Tx, uc model.UserCredentials) error {
-	query := `INSERT INTO
+	q := `INSERT INTO
 		public.pf_user_credentials(user_id, email, password_hash, salt, token, token_type, token_expire, active)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
 
@@ -25,12 +25,12 @@ func (r *Repository) TxNewAuthCredentials(ctx context.Context, tx pgx.Tx, uc mod
 	}
 
 	if tx != nil {
-		if _, err := tx.Exec(ctx, query, args...); err != nil {
-			return r.DebugLogSqlErr(query, err)
+		if _, err := tx.Exec(ctx, q, args...); err != nil {
+			return r.DebugLogSqlErr(q, err)
 		}
 	} else {
-		if _, err := r.GetPool().Exec(ctx, query, args...); err != nil {
-			return r.DebugLogSqlErr(query, err)
+		if _, err := r.GetPool().Exec(ctx, q, args...); err != nil {
+			return r.DebugLogSqlErr(q, err)
 		}
 	}
 
@@ -107,6 +107,7 @@ func (r *Repository) ConfirmCredentialsToken(ctx context.Context, tx pgx.Tx, req
 // It sets the 'active' flag to false, updates the token, token type, and token expiration based on the provided credentials.
 // The method is designed to be used when a user requests a password reset.
 func (r *Repository) ResetPassword(ctx context.Context, req *model.UserCredentials) error {
+	// TODO active should not be false after password reset
 	q := `UPDATE public.pf_user_credentials
 		SET active = false, token = $2, token_type = $3, token_expire = $4
 		WHERE user_id = $1`

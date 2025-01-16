@@ -89,8 +89,8 @@ func (db *Repo) DeleteRecords(ctx context.Context, tableName string) error {
 	if len(tableName) == 0 {
 		return fmt.Errorf("pgxs: table name is empty")
 	}
-	query := fmt.Sprintf("DELETE FROM %s.%s", "public", tableName)
+	q := fmt.Sprintf("DELETE FROM %s.%s", "public", tableName)
 
-	_, err := db.Pool.Exec(ctx, query)
+	_, err := db.Pool.Exec(ctx, q)
 	return err
 }
