@@ -12,7 +12,7 @@ import (
 type PickfighterRepo interface {
 	GetPoolConfig() (*pgxpool.Config, error)
 	GracefulShutdown()
-	DeleteRecords(ctx context.Context, tableName string) error
+	DeleteRecords(ctx context.Context, scheme string, tableName string) error
 	ConnectDBPool(ctx context.Context) (*pgxpool.Pool, error)
 	DebugLogSqlErr(q string, err error) error
 	SanitizeString(s string) string
@@ -85,11 +85,16 @@ func (db *Repo) GracefulShutdown() {
 }
 
 // DeleteRecords deletes records from the table whose name is passed as an argument
-func (db *Repo) DeleteRecords(ctx context.Context, tableName string) error {
+func (db *Repo) DeleteRecords(ctx context.Context, scheme string, tableName string) error {
+	if len(scheme) == 0 {
+		scheme = "public"
+	}
+
 	if len(tableName) == 0 {
 		return fmt.Errorf("pgxs: table name is empty")
 	}
-	q := fmt.Sprintf("DELETE FROM %s.%s", "public", tableName)
+
+	q := fmt.Sprintf("DELETE FROM %s.%s", scheme, tableName)
 
 	_, err := db.Pool.Exec(ctx, q)
 	return err

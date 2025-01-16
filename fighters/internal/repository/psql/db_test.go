@@ -203,7 +203,7 @@ func TestCreateNewFighter(t *testing.T) {
 			expectedError: &pgconn.PgError{
 				Severity: "ERROR",
 				Code:     "23505",
-				Message:  "duplicate key value violates unique constraint \"pf_fighters_fighter_url_uindex\"",
+				Message:  "duplicate key value violates unique constraint \"fighters_fighter_url_uindex\"",
 				Detail:   "Key (fighter_url)=(https://www.ufc.com/athlete/tank-abbott) already exists.",
 			},
 		},

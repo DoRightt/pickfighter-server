@@ -13,38 +13,36 @@ import (
 	context "context"
 	reflect "reflect"
 
-	pgconn "github.com/jackc/pgx/v5/pgconn"
 	pgx "github.com/jackc/pgx/v5"
 	pgxpool "github.com/jackc/pgx/v5/pgxpool"
 	gomock "go.uber.org/mock/gomock"
-	zap "go.uber.org/zap"
 )
 
-// MockPfRepo is a mock of PfRepo interface.
-type MockPfRepo struct {
+// MockPickfighterRepo is a mock of PickfighterRepo interface.
+type MockPickfighterRepo struct {
 	ctrl     *gomock.Controller
-	recorder *MockPfRepoMockRecorder
+	recorder *MockPickfighterRepoMockRecorder
 }
 
-// MockPfRepoMockRecorder is the mock recorder for MockPfRepo.
-type MockPfRepoMockRecorder struct {
-	mock *MockPfRepo
+// MockPickfighterRepoMockRecorder is the mock recorder for MockPickfighterRepo.
+type MockPickfighterRepoMockRecorder struct {
+	mock *MockPickfighterRepo
 }
 
-// NewMockPfRepo creates a new mock instance.
-func NewMockPfRepo(ctrl *gomock.Controller) *MockPfRepo {
-	mock := &MockPfRepo{ctrl: ctrl}
-	mock.recorder = &MockPfRepoMockRecorder{mock}
+// NewMockPickfighterRepo creates a new mock instance.
+func NewMockPickfighterRepo(ctrl *gomock.Controller) *MockPickfighterRepo {
+	mock := &MockPickfighterRepo{ctrl: ctrl}
+	mock.recorder = &MockPickfighterRepoMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockPfRepo) EXPECT() *MockPfRepoMockRecorder {
+func (m *MockPickfighterRepo) EXPECT() *MockPickfighterRepoMockRecorder {
 	return m.recorder
 }
 
 // BeginTx mocks base method.
-func (m *MockPfRepo) BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error) {
+func (m *MockPickfighterRepo) BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BeginTx", ctx, txOptions)
 	ret0, _ := ret[0].(pgx.Tx)
@@ -53,13 +51,13 @@ func (m *MockPfRepo) BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.
 }
 
 // BeginTx indicates an expected call of BeginTx.
-func (mr *MockPfRepoMockRecorder) BeginTx(ctx, txOptions any) *gomock.Call {
+func (mr *MockPickfighterRepoMockRecorder) BeginTx(ctx, txOptions any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BeginTx", reflect.TypeOf((*MockPfRepo)(nil).BeginTx), ctx, txOptions)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BeginTx", reflect.TypeOf((*MockPickfighterRepo)(nil).BeginTx), ctx, txOptions)
 }
 
 // ConnectDBPool mocks base method.
-func (m *MockPfRepo) ConnectDBPool(ctx context.Context) (*pgxpool.Pool, error) {
+func (m *MockPickfighterRepo) ConnectDBPool(ctx context.Context) (*pgxpool.Pool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ConnectDBPool", ctx)
 	ret0, _ := ret[0].(*pgxpool.Pool)
@@ -68,13 +66,13 @@ func (m *MockPfRepo) ConnectDBPool(ctx context.Context) (*pgxpool.Pool, error) {
 }
 
 // ConnectDBPool indicates an expected call of ConnectDBPool.
-func (mr *MockPfRepoMockRecorder) ConnectDBPool(ctx any) *gomock.Call {
+func (mr *MockPickfighterRepoMockRecorder) ConnectDBPool(ctx any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ConnectDBPool", reflect.TypeOf((*MockPfRepo)(nil).ConnectDBPool), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ConnectDBPool", reflect.TypeOf((*MockPickfighterRepo)(nil).ConnectDBPool), ctx)
 }
 
 // DebugLogSqlErr mocks base method.
-func (m *MockPfRepo) DebugLogSqlErr(q string, err error) error {
+func (m *MockPickfighterRepo) DebugLogSqlErr(q string, err error) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DebugLogSqlErr", q, err)
 	ret0, _ := ret[0].(error)
@@ -82,41 +80,27 @@ func (m *MockPfRepo) DebugLogSqlErr(q string, err error) error {
 }
 
 // DebugLogSqlErr indicates an expected call of DebugLogSqlErr.
-func (mr *MockPfRepoMockRecorder) DebugLogSqlErr(q, err any) *gomock.Call {
+func (mr *MockPickfighterRepoMockRecorder) DebugLogSqlErr(q, err any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DebugLogSqlErr", reflect.TypeOf((*MockPfRepo)(nil).DebugLogSqlErr), q, err)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DebugLogSqlErr", reflect.TypeOf((*MockPickfighterRepo)(nil).DebugLogSqlErr), q, err)
 }
 
 // DeleteRecords mocks base method.
-func (m *MockPfRepo) DeleteRecords(ctx context.Context, tableName string) error {
+func (m *MockPickfighterRepo) DeleteRecords(ctx context.Context, scheme, tableName string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteRecords", ctx, tableName)
+	ret := m.ctrl.Call(m, "DeleteRecords", ctx, scheme, tableName)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeleteRecords indicates an expected call of DeleteRecords.
-func (mr *MockPfRepoMockRecorder) DeleteRecords(ctx, tableName any) *gomock.Call {
+func (mr *MockPickfighterRepoMockRecorder) DeleteRecords(ctx, scheme, tableName any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRecords", reflect.TypeOf((*MockPfRepo)(nil).DeleteRecords), ctx, tableName)
-}
-
-// GetLogger mocks base method.
-func (m *MockPfRepo) GetLogger() *zap.SugaredLogger {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetLogger")
-	ret0, _ := ret[0].(*zap.SugaredLogger)
-	return ret0
-}
-
-// GetLogger indicates an expected call of GetLogger.
-func (mr *MockPfRepoMockRecorder) GetLogger() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLogger", reflect.TypeOf((*MockPfRepo)(nil).GetLogger))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRecords", reflect.TypeOf((*MockPickfighterRepo)(nil).DeleteRecords), ctx, scheme, tableName)
 }
 
 // GetPool mocks base method.
-func (m *MockPfRepo) GetPool() *pgxpool.Pool {
+func (m *MockPickfighterRepo) GetPool() *pgxpool.Pool {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPool")
 	ret0, _ := ret[0].(*pgxpool.Pool)
@@ -124,13 +108,13 @@ func (m *MockPfRepo) GetPool() *pgxpool.Pool {
 }
 
 // GetPool indicates an expected call of GetPool.
-func (mr *MockPfRepoMockRecorder) GetPool() *gomock.Call {
+func (mr *MockPickfighterRepoMockRecorder) GetPool() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPool", reflect.TypeOf((*MockPfRepo)(nil).GetPool))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPool", reflect.TypeOf((*MockPickfighterRepo)(nil).GetPool))
 }
 
 // GetPoolConfig mocks base method.
-func (m *MockPfRepo) GetPoolConfig() (*pgxpool.Config, error) {
+func (m *MockPickfighterRepo) GetPoolConfig() (*pgxpool.Config, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPoolConfig")
 	ret0, _ := ret[0].(*pgxpool.Config)
@@ -139,25 +123,25 @@ func (m *MockPfRepo) GetPoolConfig() (*pgxpool.Config, error) {
 }
 
 // GetPoolConfig indicates an expected call of GetPoolConfig.
-func (mr *MockPfRepoMockRecorder) GetPoolConfig() *gomock.Call {
+func (mr *MockPickfighterRepoMockRecorder) GetPoolConfig() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPoolConfig", reflect.TypeOf((*MockPfRepo)(nil).GetPoolConfig))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPoolConfig", reflect.TypeOf((*MockPickfighterRepo)(nil).GetPoolConfig))
 }
 
 // GracefulShutdown mocks base method.
-func (m *MockPfRepo) GracefulShutdown() {
+func (m *MockPickfighterRepo) GracefulShutdown() {
 	m.ctrl.T.Helper()
 	m.ctrl.Call(m, "GracefulShutdown")
 }
 
 // GracefulShutdown indicates an expected call of GracefulShutdown.
-func (mr *MockPfRepoMockRecorder) GracefulShutdown() *gomock.Call {
+func (mr *MockPickfighterRepoMockRecorder) GracefulShutdown() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GracefulShutdown", reflect.TypeOf((*MockPfRepo)(nil).GracefulShutdown))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GracefulShutdown", reflect.TypeOf((*MockPickfighterRepo)(nil).GracefulShutdown))
 }
 
 // SanitizeString mocks base method.
-func (m *MockPfRepo) SanitizeString(s string) string {
+func (m *MockPickfighterRepo) SanitizeString(s string) string {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SanitizeString", s)
 	ret0, _ := ret[0].(string)
@@ -165,116 +149,7 @@ func (m *MockPfRepo) SanitizeString(s string) string {
 }
 
 // SanitizeString indicates an expected call of SanitizeString.
-func (mr *MockPfRepoMockRecorder) SanitizeString(s any) *gomock.Call {
+func (mr *MockPickfighterRepoMockRecorder) SanitizeString(s any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SanitizeString", reflect.TypeOf((*MockPfRepo)(nil).SanitizeString), s)
-}
-
-// MockPfPool is a mock of PfPool interface.
-type MockPfPool struct {
-	ctrl     *gomock.Controller
-	recorder *MockPfPoolMockRecorder
-}
-
-// MockPfPoolMockRecorder is the mock recorder for MockPfPool.
-type MockPfPoolMockRecorder struct {
-	mock *MockPfPool
-}
-
-// NewMockPfPool creates a new mock instance.
-func NewMockPfPool(ctrl *gomock.Controller) *MockPfPool {
-	mock := &MockPfPool{ctrl: ctrl}
-	mock.recorder = &MockPfPoolMockRecorder{mock}
-	return mock
-}
-
-// EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockPfPool) EXPECT() *MockPfPoolMockRecorder {
-	return m.recorder
-}
-
-// BeginTx mocks base method.
-func (m *MockPfPool) BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "BeginTx", ctx, txOptions)
-	ret0, _ := ret[0].(pgx.Tx)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// BeginTx indicates an expected call of BeginTx.
-func (mr *MockPfPoolMockRecorder) BeginTx(ctx, txOptions any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BeginTx", reflect.TypeOf((*MockPfPool)(nil).BeginTx), ctx, txOptions)
-}
-
-// Close mocks base method.
-func (m *MockPfPool) Close() {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Close")
-}
-
-// Close indicates an expected call of Close.
-func (mr *MockPfPoolMockRecorder) Close() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockPfPool)(nil).Close))
-}
-
-// Exec mocks base method.
-func (m *MockPfPool) Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error) {
-	m.ctrl.T.Helper()
-	varargs := []any{ctx, sql}
-	for _, a := range arguments {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "Exec", varargs...)
-	ret0, _ := ret[0].(pgconn.CommandTag)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Exec indicates an expected call of Exec.
-func (mr *MockPfPoolMockRecorder) Exec(ctx, sql any, arguments ...any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]any{ctx, sql}, arguments...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exec", reflect.TypeOf((*MockPfPool)(nil).Exec), varargs...)
-}
-
-// Query mocks base method.
-func (m *MockPfPool) Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error) {
-	m.ctrl.T.Helper()
-	varargs := []any{ctx, sql}
-	for _, a := range args {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "Query", varargs...)
-	ret0, _ := ret[0].(pgx.Rows)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Query indicates an expected call of Query.
-func (mr *MockPfPoolMockRecorder) Query(ctx, sql any, args ...any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]any{ctx, sql}, args...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Query", reflect.TypeOf((*MockPfPool)(nil).Query), varargs...)
-}
-
-// QueryRow mocks base method.
-func (m *MockPfPool) QueryRow(ctx context.Context, sql string, args ...any) pgx.Row {
-	m.ctrl.T.Helper()
-	varargs := []any{ctx, sql}
-	for _, a := range args {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "QueryRow", varargs...)
-	ret0, _ := ret[0].(pgx.Row)
-	return ret0
-}
-
-// QueryRow indicates an expected call of QueryRow.
-func (mr *MockPfPoolMockRecorder) QueryRow(ctx, sql any, args ...any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]any{ctx, sql}, args...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "QueryRow", reflect.TypeOf((*MockPfPool)(nil).QueryRow), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SanitizeString", reflect.TypeOf((*MockPickfighterRepo)(nil).SanitizeString), s)
 }

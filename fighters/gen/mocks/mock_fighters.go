@@ -116,17 +116,17 @@ func (mr *MockFightersRepositoryMockRecorder) DebugLogSqlErr(q, err any) *gomock
 }
 
 // DeleteRecords mocks base method.
-func (m *MockFightersRepository) DeleteRecords(ctx context.Context, tableName string) error {
+func (m *MockFightersRepository) DeleteRecords(ctx context.Context, scheme, tableName string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteRecords", ctx, tableName)
+	ret := m.ctrl.Call(m, "DeleteRecords", ctx, scheme, tableName)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeleteRecords indicates an expected call of DeleteRecords.
-func (mr *MockFightersRepositoryMockRecorder) DeleteRecords(ctx, tableName any) *gomock.Call {
+func (mr *MockFightersRepositoryMockRecorder) DeleteRecords(ctx, scheme, tableName any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRecords", reflect.TypeOf((*MockFightersRepository)(nil).DeleteRecords), ctx, tableName)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRecords", reflect.TypeOf((*MockFightersRepository)(nil).DeleteRecords), ctx, scheme, tableName)
 }
 
 // FindFighter mocks base method.
