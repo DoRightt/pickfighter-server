@@ -13,7 +13,7 @@ import (
 
 const (
 	searchUsersQuery = `SELECT u.user_id, u.name, u.claim, u.rank, u.flags, u.created_at, u.updated_at
-	FROM public.pf_users AS u`
+	FROM auth.users AS u`
 )
 
 // FindUser searches for a user based on the provided UserRequest.
@@ -126,7 +126,7 @@ func (r *Repository) PerformUsersRequestQuery(req *model.UsersRequest) []string 
 	}
 
 	if len(req.Email) > 0 {
-		args = append(args, fmt.Sprintf(`u.public_email ILIKE '%%%s%%'`, r.SanitizeString(req.Email)))
+		args = append(args, fmt.Sprintf(`u.email ILIKE '%%%s%%'`, r.SanitizeString(req.Email)))
 	}
 
 	if req.CreatedFrom > 0 {
