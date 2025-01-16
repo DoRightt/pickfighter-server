@@ -7,10 +7,10 @@ import (
 	eventmodel "pickfighter.com/events/pkg/model"
 )
 
-// SearchBetsCount retrieves the count of bets for a given user ID from the 'pf_bets' table.
+// SearchBetsCount retrieves the count of bets for a given user ID from the 'bets' table.
 // It takes a context and a user ID, and returns the count of bets or an error if the query fails.
 func (r *Repository) SearchBetsCount(ctx context.Context, userId int32) (int32, error) {
-	q := `SELECT COUNT(*) FROM public.pf_bets WHERE user_id = $1`
+	q := `SELECT COUNT(*) FROM events.bets WHERE user_id = $1`
 
 	var count int32
 	if err := r.GetPool().QueryRow(ctx, q, userId).Scan(&count); err != nil {
@@ -20,12 +20,12 @@ func (r *Repository) SearchBetsCount(ctx context.Context, userId int32) (int32, 
 	return count, nil
 }
 
-// SearchBets retrieves a list of bets for a given user ID from the 'pf_bets' table.
+// SearchBets retrieves a list of bets for a given user ID from the 'bets' table.
 // It takes a context and a user ID, and returns a slice of Bet models or an error if the query fails.
 func (r *Repository) SearchBets(ctx context.Context, userId int32) ([]*eventmodel.Bet, error) {
 	q := `SELECT 
 	bet_id, user_id, fight_id, bet
-	FROM public.pf_bets
+	FROM events.bets
 	WHERE user_id = $1`
 
 	rows, err := r.GetPool().Query(ctx, q, userId)
@@ -48,11 +48,11 @@ func (r *Repository) SearchBets(ctx context.Context, userId int32) ([]*eventmode
 	return bets, nil
 }
 
-// CreateBet inserts a new bet into the 'pf_bets' table.
+// CreateBet inserts a new bet into the 'bets' table.
 // It takes a context, a Bet model and returns the newly created bet's ID
 // or an error if the insertion fails.
 func (r *Repository) TxCreateBet(ctx context.Context, tx pgx.Tx, bet *eventmodel.Bet) (int32, error) {
-	q := `INSERT INTO public.pf_bets 
+	q := `INSERT INTO events.bets 
 	(user_id, fight_id, bet)
 	VALUES ($1, $2, $3)
 	RETURNING bet_id`

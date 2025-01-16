@@ -81,19 +81,20 @@ func WriteFighterData(ctx context.Context, data []model.Fighter, cfg *pgxs.Confi
 	return nil
 }
 
-// DeleteFighterData deletes all records from the pf_fighters and pf_fighter_stats tables.
+// DeleteFighterData deletes all records from the fighters and fighter_stats tables.
 func DeleteFighterData(ctx context.Context, cfg *pgxs.Config) error {
+	scheme := "fighters"
 	rep, err := psql.New(ctx, cfg)
 	if err != nil {
 		logs.Errorf("Unable to start postgresql connection: %s", err)
 		return err
 	}
 
-	fightersTableNames := []string{"pf_fighter_stats", "pf_fighters"}
+	fightersTableNames := []string{"fighter_stats", "fighters"}
 	handledTableNames := []string{}
 
 	for _, name := range fightersTableNames {
-		err = rep.DeleteRecords(ctx, name)
+		err = rep.DeleteRecords(ctx, scheme, name)
 		if err != nil {
 			logs.Fatalf("Error deleting records: %s", err)
 			return err
