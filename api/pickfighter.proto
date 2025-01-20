@@ -204,7 +204,7 @@ message Fighter {
     int32 fighterId = 1;
     string name = 2;
     string nickName = 3;
-    int32 division = 4;
+    int32 divisionId = 4;
     string status = 5;
     string hometown = 6;
     string trainsAt = 7;
