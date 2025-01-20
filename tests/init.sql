@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS fighters.fighters (
     fighter_id serial NOT NULL,
     name character varying(255) NOT NULL,
     nickname character varying(255) DEFAULT ''::character varying,
-    division integer NOT NULL,
+    division_id integer,
     status character varying(50) NOT NULL,
     hometown character varying(100) DEFAULT ''::character varying,
     trains_at character varying(100) DEFAULT ''::character varying,
@@ -35,14 +35,19 @@ ALTER TABLE ONLY fighters.fighters
 ALTER TABLE ONLY fighters.fighters
     ADD CONSTRAINT fighters_pk PRIMARY KEY (fighter_id);
 
+ALTER TABLE ONLY fighters.fighters
+    ADD CONSTRAINT fighters_divisions_id_fk 
+    FOREIGN KEY (division_id) REFERENCES fighters.divisions(id) 
+    ON DELETE SET NULL;
+
 CREATE UNIQUE INDEX fighters_fighter_url_uindex ON fighters.fighters USING btree (fighter_url);
 
-INSERT INTO fighters.fighters (fighter_id, name, nickname, division, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57918, 'Rostem Akman', '', 4, 'Not Fighting', '', '', '', 31, 70, 171, 'Jun. 1, 2019', 1559347200, 72, 38, 'https://www.ufc.com/athlete/rostam-akman', 'https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/image/ufc-fighter-container/71542/profile-galery/fullbodyleft-picture/AKMAN_ROSTAM_L.png?VersionId=s0Xyj_DSjzTjrVVAvaeImvkXyz9WVs3Z&itok=sOszamHM', 0, 2, 0);
-INSERT INTO fighters.fighters (fighter_id, name, nickname, division, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57919, 'Razak Al-Hassan', '"Razor"', 6, 'Not Fighting', '', '', '', 41, 74, 205, 'Dec. 10, 2008', 1228867200, 0, 0, 'https://www.ufc.com/athlete/razak-al-hassan', '', 7, 2, 0);
-INSERT INTO fighters.fighters (fighter_id, name, nickname, division, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57901, 'Tank Abbott', '"Tank"', 7, 'Not Fighting', '', '', '', 0, 72, 253, 'Jul. 14, 1995', 805680000, 0, 0, 'https://www.ufc.com/athlete/tank-abbott', '', 8, 10, 0);
-INSERT INTO fighters.fighters (fighter_id, name, nickname, division, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57904, 'Daichi Abe', '', 4, 'Not Fighting', '', '', '', 31, 69, 170.5, 'Sep. 22, 2017', 1506038400, 71, 42, 'https://www.ufc.com/athlete/daichi-abe', 'https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2022-03/8c026dcd-60a4-457e-9cb5-b2c20969cd8f%252FDaichi-Abe_635302_LeftFullBodyImage.png?itok=5Gozk7xe', 6, 1, 0);
-INSERT INTO fighters.fighters (fighter_id, name, nickname, division, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57905, 'Papy Abedi', '"Makambo"', 5, 'Not Fighting', '', '', '', 44, 71, 184.5, 'Nov. 5, 2011', 1320451200, 74, 0, 'https://www.ufc.com/athlete/papy-abedi', 'https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2022-03/b234b354-8110-42f1-8dc3-e12c64426cce%252FPapy-Abedi_205746_LeftFullBodyImage.png?itok=cxcjAQ75', 9, 3, 0);
-INSERT INTO fighters.fighters (fighter_id, name, nickname, division, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57913, 'Fabio Agu', '', 5, 'Active', '', '', '', 35, 0, 0, 'May. 16, 2024', 1715817600, 0, 0, 'https://www.ufc.com/athlete/fabio-agu', '', 0, 0, 0);
+INSERT INTO fighters.fighters (fighter_id, name, nickname, division_id, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57918, 'Rostem Akman', '', 4, 'Not Fighting', '', '', '', 31, 70, 171, 'Jun. 1, 2019', 1559347200, 72, 38, 'https://www.ufc.com/athlete/rostam-akman', 'https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/image/ufc-fighter-container/71542/profile-galery/fullbodyleft-picture/AKMAN_ROSTAM_L.png?VersionId=s0Xyj_DSjzTjrVVAvaeImvkXyz9WVs3Z&itok=sOszamHM', 0, 2, 0);
+INSERT INTO fighters.fighters (fighter_id, name, nickname, division_id, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57919, 'Razak Al-Hassan', '"Razor"', 6, 'Not Fighting', '', '', '', 41, 74, 205, 'Dec. 10, 2008', 1228867200, 0, 0, 'https://www.ufc.com/athlete/razak-al-hassan', '', 7, 2, 0);
+INSERT INTO fighters.fighters (fighter_id, name, nickname, division_id, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57901, 'Tank Abbott', '"Tank"', 7, 'Not Fighting', '', '', '', 0, 72, 253, 'Jul. 14, 1995', 805680000, 0, 0, 'https://www.ufc.com/athlete/tank-abbott', '', 8, 10, 0);
+INSERT INTO fighters.fighters (fighter_id, name, nickname, division_id, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57904, 'Daichi Abe', '', 4, 'Not Fighting', '', '', '', 31, 69, 170.5, 'Sep. 22, 2017', 1506038400, 71, 42, 'https://www.ufc.com/athlete/daichi-abe', 'https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2022-03/8c026dcd-60a4-457e-9cb5-b2c20969cd8f%252FDaichi-Abe_635302_LeftFullBodyImage.png?itok=5Gozk7xe', 6, 1, 0);
+INSERT INTO fighters.fighters (fighter_id, name, nickname, division_id, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57905, 'Papy Abedi', '"Makambo"', 5, 'Not Fighting', '', '', '', 44, 71, 184.5, 'Nov. 5, 2011', 1320451200, 74, 0, 'https://www.ufc.com/athlete/papy-abedi', 'https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2022-03/b234b354-8110-42f1-8dc3-e12c64426cce%252FPapy-Abedi_205746_LeftFullBodyImage.png?itok=cxcjAQ75', 9, 3, 0);
+INSERT INTO fighters.fighters (fighter_id, name, nickname, division_id, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57913, 'Fabio Agu', '', 5, 'Active', '', '', '', 35, 0, 0, 'May. 16, 2024', 1715817600, 0, 0, 'https://www.ufc.com/athlete/fabio-agu', '', 0, 0, 0);
 
 
 --- fighters_stats table
