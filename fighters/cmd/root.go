@@ -61,8 +61,6 @@ func init() {
 	if err != nil {
 		log.Fatalf("error while logger initializing: %s", err)
 	}
-
-	rootCmd.Flags().BoolP("version", "v", false, "Shows app version")
 }
 
 // initZapLogger initializes the zap logger.
