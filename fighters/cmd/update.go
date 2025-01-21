@@ -3,9 +3,9 @@ package cmd
 import (
 	"context"
 
+	"github.com/spf13/cobra"
 	"pickfighter.com/fighters/pkg/cfg"
 	logs "pickfighter.com/pkg/logger"
-	"github.com/spf13/cobra"
 )
 
 func init() {

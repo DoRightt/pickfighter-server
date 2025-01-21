@@ -7,6 +7,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
 	"pickfighter.com/fighters/internal/controller/fighters"
 	grpchandler "pickfighter.com/fighters/internal/handler/grpc"
 	"pickfighter.com/fighters/internal/repository/psql"
@@ -17,9 +20,6 @@ import (
 	logs "pickfighter.com/pkg/logger"
 	"pickfighter.com/pkg/model"
 	"pickfighter.com/pkg/sigx"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"go.uber.org/zap"
 )
 
 var allowedApiRoutes = []string{

@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	logs "pickfighter.com/pkg/logger"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	logs "pickfighter.com/pkg/logger"
 )
 
 type PickfighterRepo interface {
