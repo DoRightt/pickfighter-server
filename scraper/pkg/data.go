@@ -44,28 +44,30 @@ func SetStatistic(f *model.Fighter, stat string) {
 func SetDivision(f *model.Fighter, d string) {
 	switch d {
 	case "Flyweight Division":
-		f.Division = model.Flyweight
+		f.DivisionId = model.Flyweight
 	case "Bantamweight Division":
-		f.Division = model.Bantamweight
+		f.DivisionId = model.Bantamweight
 	case "Featherweight Division":
-		f.Division = model.Featherweight
+		f.DivisionId = model.Featherweight
 	case "Lightweight Division":
-		f.Division = model.Lightweight
+		f.DivisionId = model.Lightweight
 	case "Welterweight Division":
-		f.Division = model.Welterweight
+		f.DivisionId = model.Welterweight
 	case "Middleweight Division":
-		f.Division = model.Middleweight
+		f.DivisionId = model.Middleweight
 	case "Light Heavyweight Division":
-		f.Division = model.Lightheavyweight
+		f.DivisionId = model.Lightheavyweight
 	case "Heavyweight Division":
-		f.Division = model.Heavyweight
+		f.DivisionId = model.Heavyweight
 	case "Women's Strawweight Division":
-		f.Division = model.WomensStrawweight
+		f.DivisionId = model.WomensStrawweight
 	case "Women's Flyweight Division":
-		f.Division = model.WomensFlyweight
+		f.DivisionId = model.WomensFlyweight
 	case "Women's Bantamweight Division":
-		f.Division = model.WomensBantamweight
-	case "Women's Featerweight Division":
-		f.Division = model.WomensFeatherweight
+		f.DivisionId = model.WomensBantamweight
+	case "Women's Featherweight Division":
+		f.DivisionId = model.WomensFeatherweight
+	default:
+		f.DivisionId = 0
 	}
 }

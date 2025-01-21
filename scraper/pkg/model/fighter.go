@@ -36,18 +36,18 @@ func (d Division) String() string {
 }
 
 const (
-	Flyweight Division = iota
-	Bantamweight
-	Featherweight
-	Lightweight
-	Welterweight
-	Middleweight
-	Lightheavyweight
-	Heavyweight
-	WomensStrawweight
-	WomensFlyweight
-	WomensBantamweight
-	WomensFeatherweight
+	Flyweight           Division = 1
+	Bantamweight        Division = 2
+	Featherweight       Division = 3
+	Lightweight         Division = 4
+	Welterweight        Division = 5
+	Middleweight        Division = 6
+	Lightheavyweight    Division = 7
+	Heavyweight         Division = 8
+	WomensStrawweight   Division = 9
+	WomensFlyweight     Division = 10
+	WomensBantamweight  Division = 11
+	WomensFeatherweight Division = 12
 )
 
 // FighterStats represents statistical information for a fighter
@@ -77,7 +77,7 @@ type Fighter struct {
 	FighterId      int32        `json:"fighter_id,omitempty"`
 	Name           string       `json:"name"`
 	NickName       string       `json:"nickName"`
-	Division       Division     `json:"division"`
+	DivisionId     Division     `json:"division_id"`
 	Status         string       `json:"status"`
 	Hometown       string       `json:"hometown"`
 	TrainsAt       string       `json:"trainsAt"`
