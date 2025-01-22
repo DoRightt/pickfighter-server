@@ -35,7 +35,7 @@ func (r *Repository) SearchFightersCount(ctx context.Context, req *model.Fighter
 // information about the fighters and their statistics. If the request is successful, it returns
 // a slice of Fighter models. In case of an error, it returns nil and the error details.
 func (r *Repository) SearchFighters(ctx context.Context, req *model.FightersRequest) ([]*model.Fighter, error) {
-	q := `SELECT f.fighter_id, f.name, f.nickname, f.division, f.status,
+	q := `SELECT f.fighter_id, f.name, f.nickname, f.division_id, f.status,
 		f.hometown, f.trains_at, f.fighting_style, f.age, f.height,
 		f.weight, f.octagon_debut, f.debut_timestamp, f.reach, f.leg_reach,
 		f.fighter_url, f.image_url, f.wins, f.loses, f.draw,
@@ -65,7 +65,7 @@ func (r *Repository) SearchFighters(ctx context.Context, req *model.FightersRequ
 		var fs model.FighterStats
 
 		if err := rows.Scan(
-			&f.FighterId, &f.Name, &f.NickName, &f.Division, &f.Status,
+			&f.FighterId, &f.Name, &f.NickName, &f.DivisionId, &f.Status,
 			&f.Hometown, &f.TrainsAt, &f.FightingStyle, &f.Age, &f.Height,
 			&f.Weight, &f.OctagonDebut, &f.DebutTimestamp, &f.Reach, &f.LegReach,
 			&f.FighterUrl, &f.ImageUrl, &f.Wins, &f.Loses, &f.Draw,

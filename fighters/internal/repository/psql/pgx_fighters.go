@@ -35,7 +35,7 @@ func (r *Repository) FindFighter(ctx context.Context, req model.Fighter) (int32,
 // newly created fighter and an error if the insertion operation encounters any issues.
 func (r *Repository) CreateNewFighter(ctx context.Context, tx pgx.Tx, fighter model.Fighter) (int32, error) {
 	qData := `INSERT INTO fighters.fighters (
-		name, nickname, division, status, hometown,
+		name, nickname, division_id, status, hometown,
 		trains_at, fighting_style, age, height, weight,
 		octagon_debut, debut_timestamp, reach, leg_reach, wins,
 		loses, draw, fighter_url, image_url
@@ -45,7 +45,7 @@ func (r *Repository) CreateNewFighter(ctx context.Context, tx pgx.Tx, fighter mo
 	var fighterId int32
 
 	args := []any{
-		fighter.Name, fighter.NickName, fighter.Division, fighter.Status, fighter.Hometown,
+		fighter.Name, fighter.NickName, fighter.DivisionId, fighter.Status, fighter.Hometown,
 		fighter.TrainsAt, fighter.FightingStyle, fighter.Age, fighter.Height, fighter.Weight,
 		fighter.OctagonDebut, fighter.DebutTimestamp, fighter.Reach, fighter.LegReach, fighter.Wins,
 		fighter.Loses, fighter.Draw, fighter.FighterUrl, fighter.ImageUrl,
@@ -111,7 +111,7 @@ func (r *Repository) CreateNewFighterStats(ctx context.Context, tx pgx.Tx, stats
 // fighter ID and an error if the update operation encounters any issues.
 func (r *Repository) UpdateFighter(ctx context.Context, tx pgx.Tx, fighter model.Fighter) (int32, error) {
 	qData := `UPDATE fighters.fighters SET
-		nickname = $2, division = $3, status = $4, hometown = $5, trains_at = $6, 
+		nickname = $2, division_id= $3, status = $4, hometown = $5, trains_at = $6, 
 		fighting_style = $7, age = $8, height = $9, weight = $10, octagon_debut = $11, 
 		debut_timestamp = $12, reach = $13, leg_reach = $14, wins = $15, loses = $16,
 		draw = $17, fighter_url = $18, image_url = $19
@@ -122,7 +122,7 @@ func (r *Repository) UpdateFighter(ctx context.Context, tx pgx.Tx, fighter model
 
 	args := []any{
 		fighter.FighterId,
-		fighter.NickName, fighter.Division, fighter.Status, fighter.Hometown, fighter.TrainsAt,
+		fighter.NickName, fighter.DivisionId, fighter.Status, fighter.Hometown, fighter.TrainsAt,
 		fighter.FightingStyle, fighter.Age, fighter.Height, fighter.Weight, fighter.OctagonDebut,
 		fighter.DebutTimestamp, fighter.Reach, fighter.LegReach, fighter.Wins, fighter.Loses,
 		fighter.Draw, fighter.FighterUrl, fighter.ImageUrl,

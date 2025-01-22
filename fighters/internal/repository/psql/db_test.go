@@ -163,7 +163,7 @@ func TestCreateNewFighter(t *testing.T) {
 			fighter: model.Fighter{
 				Name:           "Noob Saibot",
 				NickName:       "",
-				Division:       1,
+				DivisionId:       1,
 				Status:         "Active",
 				Hometown:       "",
 				Height:         100,
@@ -185,7 +185,7 @@ func TestCreateNewFighter(t *testing.T) {
 			fighter: model.Fighter{
 				Name:           "Tobias Boon",
 				NickName:       "",
-				Division:       1,
+				DivisionId:       1,
 				Status:         "Active",
 				Hometown:       "",
 				Height:         100,
