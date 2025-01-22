@@ -4,6 +4,32 @@ SELECT 'CREATE DATABASE fighters_db' WHERE NOT EXISTS (SELECT FROM pg_database W
 
 CREATE SCHEMA IF NOT EXISTS fighters;
 
+--- fighters.divisions table
+
+CREATE TABLE IF NOT EXISTS fighters.divisions (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    value character varying(255) NOT NULL
+);
+
+INSERT INTO fighters.divisions (id, name, value) VALUES (12, 'Women''s Featherweight Division', 'womens_featherweight');
+INSERT INTO fighters.divisions (id, name, value) VALUES (7, 'Light Heavyweight Division', 'lightheavyweight');
+INSERT INTO fighters.divisions (id, name, value) VALUES (8, 'Heavyweight Division', 'heavyweight');
+INSERT INTO fighters.divisions (id, name, value) VALUES (4, 'Lightweight Division', 'lightweight');
+INSERT INTO fighters.divisions (id, name, value) VALUES (1, 'Flyweight Division', 'flyweight');
+INSERT INTO fighters.divisions (id, name, value) VALUES (9, 'Women''s Strawweight Division', 'womens_strawweight');
+INSERT INTO fighters.divisions (id, name, value) VALUES (10, 'Women''s Flyweight Division', 'womens_flyweight');
+INSERT INTO fighters.divisions (id, name, value) VALUES (2, 'Bantamweight Division', 'bantamweight');
+INSERT INTO fighters.divisions (id, name, value) VALUES (3, 'Featherweight Division', 'featherweight');
+INSERT INTO fighters.divisions (id, name, value) VALUES (11, 'Women''s Bantamweight Division', 'womens_bantamweight');
+INSERT INTO fighters.divisions (id, name, value) VALUES (6, 'Middleweight Division', 'middleweight');
+INSERT INTO fighters.divisions (id, name, value) VALUES (5, 'Welterweight Division', 'welterweight');
+INSERT INTO fighters.divisions (id, name, value) VALUES (0, 'No Division', 'no_division');
+
+ALTER TABLE ONLY fighters.divisions
+    ADD CONSTRAINT divisions_pk PRIMARY KEY (id);
+
+    
 --- fighters table
 
 CREATE TABLE IF NOT EXISTS fighters.fighters (
