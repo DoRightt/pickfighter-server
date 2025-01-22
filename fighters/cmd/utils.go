@@ -19,9 +19,10 @@ import (
 )
 
 // ReadFighterData reads fighter data from a JSON file and returns a slice of model.Fighter.
-// The file path is set to "../scraper/collection/fighters.json".
+// The file path is set to "../../scraper/collection/fighters.json".
 func ReadFighterData() ([]model.Fighter, error) {
-	filePath := "../scraper/collection/fighters.json"
+	// TODO: tricky path
+	filePath := "../../scraper/collection/fighters.json"
 
 	jsonData, err := os.ReadFile(filePath)
 	if err != nil {
