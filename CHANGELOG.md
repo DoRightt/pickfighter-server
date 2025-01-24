@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 -   Name, division and status indexes for fighters table
+-   DB dump script
+-   Configs backup script
 
 ## 23 Jan 2025
 
