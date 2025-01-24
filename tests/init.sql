@@ -68,6 +68,10 @@ ALTER TABLE ONLY fighters.fighters
 
 CREATE UNIQUE INDEX fighters_fighter_url_uindex ON fighters.fighters USING btree (fighter_url);
 
+CREATE INDEX fighters_division_index ON fighters.fighters USING btree (division_id);
+CREATE INDEX fighters_name_index ON fighters.fighters USING btree (name);
+CREATE INDEX fighters_status_index ON fighters.fighters USING btree (status);
+
 INSERT INTO fighters.fighters (fighter_id, name, nickname, division_id, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57918, 'Rostem Akman', '', 4, 'Not Fighting', '', '', '', 31, 70, 171, 'Jun. 1, 2019', 1559347200, 72, 38, 'https://www.ufc.com/athlete/rostam-akman', 'https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/image/ufc-fighter-container/71542/profile-galery/fullbodyleft-picture/AKMAN_ROSTAM_L.png?VersionId=s0Xyj_DSjzTjrVVAvaeImvkXyz9WVs3Z&itok=sOszamHM', 0, 2, 0);
 INSERT INTO fighters.fighters (fighter_id, name, nickname, division_id, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57919, 'Razak Al-Hassan', '"Razor"', 6, 'Not Fighting', '', '', '', 41, 74, 205, 'Dec. 10, 2008', 1228867200, 0, 0, 'https://www.ufc.com/athlete/razak-al-hassan', '', 7, 2, 0);
 INSERT INTO fighters.fighters (fighter_id, name, nickname, division_id, status, hometown, trains_at, fighting_style, age, height, weight, octagon_debut, debut_timestamp, reach, leg_reach, fighter_url, image_url, wins, loses, draw) VALUES (57901, 'Tank Abbott', '"Tank"', 7, 'Not Fighting', '', '', '', 0, 72, 253, 'Jul. 14, 1995', 805680000, 0, 0, 'https://www.ufc.com/athlete/tank-abbott', '', 8, 10, 0);
