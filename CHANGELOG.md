@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Init root user command for auth service
 -   PatchUser method for auth service
+-   Init scheme command for auth / fighters / events services
 
 ### Changed
 
