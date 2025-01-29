@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"pickfighter.com/auth/internal/repository/psql"
-	migrations "pickfighter.com/auth/migrations/init"
+	"pickfighter.com/events/internal/repository/psql"
+	migrations "pickfighter.com/events/migrations/init"
 	logs "pickfighter.com/pkg/logger"
 )
 
@@ -19,28 +19,7 @@ var repoCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(repoCmd)
-	repoCmd.AddCommand(repoInitialRootUserCmd)
 	repoCmd.AddCommand(initSchemaCmd)
-}
-
-var repoInitialRootUserCmd = &cobra.Command{
-	Use:              "init-root-user",
-	Short:            "Creates root user data",
-	Long:             ``,
-	TraverseChildren: true,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		ctx := context.Background()
-		ctx, cancel := context.WithCancel(ctx)
-		defer cancel()
-
-		db, err := psql.New(ctx)
-		if err != nil {
-			logs.Fatalf("Unable to connect postgresql: %s", err)
-		}
-		defer db.GracefulShutdown()
-
-		return db.InitRootUser(ctx)
-	},
 }
 
 var initSchemaCmd = &cobra.Command{
@@ -55,12 +34,10 @@ var initSchemaCmd = &cobra.Command{
 		}
 		defer db.GracefulShutdown()
 
-		err = migrations.InitAuthSchema(ctx, db)
+		err = migrations.InitEventsSchema(ctx, db)
 		if err != nil {
 			logs.Fatalf("Error while initializing database : %v", err)
 		}
 		fmt.Println("Database successfully initalized")
-
-		db.InitRootUser(ctx)
 	},
 }
