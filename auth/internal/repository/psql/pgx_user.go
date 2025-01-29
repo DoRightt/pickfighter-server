@@ -2,6 +2,7 @@ package psql
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"pickfighter.com/auth/pkg/model"
@@ -42,4 +43,24 @@ func (r *Repository) TxCreateUser(ctx context.Context, tx pgx.Tx, u model.User) 
 	}
 
 	return userId, nil
+}
+
+func (r *Repository) PatchUser(ctx context.Context, tx pgx.Tx, userId int32, param string, val any) error {
+	q := fmt.Sprintf(`UPDATE auth.users SET
+		updated_at = $2,
+		%s = $3
+	WHERE user_id = $1`, param)
+
+	args := []any{userId, time.Now().Unix(), val}
+	if tx != nil {
+		if _, err := tx.Exec(ctx, q, args...); err != nil {
+			return r.DebugLogSqlErr(q, err)
+		}
+	} else {
+		if _, err := r.GetPool().Exec(ctx, q, args...); err != nil {
+			return r.DebugLogSqlErr(q, err)
+		}
+	}
+
+	return nil
 }

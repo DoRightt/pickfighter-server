@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.3.3
 
+## 29 Jan 2025
+
+### Added
+
+-   Init root user command for auth service
+-   PatchUser method for auth service
+
+### Changed
+
+-   The claim field is now used instead of flags field to determine user rights
+
 ## 24 Jan 2025
 
 ### Added

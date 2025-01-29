@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
-	"pickfighter.com/auth/pkg/logger"
-	"pickfighter.com/auth/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
+	"pickfighter.com/auth/pkg/logger"
+	"pickfighter.com/auth/pkg/version"
 )
 
 var (
@@ -107,7 +107,7 @@ func setConfigDefaults() {
 	viper.SetDefault("postgres.main.port", "5432")
 	viper.SetDefault("postgres.main.name", "postgres")
 	viper.SetDefault("postgres.main.user", "postgres")
-
+	
 	// web
 	viper.SetDefault("web.host", "http://localhost")
 	viper.SetDefault("web.port", "4200")

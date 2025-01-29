@@ -62,8 +62,8 @@ func (c *Controller) createJWTToken(ctx context.Context, creds *authmodel.UserCr
 		return nil, err
 	}
 
-	if u.Flags > 0 {
-		if err := t.Set(string(model.ContextFlags), u.Flags); err != nil {
+	if u.Claim == "root_user" {
+		if err := t.Set(string(model.ContextClaim), u.Claim); err != nil {
 			logs.Errorf("Unable to set JWT token private claim key: %s", err)
 			return nil, err
 		}
