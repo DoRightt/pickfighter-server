@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"time"
 
-	"pickfighter.com/pkg/httplib"
-	logs "pickfighter.com/pkg/logger"
-	"pickfighter.com/pkg/model"
 	"github.com/lestrrat-go/jwx/v2/jwa"
 	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/spf13/viper"
+	"pickfighter.com/pkg/httplib"
+	logs "pickfighter.com/pkg/logger"
+	"pickfighter.com/pkg/model"
 )
 
 // verifyJWT parses a raw JWT string and verifies its signature using the specified algorithm and public key.
@@ -69,15 +69,6 @@ func (h *Handler) IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc {
 			ctx = context.WithValue(ctx, model.ContextUserId, int32(uid))
 		}
 
-		// TODO admin claim?
-		// rootClaim, onBoard := token.Get(string(model.ContextClaim))
-		// if onBoard {
-		// 	claim, fit := rootClaim.(string)
-		// 	if fit {
-		// 		ctx = context.WithValue(ctx, model.ContextNamespaceClaims, claim)
-		// 	}
-		// }
-
 		ctx = context.WithValue(ctx, model.ContextJWTPointer, token)
 
 		fn(w, r.WithContext(ctx))
@@ -88,22 +79,21 @@ func (h *Handler) IfLoggedIn(fn http.HandlerFunc) http.HandlerFunc {
 // It checks the "admin" claim in the JWT (JSON Web Token) stored in the request cookie.
 // If the user is an administrator, the request continues; otherwise, it responds with an error.
 func (h *Handler) CheckIsAdmin(fn http.HandlerFunc) http.HandlerFunc {
-	// TODO mb claim should set in createJWTToken method
 	return h.IfLoggedIn(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 
 		token, ok := ctx.Value(model.ContextJWTPointer).(jwt.Token)
 		if ok {
-			f, ok := token.Get(string(model.ContextFlags))
-			flag, valid := f.(float64)
-			if !ok || int(flag) != 1 {
+			rootClaim, ok := token.Get(string(model.ContextClaim))
+			if !ok || rootClaim != "root_user" {
 				httplib.ErrorResponseJSON(w, http.StatusMethodNotAllowed, http.StatusMethodNotAllowed,
 					fmt.Errorf("action is allowed only for admins"))
 				return
-			}
-
-			if valid {
-				ctx = context.WithValue(ctx, model.ContextFlags, int(flag))
+			} else {
+				claim, fit := rootClaim.(string)
+				if fit {
+					ctx = context.WithValue(ctx, model.ContextClaim, claim)
+				}
 			}
 
 		} else {
