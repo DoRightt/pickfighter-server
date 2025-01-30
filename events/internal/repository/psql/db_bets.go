@@ -3,8 +3,8 @@ package psql
 import (
 	"context"
 
+	eventmodel "github.com/DoRightt/pickfighter-server/events/pkg/model"
 	"github.com/jackc/pgx/v5"
-	eventmodel "pickfighter.com/events/pkg/model"
 )
 
 // SearchBetsCount retrieves the count of bets for a given user ID from the 'bets' table.

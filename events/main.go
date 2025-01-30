@@ -1,6 +1,6 @@
 package main
 
-import "pickfighter.com/events/cmd"
+import "github.com/DoRightt/pickfighter-server/events/cmd"
 
 func main() {
 	cmd.Execute()

@@ -3,9 +3,9 @@ package auth
 import (
 	"context"
 
-	internalErr "pickfighter.com/auth/pkg/errors"
-	"pickfighter.com/auth/pkg/model"
-	logs "pickfighter.com/pkg/logger"
+	internalErr "github.com/DoRightt/pickfighter-server/auth/pkg/errors"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/model"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 )
 
 // Profile retrieves the user profile based on the provided UserRequest.

@@ -10,10 +10,10 @@ import (
 	"sync"
 	"time"
 
-	"pickfighter.com/scraper/internal/scraperutil"
-	data "pickfighter.com/scraper/pkg"
-	"pickfighter.com/scraper/pkg/logger"
-	"pickfighter.com/scraper/pkg/model"
+	"github.com/DoRightt/pickfighter-server/scraper/internal/scraperutil"
+	data "github.com/DoRightt/pickfighter-server/scraper/pkg"
+	"github.com/DoRightt/pickfighter-server/scraper/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/scraper/pkg/model"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"

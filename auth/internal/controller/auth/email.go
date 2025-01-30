@@ -8,7 +8,7 @@ import (
 
 	"github.com/mailgun/mailgun-go/v4"
 	"github.com/spf13/viper"
-	"pickfighter.com/auth/pkg/model"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/model"
 )
 
 // HandleEmailEvent processes different email events based on the provided EmailData.

@@ -2,7 +2,7 @@ package model
 
 import (
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"pickfighter.com/gen"
+	"github.com/DoRightt/pickfighter-server/gen"
 )
 
 func RegisterRequestFromProto(p *gen.RegisterRequest) *RegisterRequest {

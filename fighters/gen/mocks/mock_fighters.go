@@ -16,7 +16,7 @@ import (
 	pgx "github.com/jackc/pgx/v5"
 	pgxpool "github.com/jackc/pgx/v5/pgxpool"
 	gomock "go.uber.org/mock/gomock"
-	model "pickfighter.com/fighters/pkg/model"
+	model "github.com/DoRightt/pickfighter-server/fighters/pkg/model"
 )
 
 // MockFightersRepository is a mock of FightersRepository interface.

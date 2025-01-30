@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"pickfighter.com/pkg/discovery"
+	"github.com/DoRightt/pickfighter-server/pkg/discovery"
 	consul "github.com/hashicorp/consul/api"
 )
 

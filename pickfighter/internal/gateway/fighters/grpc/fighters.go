@@ -3,10 +3,10 @@ package grpc
 import (
 	"context"
 
-	fightersmodel "pickfighter.com/fighters/pkg/model"
-	"pickfighter.com/gen"
-	"pickfighter.com/internal/grpcutil"
-	"pickfighter.com/pkg/discovery"
+	fightersmodel "github.com/DoRightt/pickfighter-server/fighters/pkg/model"
+	"github.com/DoRightt/pickfighter-server/gen"
+	"github.com/DoRightt/pickfighter-server/internal/grpcutil"
+	"github.com/DoRightt/pickfighter-server/pkg/discovery"
 )
 
 // Gateway defines an gRPC gateway for a fighters service.

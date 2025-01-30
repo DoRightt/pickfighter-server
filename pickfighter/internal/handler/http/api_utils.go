@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/DoRightt/pickfighter-server/pickfighter/pkg/version"
+	"github.com/DoRightt/pickfighter-server/pkg/httplib"
 	"github.com/spf13/viper"
-	"pickfighter.com/pickfighter/pkg/version"
-	"pickfighter.com/pkg/httplib"
 )
 
 func (h *Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {

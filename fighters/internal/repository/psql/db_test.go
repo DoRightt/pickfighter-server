@@ -8,13 +8,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/DoRightt/pickfighter-server/fighters/pkg/cfg"
+	"github.com/DoRightt/pickfighter-server/fighters/pkg/model"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
-	"pickfighter.com/fighters/pkg/cfg"
-	"pickfighter.com/fighters/pkg/model"
 )
 
 var testFighter = &model.Fighter{
@@ -163,7 +163,7 @@ func TestCreateNewFighter(t *testing.T) {
 			fighter: model.Fighter{
 				Name:           "Noob Saibot",
 				NickName:       "",
-				DivisionId:       1,
+				DivisionId:     1,
 				Status:         "Active",
 				Hometown:       "",
 				Height:         100,
@@ -185,7 +185,7 @@ func TestCreateNewFighter(t *testing.T) {
 			fighter: model.Fighter{
 				Name:           "Tobias Boon",
 				NickName:       "",
-				DivisionId:       1,
+				DivisionId:     1,
 				Status:         "Active",
 				Hometown:       "",
 				Height:         100,

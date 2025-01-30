@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/DoRightt/pickfighter-server/events/internal/repository/psql"
+	migrations "github.com/DoRightt/pickfighter-server/events/migrations/init"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 	"github.com/spf13/cobra"
-	"pickfighter.com/events/internal/repository/psql"
-	migrations "pickfighter.com/events/migrations/init"
-	logs "pickfighter.com/pkg/logger"
 )
 
 var repoCmd = &cobra.Command{

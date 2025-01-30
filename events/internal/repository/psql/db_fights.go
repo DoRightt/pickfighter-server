@@ -3,8 +3,8 @@ package psql
 import (
 	"context"
 
+	eventmodel "github.com/DoRightt/pickfighter-server/events/pkg/model"
 	"github.com/jackc/pgx/v5"
-	eventmodel "pickfighter.com/events/pkg/model"
 )
 
 // TxCreateEventFight creates a new fight in the 'fights' table within a transaction.

@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.3.3
 
+## 30 Jan 2025
+
+### Changed
+
+-   Module name
+
 ## 29 Jan 2025
 
 ### Added

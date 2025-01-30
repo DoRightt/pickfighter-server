@@ -14,7 +14,7 @@ import (
 	reflect "reflect"
 
 	gomock "go.uber.org/mock/gomock"
-	model "pickfighter.com/fighters/pkg/model"
+	model "github.com/DoRightt/pickfighter-server/fighters/pkg/model"
 )
 
 // MockFightersController is a mock of FightersController interface.

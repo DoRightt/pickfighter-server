@@ -3,9 +3,9 @@ package grpc
 import (
 	"context"
 
+	"github.com/DoRightt/pickfighter-server/events/pkg/model"
+	"github.com/DoRightt/pickfighter-server/gen"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"pickfighter.com/events/pkg/model"
-	"pickfighter.com/gen"
 )
 
 // HealthCheck handles the gRPC request for checking the health status of the application.

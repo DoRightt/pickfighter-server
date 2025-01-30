@@ -7,8 +7,8 @@ import (
 
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v5"
-	"pickfighter.com/auth/pkg/model"
-	logs "pickfighter.com/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/model"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 )
 
 const (

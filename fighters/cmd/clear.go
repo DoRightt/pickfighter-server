@@ -3,8 +3,8 @@ package cmd
 import (
 	"context"
 
+	"github.com/DoRightt/pickfighter-server/fighters/pkg/cfg"
 	"github.com/spf13/cobra"
-	"pickfighter.com/fighters/pkg/cfg"
 )
 
 func init() {

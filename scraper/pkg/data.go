@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"strings"
 
-	"pickfighter.com/scraper/pkg/logger"
-	"pickfighter.com/scraper/pkg/model"
+	"github.com/DoRightt/pickfighter-server/scraper/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/scraper/pkg/model"
 )
 
 const defaultStat = "0-0-0 (W-L-D)"

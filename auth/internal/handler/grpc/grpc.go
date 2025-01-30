@@ -3,9 +3,9 @@ package grpc
 import (
 	"context"
 
-	"pickfighter.com/auth/internal/controller/auth"
-	"pickfighter.com/auth/pkg/model"
-	"pickfighter.com/gen"
+	"github.com/DoRightt/pickfighter-server/auth/internal/controller/auth"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/model"
+	"github.com/DoRightt/pickfighter-server/gen"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

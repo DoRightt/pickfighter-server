@@ -6,7 +6,7 @@ import (
 	"time"
 
 	// TODO errors pkg should be higher
-	internalErr "pickfighter.com/pickfighter/pkg/errors"
+	internalErr "github.com/DoRightt/pickfighter-server/pickfighter/pkg/errors"
 )
 
 func TestApiError(t *testing.T) {

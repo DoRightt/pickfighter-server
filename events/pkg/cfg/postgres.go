@@ -1,7 +1,7 @@
 package cfg
 
 import (
-	"pickfighter.com/pkg/pgxs"
+	"github.com/DoRightt/pickfighter-server/pkg/pgxs"
 	"github.com/spf13/viper"
 )
 

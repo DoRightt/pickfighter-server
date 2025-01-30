@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"pickfighter.com/fighters/pkg/version"
+	"github.com/DoRightt/pickfighter-server/fighters/pkg/version"
 )
 
 type DefaultMessagesList map[int]Error

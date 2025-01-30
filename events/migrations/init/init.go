@@ -6,8 +6,8 @@ import (
 	"log"
 	"strings"
 
+	"github.com/DoRightt/pickfighter-server/events/internal/repository/psql"
 	"github.com/jackc/pgx/v5"
-	"pickfighter.com/events/internal/repository/psql"
 )
 
 func InitEventsSchema(ctx context.Context, r *psql.Repository) error {

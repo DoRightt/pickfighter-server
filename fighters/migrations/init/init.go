@@ -6,8 +6,8 @@ import (
 	"log"
 	"strings"
 
+	"github.com/DoRightt/pickfighter-server/fighters/internal/repository/psql"
 	"github.com/jackc/pgx/v5"
-	"pickfighter.com/fighters/internal/repository/psql"
 )
 
 func InitFightersSchema(ctx context.Context, r *psql.Repository) error {

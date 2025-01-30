@@ -6,7 +6,7 @@ import (
 
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v5"
-	"pickfighter.com/auth/pkg/model"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/model"
 )
 
 // TxNewAuthCredentials creates new authentication credentials for a user in the 'user_credentials' table.

@@ -3,9 +3,9 @@ package grpc
 import (
 	"context"
 
-	"pickfighter.com/events/internal/controller/event"
-	"pickfighter.com/events/pkg/model"
-	"pickfighter.com/gen"
+	"github.com/DoRightt/pickfighter-server/events/internal/controller/event"
+	"github.com/DoRightt/pickfighter-server/events/pkg/model"
+	"github.com/DoRightt/pickfighter-server/gen"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

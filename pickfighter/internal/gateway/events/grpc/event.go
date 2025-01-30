@@ -3,10 +3,10 @@ package grpc
 import (
 	"context"
 
-	eventmodel "pickfighter.com/events/pkg/model"
-	"pickfighter.com/gen"
-	"pickfighter.com/internal/grpcutil"
-	"pickfighter.com/pkg/discovery"
+	eventmodel "github.com/DoRightt/pickfighter-server/events/pkg/model"
+	"github.com/DoRightt/pickfighter-server/gen"
+	"github.com/DoRightt/pickfighter-server/internal/grpcutil"
+	"github.com/DoRightt/pickfighter-server/pkg/discovery"
 )
 
 // Gateway defines an gRPC gateway for a event service.

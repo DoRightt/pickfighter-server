@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"pickfighter.com/scraper/internal/scraper"
+	"github.com/DoRightt/pickfighter-server/scraper/internal/scraper"
 	"github.com/spf13/cobra"
 )
 

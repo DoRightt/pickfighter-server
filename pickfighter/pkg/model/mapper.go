@@ -1,9 +1,9 @@
 package model
 
 import (
-	eventmodel "pickfighter.com/events/pkg/model"
-	fightersmodel "pickfighter.com/fighters/pkg/model"
-	"pickfighter.com/gen"
+	eventmodel "github.com/DoRightt/pickfighter-server/events/pkg/model"
+	fightersmodel "github.com/DoRightt/pickfighter-server/fighters/pkg/model"
+	"github.com/DoRightt/pickfighter-server/gen"
 )
 
 func HealthStatusFromProto(req *gen.HealthResponse) *HealthStatus {

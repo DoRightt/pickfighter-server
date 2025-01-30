@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/DoRightt/pickfighter-server/events/pkg/model"
+	eventmodel "github.com/DoRightt/pickfighter-server/events/pkg/model"
+	"github.com/DoRightt/pickfighter-server/events/pkg/version"
+	"github.com/DoRightt/pickfighter-server/pkg/pgxs"
 	"github.com/jackc/pgx/v5"
 	"github.com/spf13/viper"
-	"pickfighter.com/events/pkg/model"
-	eventmodel "pickfighter.com/events/pkg/model"
-	"pickfighter.com/events/pkg/version"
-	"pickfighter.com/pkg/pgxs"
 )
 
 // ErrNotFound is returned when a requested record is not found.

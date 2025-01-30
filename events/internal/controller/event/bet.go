@@ -3,9 +3,9 @@ package event
 import (
 	"context"
 
-	internalErr "pickfighter.com/events/pkg/errors"
-	eventmodel "pickfighter.com/events/pkg/model"
-	logs "pickfighter.com/pkg/logger"
+	internalErr "github.com/DoRightt/pickfighter-server/events/pkg/errors"
+	eventmodel "github.com/DoRightt/pickfighter-server/events/pkg/model"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 	"github.com/jackc/pgx/v5"
 )
 

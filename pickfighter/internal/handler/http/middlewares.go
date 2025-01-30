@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/DoRightt/pickfighter-server/pkg/httplib"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/pkg/model"
 	"github.com/lestrrat-go/jwx/v2/jwa"
 	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/spf13/viper"
-	"pickfighter.com/pkg/httplib"
-	logs "pickfighter.com/pkg/logger"
-	"pickfighter.com/pkg/model"
 )
 
 // verifyJWT parses a raw JWT string and verifies its signature using the specified algorithm and public key.

@@ -3,11 +3,11 @@ package grpc
 import (
 	"context"
 
-	authmodel "pickfighter.com/auth/pkg/model"
-	"pickfighter.com/gen"
-	"pickfighter.com/internal/grpcutil"
-	"pickfighter.com/pkg/discovery"
-	"pickfighter.com/pkg/model"
+	authmodel "github.com/DoRightt/pickfighter-server/auth/pkg/model"
+	"github.com/DoRightt/pickfighter-server/gen"
+	"github.com/DoRightt/pickfighter-server/internal/grpcutil"
+	"github.com/DoRightt/pickfighter-server/pkg/discovery"
+	"github.com/DoRightt/pickfighter-server/pkg/model"
 )
 
 // Gateway defines an gRPC gateway for a auth service.

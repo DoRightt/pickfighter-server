@@ -1,6 +1,6 @@
 package model
 
-import "pickfighter.com/gen"
+import "github.com/DoRightt/pickfighter-server/gen"
 
 // FighterToProto converts a single Fighter struct into a generated proto counterpart.
 func FighterToProto(f *Fighter) *gen.Fighter {

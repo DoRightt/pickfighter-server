@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
-	"pickfighter.com/auth/internal/repository/psql"
+	"github.com/DoRightt/pickfighter-server/auth/internal/repository/psql"
 )
 
 func InitAuthSchema(ctx context.Context, r *psql.Repository) error {
