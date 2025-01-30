@@ -3,8 +3,8 @@ package psql
 import (
 	"context"
 
-	"pickfighter.com/fighters/pkg/cfg"
-	"pickfighter.com/pkg/pgxs"
+	"github.com/DoRightt/pickfighter-server/fighters/pkg/cfg"
+	"github.com/DoRightt/pickfighter-server/pkg/pgxs"
 )
 
 const sep = ` AND `

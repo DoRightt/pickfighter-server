@@ -5,11 +5,11 @@ import (
 	"log"
 	"time"
 
+	"github.com/DoRightt/pickfighter-server/pickfighter/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/pickfighter/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
-	"pickfighter.com/pickfighter/pkg/logger"
-	"pickfighter.com/pickfighter/pkg/version"
 )
 
 var (

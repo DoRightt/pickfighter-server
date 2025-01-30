@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 
+	"github.com/DoRightt/pickfighter-server/fighters/internal/controller/fighters"
+	"github.com/DoRightt/pickfighter-server/fighters/pkg/model"
+	"github.com/DoRightt/pickfighter-server/gen"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"pickfighter.com/fighters/internal/controller/fighters"
-	"pickfighter.com/fighters/pkg/model"
-	"pickfighter.com/gen"
 )
 
 type FightersController interface {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"math/rand"
 
-	"pickfighter.com/pkg/discovery"
+	"github.com/DoRightt/pickfighter-server/pkg/discovery"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

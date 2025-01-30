@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	authmodel "pickfighter.com/auth/pkg/model"
-	logs "pickfighter.com/pkg/logger"
-	"pickfighter.com/pkg/model"
+	authmodel "github.com/DoRightt/pickfighter-server/auth/pkg/model"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/pkg/model"
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"

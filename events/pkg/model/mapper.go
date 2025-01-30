@@ -1,7 +1,7 @@
 package model
 
 import (
-	"pickfighter.com/gen"
+	"github.com/DoRightt/pickfighter-server/gen"
 )
 
 func EventRequestFromProto(p *gen.CreateEventRequest) *EventRequest {

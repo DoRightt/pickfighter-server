@@ -3,11 +3,11 @@ package pickfighter
 import (
 	"context"
 
-	authmodel "pickfighter.com/auth/pkg/model"
-	eventmodel "pickfighter.com/events/pkg/model"
-	fightersmodel "pickfighter.com/fighters/pkg/model"
-	"pickfighter.com/pickfighter/pkg/model"
-	gatewaymodel "pickfighter.com/pickfighter/pkg/model"
+	authmodel "github.com/DoRightt/pickfighter-server/auth/pkg/model"
+	eventmodel "github.com/DoRightt/pickfighter-server/events/pkg/model"
+	fightersmodel "github.com/DoRightt/pickfighter-server/fighters/pkg/model"
+	"github.com/DoRightt/pickfighter-server/pickfighter/pkg/model"
+	gatewaymodel "github.com/DoRightt/pickfighter-server/pickfighter/pkg/model"
 )
 
 type fightersGateway interface {

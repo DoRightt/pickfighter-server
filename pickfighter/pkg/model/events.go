@@ -1,7 +1,7 @@
 package model
 
 import (
-	fightersmodel "pickfighter.com/fighters/pkg/model"
+	fightersmodel "github.com/DoRightt/pickfighter-server/fighters/pkg/model"
 )
 
 // EventResponse represents a event response with []Event

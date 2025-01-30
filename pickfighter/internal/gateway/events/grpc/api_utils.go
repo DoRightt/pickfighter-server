@@ -3,10 +3,10 @@ package grpc
 import (
 	"context"
 
+	"github.com/DoRightt/pickfighter-server/gen"
+	"github.com/DoRightt/pickfighter-server/internal/grpcutil"
+	"github.com/DoRightt/pickfighter-server/pickfighter/pkg/model"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"pickfighter.com/gen"
-	"pickfighter.com/internal/grpcutil"
-	"pickfighter.com/pickfighter/pkg/model"
 )
 
 // ServiceHealthCheck connects to the event-service via gRPC to check its health status.

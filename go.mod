@@ -1,4 +1,4 @@
-module pickfighter.com
+module github.com/DoRightt/pickfighter-server
 
 go 1.23
 

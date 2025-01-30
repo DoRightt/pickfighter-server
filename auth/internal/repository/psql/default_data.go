@@ -8,10 +8,10 @@ import (
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v5"
 	"github.com/spf13/viper"
-	"pickfighter.com/auth/pkg/model"
-	"pickfighter.com/auth/pkg/utils"
-	logs "pickfighter.com/pkg/logger"
-	modeldefault "pickfighter.com/pkg/model"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/model"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/utils"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
+	modeldefault "github.com/DoRightt/pickfighter-server/pkg/model"
 )
 
 type rootUserData struct {

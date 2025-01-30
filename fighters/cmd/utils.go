@@ -7,15 +7,15 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/DoRightt/pickfighter-server/fighters/internal/repository/psql"
+	internalErr "github.com/DoRightt/pickfighter-server/fighters/pkg/errors"
+	"github.com/DoRightt/pickfighter-server/fighters/pkg/model"
+	"github.com/DoRightt/pickfighter-server/pkg/httplib"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/pkg/pgxs"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-	"pickfighter.com/fighters/internal/repository/psql"
-	internalErr "pickfighter.com/fighters/pkg/errors"
-	"pickfighter.com/fighters/pkg/model"
-	"pickfighter.com/pkg/httplib"
-	logs "pickfighter.com/pkg/logger"
-	"pickfighter.com/pkg/pgxs"
 )
 
 // ReadFighterData reads fighter data from a JSON file and returns a slice of model.Fighter.

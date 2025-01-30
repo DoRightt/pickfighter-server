@@ -6,7 +6,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	logs "pickfighter.com/pkg/logger"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 )
 
 type PickfighterRepo interface {

@@ -9,8 +9,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
-	"pickfighter.com/auth/pkg/logger"
-	"pickfighter.com/auth/pkg/version"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/version"
 )
 
 var (

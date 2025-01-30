@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"pickfighter.com/auth/internal/repository/psql"
-	migrations "pickfighter.com/auth/migrations/init"
-	logs "pickfighter.com/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/auth/internal/repository/psql"
+	migrations "github.com/DoRightt/pickfighter-server/auth/migrations/init"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 )
 
 var repoCmd = &cobra.Command{

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"pickfighter.com/pickfighter/pkg/version"
-	logs "pickfighter.com/pkg/logger"
-	"pickfighter.com/pkg/utils"
+	"github.com/DoRightt/pickfighter-server/pickfighter/pkg/version"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/pkg/utils"
 )
 
 var ErrAuthCertsPathRequired = fmt.Errorf("authentication certificates path is required")

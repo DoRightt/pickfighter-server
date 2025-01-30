@@ -8,9 +8,9 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/spf13/viper"
-	"pickfighter.com/auth/pkg/model"
-	"pickfighter.com/auth/pkg/version"
-	"pickfighter.com/pkg/pgxs"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/model"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/version"
+	"github.com/DoRightt/pickfighter-server/pkg/pgxs"
 )
 
 // ErrNotFound is returned when a requested record is not found.

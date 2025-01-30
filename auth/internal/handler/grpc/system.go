@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"google.golang.org/protobuf/types/known/emptypb"
-	"pickfighter.com/auth/pkg/model"
-	"pickfighter.com/gen"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/model"
+	"github.com/DoRightt/pickfighter-server/gen"
 )
 
 // HealthCheck handles the gRPC request for checking the health status of the application.

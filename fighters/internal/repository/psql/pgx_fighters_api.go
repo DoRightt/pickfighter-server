@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"pickfighter.com/fighters/pkg/model"
+	"github.com/DoRightt/pickfighter-server/fighters/pkg/model"
 )
 
 // SearchFightersCount retrieves the count of fighters based on the provided FightersRequest.

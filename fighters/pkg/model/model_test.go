@@ -3,8 +3,8 @@ package model
 import (
 	"testing"
 
+	"github.com/DoRightt/pickfighter-server/gen"
 	"github.com/stretchr/testify/assert"
-	"pickfighter.com/gen"
 )
 
 func TestFighterString(t *testing.T) {

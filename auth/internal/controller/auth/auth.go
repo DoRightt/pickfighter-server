@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5"
-	internalErr "pickfighter.com/auth/pkg/errors"
-	"pickfighter.com/auth/pkg/model"
-	"pickfighter.com/auth/pkg/utils"
-	logs "pickfighter.com/pkg/logger"
+	internalErr "github.com/DoRightt/pickfighter-server/auth/pkg/errors"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/model"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/utils"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 )
 
 // Register creates user credentials in a transactional context,

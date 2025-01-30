@@ -10,21 +10,21 @@ import (
 	"testing"
 	"time"
 
+	"github.com/DoRightt/pickfighter-server/fighters/internal/repository/psql"
+	"github.com/DoRightt/pickfighter-server/fighters/pkg/cfg"
+	fightersmodel "github.com/DoRightt/pickfighter-server/fighters/pkg/model"
+	"github.com/DoRightt/pickfighter-server/pkg/model"
 	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
-	"pickfighter.com/fighters/internal/repository/psql"
-	"pickfighter.com/fighters/pkg/cfg"
-	fightersmodel "pickfighter.com/fighters/pkg/model"
-	"pickfighter.com/pkg/model"
 )
 
 var testFighter = fightersmodel.Fighter{
 	FighterId:      999888,
 	Name:           "John Doe",
 	NickName:       "The Phantom",
-	DivisionId:       1,
+	DivisionId:     1,
 	Status:         "Active",
 	Hometown:       "New York",
 	TrainsAt:       "MMA Gym",
@@ -229,7 +229,7 @@ func getRandomFighter() fightersmodel.Fighter {
 		FighterId:      fighterId,
 		Name:           "Test Fighter " + randomString(5),
 		NickName:       "The Phantom",
-		DivisionId:       1,
+		DivisionId:     1,
 		Status:         "Active",
 		Hometown:       "New York",
 		TrainsAt:       "MMA Gym",

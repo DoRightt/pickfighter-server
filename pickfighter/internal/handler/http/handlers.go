@@ -9,16 +9,16 @@ import (
 	"strings"
 	"time"
 
+	authmodel "github.com/DoRightt/pickfighter-server/auth/pkg/model"
+	eventmodel "github.com/DoRightt/pickfighter-server/events/pkg/model"
+	fightersmodel "github.com/DoRightt/pickfighter-server/fighters/pkg/model"
+	"github.com/DoRightt/pickfighter-server/pkg/httplib"
+	"github.com/DoRightt/pickfighter-server/pkg/model"
+	"github.com/DoRightt/pickfighter-server/pkg/utils"
 	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/spf13/viper"
-	authmodel "pickfighter.com/auth/pkg/model"
-	eventmodel "pickfighter.com/events/pkg/model"
-	fightersmodel "pickfighter.com/fighters/pkg/model"
-	"pickfighter.com/pkg/httplib"
-	"pickfighter.com/pkg/model"
-	"pickfighter.com/pkg/utils"
 
-	internalErr "pickfighter.com/pickfighter/pkg/errors"
+	internalErr "github.com/DoRightt/pickfighter-server/pickfighter/pkg/errors"
 )
 
 // * * * * * Fighters Handlers * * * * *

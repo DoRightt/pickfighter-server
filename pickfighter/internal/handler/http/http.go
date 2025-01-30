@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"strings"
 
-	"pickfighter.com/pickfighter/internal/controller/pickfighter"
-	"pickfighter.com/pickfighter/pkg/version"
-	"pickfighter.com/pkg/httplib"
-	"pickfighter.com/pkg/ipaddr"
-	logs "pickfighter.com/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/pickfighter/internal/controller/pickfighter"
+	"github.com/DoRightt/pickfighter-server/pickfighter/pkg/version"
+	"github.com/DoRightt/pickfighter-server/pkg/httplib"
+	"github.com/DoRightt/pickfighter-server/pkg/ipaddr"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
 )

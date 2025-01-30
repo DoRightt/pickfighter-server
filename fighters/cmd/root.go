@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
+	"github.com/DoRightt/pickfighter-server/fighters/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/fighters/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
-	"pickfighter.com/fighters/pkg/logger"
-	"pickfighter.com/fighters/pkg/version"
 )
 
 var (

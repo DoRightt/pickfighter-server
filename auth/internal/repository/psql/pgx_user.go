@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"pickfighter.com/auth/pkg/model"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/model"
 
 	"github.com/jackc/pgx/v5"
 )
