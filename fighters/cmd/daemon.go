@@ -13,7 +13,7 @@ import (
 	service "github.com/DoRightt/pickfighter-server/fighters/internal/service/fighters"
 	"github.com/DoRightt/pickfighter-server/fighters/pkg/cfg"
 	"github.com/DoRightt/pickfighter-server/pkg/discovery"
-	"github.com/DoRightt/pickfighter-server/pkg/discovery/consul"
+	"github.com/DoRightt/pickfighter-server/pkg/discovery/redis"
 	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 	"github.com/DoRightt/pickfighter-server/pkg/model"
 	"github.com/DoRightt/pickfighter-server/pkg/sigx"
@@ -75,7 +75,7 @@ func runServe(cmd *cobra.Command, args []string) {
 
 	app := service.New()
 
-	registry, err := consul.NewRegistry("localhost:8500")
+	registry, err := redis.NewRegistry("localhost:8500")
 	if err != nil {
 		panic(err)
 	}
@@ -90,7 +90,7 @@ func runServe(cmd *cobra.Command, args []string) {
 				logs.Error("Failed to report healthy state", zap.Error(err))
 			}
 
-			time.Sleep(1 * time.Second)
+			time.Sleep(15 * time.Second)
 		}
 	}()
 

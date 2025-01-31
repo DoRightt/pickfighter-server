@@ -13,10 +13,10 @@ import (
 	fightersgateway "github.com/DoRightt/pickfighter-server/pickfighter/internal/gateway/fighters/grpc"
 	httphandler "github.com/DoRightt/pickfighter-server/pickfighter/internal/handler/http"
 	service "github.com/DoRightt/pickfighter-server/pickfighter/internal/service/pickfighter"
-	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 	"github.com/DoRightt/pickfighter-server/pickfighter/pkg/version"
 	"github.com/DoRightt/pickfighter-server/pkg/discovery"
-	"github.com/DoRightt/pickfighter-server/pkg/discovery/consul"
+	"github.com/DoRightt/pickfighter-server/pkg/discovery/redis"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 	"github.com/DoRightt/pickfighter-server/pkg/model"
 	"github.com/DoRightt/pickfighter-server/pkg/sigx"
 	"github.com/spf13/cobra"
@@ -76,7 +76,7 @@ func runServe(cmd *cobra.Command, args []string) {
 
 	route := args[0]
 
-	registry, err := consul.NewRegistry("localhost:8500")
+	registry, err := redis.NewRegistry("localhost:8500")
 	if err != nil {
 		panic(err)
 	}
@@ -93,7 +93,7 @@ func runServe(cmd *cobra.Command, args []string) {
 				logs.Error("Failed to report healthy state", zap.Error(err))
 			}
 
-			time.Sleep(1 * time.Second)
+			time.Sleep(15 * time.Second)
 		}
 	}()
 
@@ -105,6 +105,8 @@ func runServe(cmd *cobra.Command, args []string) {
 	ctl := pickfighter.New(authGateway, eventGateway, fightersGateway)
 	h := httphandler.New(ctl)
 	app := service.New(h)
+	app.Registry = registry
+	app.InstanceID = instanceID
 
 	viper.Set("api.route", route)
 
