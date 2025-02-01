@@ -24,7 +24,7 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.58.0
 	go.uber.org/mock v0.5.0
 	go.uber.org/zap v1.27.0
-	google.golang.org/grpc v1.69.4
+	google.golang.org/grpc v1.70.0
 	google.golang.org/protobuf v1.36.2
 	gopkg.in/go-playground/assert.v1 v1.2.1
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
