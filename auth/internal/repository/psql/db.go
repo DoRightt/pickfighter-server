@@ -3,7 +3,7 @@ package psql
 import (
 	"context"
 
-	"github.com/DoRightt/pickfighter-server/fighters/pkg/cfg"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/cfg"
 	"github.com/DoRightt/pickfighter-server/pkg/pgxs"
 )
 
