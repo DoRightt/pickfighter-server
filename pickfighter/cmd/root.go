@@ -48,9 +48,11 @@ func init() {
 	rootCmd.PersistentFlags().String("name", version.Name, "Application name label")
 	rootCmd.PersistentFlags().Bool("log_json", false, "Enable JSON formatted logs output")
 	rootCmd.PersistentFlags().Int("log_level", int(zapcore.DebugLevel), "Log level")
+	rootCmd.PersistentFlags().String("env", "dev", "Application runtime environment")
 
 	bindViperPersistentFlag(rootCmd, "config_path", "config")
 	bindViperPersistentFlag(rootCmd, "app.name", "name")
+	bindViperPersistentFlag(rootCmd, "app.env", "env")
 	bindViperPersistentFlag(rootCmd, "log_json", "log_json")
 	bindViperPersistentFlag(rootCmd, "log_level", "log_level")
 
@@ -75,9 +77,11 @@ func initConfig() {
 	if cfgPath != "" {
 		viper.SetConfigFile(cfgPath)
 	} else {
+		env := viper.GetString("app.env")
+		
 		viper.AddConfigPath("./configs")
 		viper.SetConfigType("yaml")
-		viper.SetConfigName("config")
+		viper.SetConfigName("config." + env)
 	}
 
 	viper.AutomaticEnv()

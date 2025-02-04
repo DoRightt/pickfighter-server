@@ -76,7 +76,7 @@ func runServe(cmd *cobra.Command, args []string) {
 
 	route := args[0]
 
-	registry, err := redis.NewRegistry("localhost:8500")
+	registry, err := redis.NewRegistry(viper.GetString("registry.redis.url"))
 	if err != nil {
 		panic(err)
 	}
