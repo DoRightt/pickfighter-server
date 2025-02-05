@@ -63,10 +63,10 @@ func InitEventsSchema(ctx context.Context, r *psql.Repository) error {
 		},
 		{
 			// Queries to set sequences owners
-			`ALTER SEQUENCE IF NOT EXISTS events.pf_bets_bet_id_seq OWNED BY events.bets.bet_id;`,
-			`ALTER SEQUENCE IF NOT EXISTS events.pf_events_event_id_seq OWNED BY events.events.event_id;`,
-			`ALTER SEQUENCE IF NOT EXISTS events.pf_fight_results_result_id_seq OWNED BY events.fight_results.result_id;`,
-			`ALTER SEQUENCE IF NOT EXISTS events.pf_fights_fight_id_seq OWNED BY events.fights.fight_id;`,
+			`ALTER SEQUENCE events.pf_bets_bet_id_seq OWNED BY events.bets.bet_id;`,
+			`ALTER SEQUENCE events.pf_events_event_id_seq OWNED BY events.events.event_id;`,
+			`ALTER SEQUENCE events.pf_fight_results_result_id_seq OWNED BY events.fight_results.result_id;`,
+			`ALTER SEQUENCE events.pf_fights_fight_id_seq OWNED BY events.fights.fight_id;`,
 		},
 		{
 			// Queries to set default values
