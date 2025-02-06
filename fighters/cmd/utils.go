@@ -22,7 +22,7 @@ import (
 // The file path is set to "../../scraper/collection/fighters.json".
 func ReadFighterData() ([]model.Fighter, error) {
 	// TODO: tricky path
-	filePath := "../../scraper/collection/fighters.json"
+	filePath := "./data/fighters.json"
 
 	jsonData, err := os.ReadFile(filePath)
 	if err != nil {
