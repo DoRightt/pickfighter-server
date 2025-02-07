@@ -1,0 +1,116 @@
+services:
+  db:
+    container_name: pickfighter-db
+    build:
+      context: .
+      dockerfile: migrations/init/Dockerfile
+    volumes:
+      - postgres:/var/lib/postgresql/data/pgdata
+    expose:
+      - "5432"
+    environment:
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: "pickfighter"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    networks:
+      - pickfighter_network
+
+  redis:
+    image: redis
+    container_name: dev-redis
+    expose:
+      - "6379"
+    networks:
+    - pickfighter_network
+
+  pickfighter-gateway-service:
+    image: pickfighter-service-image
+    container_name: pickfighter-gateway-service
+    build:
+      context: .
+      dockerfile: pickfighter/Dockerfile
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis:6379
+    networks:
+      - pickfighter_network
+
+  auth-service:
+    image: auth-service-image
+    container_name: auth-service
+    build:
+      context: .
+      dockerfile: auth/Dockerfile
+    depends_on:
+      - redis
+      - db
+    environment:
+      - REDIS_URL=redis:6379
+      - DB_URL=postgres://postgres@db:5432/pickfighter
+    expose:
+      - "9092"
+    networks:
+      - pickfighter_network
+    
+
+  fighters-service:
+    image: fighters-service-image
+    container_name: fighters-service
+    build:
+      context: .
+      dockerfile: fighters/Dockerfile
+    depends_on:
+      - redis
+      - db
+    environment:
+      - REDIS_URL=redis:6379
+      - DB_URL=postgres://postgres@db:5432/pickfighter
+    expose:
+      - "9093"
+    networks:
+      - pickfighter_network
+
+  events-service:
+    image: events-service-image
+    container_name: events-service
+    build:
+      context: .
+      dockerfile: events/Dockerfile
+    depends_on:
+      - redis
+      - db
+    environment:
+      - REDIS_URL=redis:6379
+      - DB_URL=postgres://postgres@db:5432/pickfighter
+    expose:
+      - "9094"
+    networks:
+      - pickfighter_network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8081:8080"
+    depends_on:
+      - pickfighter-gateway-service
+    networks:
+      - pickfighter_network
+
+networks:
+  pickfighter_network:
+    driver: bridge
+
+volumes:
+  postgres:
