@@ -13,10 +13,10 @@ import (
 	fightersgateway "github.com/DoRightt/pickfighter-server/pickfighter/internal/gateway/fighters/grpc"
 	httphandler "github.com/DoRightt/pickfighter-server/pickfighter/internal/handler/http"
 	service "github.com/DoRightt/pickfighter-server/pickfighter/internal/service/pickfighter"
-	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 	"github.com/DoRightt/pickfighter-server/pickfighter/pkg/version"
 	"github.com/DoRightt/pickfighter-server/pkg/discovery"
-	"github.com/DoRightt/pickfighter-server/pkg/discovery/consul"
+	"github.com/DoRightt/pickfighter-server/pkg/discovery/redis"
+	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
 	"github.com/DoRightt/pickfighter-server/pkg/model"
 	"github.com/DoRightt/pickfighter-server/pkg/sigx"
 	"github.com/spf13/cobra"
@@ -69,21 +69,28 @@ func validateServerArgs(cmd *cobra.Command, args []string) error {
 // runServe is the main function executed when the serve command is run.
 // It initializes the application, sets up service and runs the HTTP server.
 func runServe(cmd *cobra.Command, args []string) {
+	var hostName string
 	port := viper.GetInt("http.port")
 	serviceName := version.Name
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	if viper.GetString("app.env") == "prod" {
+		hostName = serviceName
+	} else {
+		hostName = "localhost"
+	}
+
 	route := args[0]
 
-	registry, err := consul.NewRegistry("localhost:8500")
+	registry, err := redis.NewRegistry(viper.GetString("registry.redis.url"))
 	if err != nil {
 		panic(err)
 	}
 
 	instanceID := discovery.GenerateInstanceID(serviceName)
 
-	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("localhost:%d", port)); err != nil {
+	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("%s:%d", hostName, port)); err != nil {
 		panic(err)
 	}
 
@@ -93,7 +100,7 @@ func runServe(cmd *cobra.Command, args []string) {
 				logs.Error("Failed to report healthy state", zap.Error(err))
 			}
 
-			time.Sleep(1 * time.Second)
+			time.Sleep(15 * time.Second)
 		}
 	}()
 
@@ -105,6 +112,8 @@ func runServe(cmd *cobra.Command, args []string) {
 	ctl := pickfighter.New(authGateway, eventGateway, fightersGateway)
 	h := httphandler.New(ctl)
 	app := service.New(h)
+	app.Registry = registry
+	app.InstanceID = instanceID
 
 	viper.Set("api.route", route)
 

@@ -20,7 +20,7 @@ func New(registry discovery.Registry) *Gateway {
 }
 
 func (g *Gateway) CreateEvent(ctx context.Context, req *eventmodel.EventRequest) (*eventmodel.Event, error) {
-	conn, err := grpcutil.ServiceConnection(ctx, "event-service", g.registry)
+	conn, err := grpcutil.ServiceConnection(ctx, "events-service", g.registry)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (g *Gateway) CreateEvent(ctx context.Context, req *eventmodel.EventRequest)
 }
 
 func (g *Gateway) SearchEvents(ctx context.Context) (*eventmodel.EventsResponse, error) {
-	conn, err := grpcutil.ServiceConnection(ctx, "event-service", g.registry)
+	conn, err := grpcutil.ServiceConnection(ctx, "events-service", g.registry)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (g *Gateway) SearchEvents(ctx context.Context) (*eventmodel.EventsResponse,
 }
 
 func (g *Gateway) CreateBet(ctx context.Context, req *eventmodel.Bet) (*eventmodel.Bet, error) {
-	conn, err := grpcutil.ServiceConnection(ctx, "event-service", g.registry)
+	conn, err := grpcutil.ServiceConnection(ctx, "events-service", g.registry)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func (g *Gateway) CreateBet(ctx context.Context, req *eventmodel.Bet) (*eventmod
 }
 
 func (g *Gateway) SearchBets(ctx context.Context, userId int32) (*eventmodel.BetsResponse, error) {
-	conn, err := grpcutil.ServiceConnection(ctx, "event-service", g.registry)
+	conn, err := grpcutil.ServiceConnection(ctx, "events-service", g.registry)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +98,7 @@ func (g *Gateway) SearchBets(ctx context.Context, userId int32) (*eventmodel.Bet
 }
 
 func (g *Gateway) SetResult(ctx context.Context, req *eventmodel.FightResultRequest) (int32, error) {
-	conn, err := grpcutil.ServiceConnection(ctx, "event-service", g.registry)
+	conn, err := grpcutil.ServiceConnection(ctx, "events-service", g.registry)
 	if err != nil {
 		return 0, err
 	}

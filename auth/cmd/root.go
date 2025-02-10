@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
+	"github.com/DoRightt/pickfighter-server/auth/pkg/logger"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
-	"github.com/DoRightt/pickfighter-server/auth/pkg/logger"
-	"github.com/DoRightt/pickfighter-server/auth/pkg/version"
 )
 
 var (
@@ -49,9 +49,11 @@ func init() {
 	rootCmd.PersistentFlags().String("name", version.Name, "Application name label")
 	rootCmd.PersistentFlags().Bool("log_json", false, "Enable JSON formatted logs output")
 	rootCmd.PersistentFlags().Int("log_level", int(zapcore.DebugLevel), "Log level")
+	rootCmd.PersistentFlags().String("env", "dev", "Application runtime environment")
 
 	bindViperPersistentFlag(rootCmd, "config_path", "config")
 	bindViperPersistentFlag(rootCmd, "app.name", "name")
+	bindViperPersistentFlag(rootCmd, "app.env", "env")
 	bindViperPersistentFlag(rootCmd, "log_json", "log_json")
 	bindViperPersistentFlag(rootCmd, "log_level", "log_level")
 
@@ -76,9 +78,11 @@ func initConfig() {
 	if cfgPath != "" {
 		viper.SetConfigFile(cfgPath)
 	} else {
+		env := viper.GetString("app.env")
+		
 		viper.AddConfigPath("./configs")
 		viper.SetConfigType("yaml")
-		viper.SetConfigName("config")
+		viper.SetConfigName("config." + env)
 	}
 
 	viper.AutomaticEnv()
@@ -97,7 +101,7 @@ func setConfigDefaults() {
 	viper.SetDefault("app.run_date", time.Unix(version.RunDate, 0).Format(time.RFC1123))
 
 	// http server
-	viper.SetDefault("http.addr", "127.0.0.1:9092")
+	viper.SetDefault("http.addr", "127.0.0.1")
 	viper.SetDefault("http.port", "9092")
 	viper.SetDefault("http.ssl.enabled", false)
 
@@ -107,7 +111,7 @@ func setConfigDefaults() {
 	viper.SetDefault("postgres.main.port", "5432")
 	viper.SetDefault("postgres.main.name", "postgres")
 	viper.SetDefault("postgres.main.user", "postgres")
-	
+
 	// web
 	viper.SetDefault("web.host", "http://localhost")
 	viper.SetDefault("web.port", "4200")

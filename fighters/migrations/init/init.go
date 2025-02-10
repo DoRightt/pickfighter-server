@@ -30,27 +30,6 @@ func InitFightersSchema(ctx context.Context, r *psql.Repository) error {
 				name VARCHAR(255) NOT NULL,
 				value VARCHAR(255) NOT NULL
 			);`,
-			`CREATE TABLE IF NOT EXISTS fighters.fighter_stats (
-				stat_id SERIAL PRIMARY KEY,
-				fighter_id INT REFERENCES fighters.fighters(fighter_id),
-				total_sig_str_landed INT,
-				total_sig_str_attempted INT,
-				str_accuracy INT,
-				total_tkd_landed INT,
-				total_tkd_attempted INT,
-				tkd_accuracy INT,
-				sig_str_landed DOUBLE PRECISION,
-				sig_str_absorbed DOUBLE PRECISION,
-				sig_str_defense INT,
-				takedown_defense INT,
-				takedown_avg DOUBLE PRECISION,
-				submission_avg DOUBLE PRECISION,
-				knockdown_avg DOUBLE PRECISION,
-				avg_fight_time VARCHAR(50),
-				win_by_ko INT,
-				win_by_sub INT,
-				win_by_dec INT
-			);`,
 			`CREATE TABLE IF NOT EXISTS fighters.fighters (
 				fighter_id SERIAL PRIMARY KEY,
 				name VARCHAR(255) NOT NULL,
@@ -73,6 +52,27 @@ func InitFightersSchema(ctx context.Context, r *psql.Repository) error {
 				loses INT DEFAULT 0 NOT NULL,
 				draw INT DEFAULT 0 NOT NULL
 			);`,
+			`CREATE TABLE IF NOT EXISTS fighters.fighter_stats (
+				stat_id SERIAL PRIMARY KEY,
+				fighter_id INT REFERENCES fighters.fighters(fighter_id),
+				total_sig_str_landed INT,
+				total_sig_str_attempted INT,
+				str_accuracy INT,
+				total_tkd_landed INT,
+				total_tkd_attempted INT,
+				tkd_accuracy INT,
+				sig_str_landed DOUBLE PRECISION,
+				sig_str_absorbed DOUBLE PRECISION,
+				sig_str_defense INT,
+				takedown_defense INT,
+				takedown_avg DOUBLE PRECISION,
+				submission_avg DOUBLE PRECISION,
+				knockdown_avg DOUBLE PRECISION,
+				avg_fight_time VARCHAR(50),
+				win_by_ko INT,
+				win_by_sub INT,
+				win_by_dec INT
+			);`,
 		},
 		{
 			// Queries to create sequences
@@ -82,9 +82,9 @@ func InitFightersSchema(ctx context.Context, r *psql.Repository) error {
 		},
 		{
 			// Queries to set sequences owners
-			`ALTER SEQUENCE IF NOT EXISTS fighters.divisions_id_seq OWNED BY fighters.divisions.id;`,
-			`ALTER SEQUENCE IF NOT EXISTS fighters.pf_fighter_stats_stat_id_seq OWNED BY fighters.fighter_stats.stat_id;`,
-			`ALTER SEQUENCE IF NOT EXISTS fighters.pf_fighters_fighter_id_seq OWNED BY fighters.fighters.fighter_id;`,
+			`ALTER SEQUENCE fighters.divisions_id_seq OWNED BY fighters.divisions.id;`,
+			`ALTER SEQUENCE fighters.pf_fighter_stats_stat_id_seq OWNED BY fighters.fighter_stats.stat_id;`,
+			`ALTER SEQUENCE fighters.pf_fighters_fighter_id_seq OWNED BY fighters.fighters.fighter_id;`,
 		},
 		{
 			// Queries to set default values

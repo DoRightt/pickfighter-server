@@ -1,0 +1,5 @@
+\c pickfighter;
+
+CREATE SCHEMA IF NOT EXISTS auth;
+CREATE SCHEMA IF NOT EXISTS events;
+CREATE SCHEMA IF NOT EXISTS fighters;

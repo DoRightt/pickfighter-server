@@ -102,7 +102,9 @@ func (h *Handler) RunHTTPServer(ctx context.Context) error {
 
 	h.ApplyRoutes()
 
-	srvAddr := viper.GetString("http.addr")
+	port := viper.GetString("http.port")
+	host := viper.GetString("http.addr")
+	srvAddr := fmt.Sprintf("%s:%v", host, port)
 	if len(srvAddr) < 1 || !strings.Contains(srvAddr, ":") {
 		return fmt.Errorf("'%s' service address not specified", serviceName)
 	}
