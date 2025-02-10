@@ -6,6 +6,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.3.3
 
+## 10 Feb 2025
+
+### Added
+
+-   HostPort condition with "localhost" for dev and service name for prod
+
+### Changed
+
+-   Events service name (event -> events)
+-   http.addr is without port now
+
+## 7 Feb 2025
+
+### Added
+
+-   Fighters service Dockerfile
+-   Events service Dockerfile
+-   Auth service Dockerfile
+-   Gateway service Dockerfile
+-   Postgres Dockerfile
+-   docker-compose file
+
+## 6 Feb 2025
+
+### Added
+
+-   sql init files
+-   fighters collection in fighters service
+
+### Changed
+
+-   filepath for fighters json 
+
+## 4 Feb 2025
+
+### Added
+
+-   --env flag for config selection
+-   nginx conf
+
+### ### Changed
+
+-   cfg_backup script updated
+
+## 31 Jan 2025
+
+### Added
+
+-   Redis registry script
+
+### Changed
+
+-   Consul registry script name
+-   Health check time interval 1s -> 15s
+-   Gate-way service name
+
 ## 30 Jan 2025
 
 ### Changed
