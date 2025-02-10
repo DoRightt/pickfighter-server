@@ -69,10 +69,17 @@ func validateServerArgs(cmd *cobra.Command, args []string) error {
 // runServe is the main function executed when the serve command is run.
 // It initializes the application, sets up service and runs the HTTP server.
 func runServe(cmd *cobra.Command, args []string) {
+	var hostName string
 	port := viper.GetInt("http.port")
 	serviceName := version.Name
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+
+	if viper.GetString("app.env") == "prod" {
+		hostName = serviceName
+	} else {
+		hostName = "localhost"
+	}
 
 	route := args[0]
 
@@ -83,7 +90,7 @@ func runServe(cmd *cobra.Command, args []string) {
 
 	instanceID := discovery.GenerateInstanceID(serviceName)
 
-	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("localhost:%d", port)); err != nil {
+	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("%s:%d", hostName, port)); err != nil {
 		panic(err)
 	}
 

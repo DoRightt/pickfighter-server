@@ -12,6 +12,7 @@ import (
 	grpchandler "github.com/DoRightt/pickfighter-server/auth/internal/handler/grpc"
 	"github.com/DoRightt/pickfighter-server/auth/internal/repository/psql"
 	service "github.com/DoRightt/pickfighter-server/auth/internal/service/auth"
+	"github.com/DoRightt/pickfighter-server/auth/pkg/version"
 	"github.com/DoRightt/pickfighter-server/pkg/discovery"
 	"github.com/DoRightt/pickfighter-server/pkg/discovery/redis"
 	logs "github.com/DoRightt/pickfighter-server/pkg/logger"
@@ -67,9 +68,17 @@ func validateServerArgs(cmd *cobra.Command, args []string) error {
 // runServe is the main function executed when the serve command is run.
 // It initializes the application, sets up service and runs the HTTP server.
 func runServe(cmd *cobra.Command, args []string) {
+	var hostName string
 	port := viper.GetInt("http.port")
+	serviceName := version.Name
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+
+	if viper.GetString("app.env") == "prod" {
+		hostName = serviceName
+	} else {
+		hostName = "localhost"
+	}
 
 	route := args[0]
 
@@ -80,8 +89,8 @@ func runServe(cmd *cobra.Command, args []string) {
 		panic(err)
 	}
 
-	instanceID := discovery.GenerateInstanceID(app.ServiceName)
-	if err := registry.Register(ctx, instanceID, app.ServiceName, fmt.Sprintf("localhost:%d", port)); err != nil {
+	instanceID := discovery.GenerateInstanceID(serviceName)
+	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("%s:%d", hostName, port)); err != nil {
 		panic(err)
 	}
 
