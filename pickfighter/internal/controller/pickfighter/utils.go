@@ -71,7 +71,7 @@ func (c *Controller) GetAuthServiceHealthStatus() *model.HealthStatus {
 func (c *Controller) GetEventServiceHealthStatus() *model.HealthStatus {
 	status, err := c.eventGateway.ServiceHealthCheck()
 	if err != nil {
-		return badHealthStatus("event-service")
+		return badHealthStatus("events-service")
 	}
 
 	return status

@@ -25,7 +25,7 @@ func (h *Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {
 	result["auth-service"] = authStatus
 
 	eventStatus := h.ctrl.GetEventServiceHealthStatus()
-	result["event-service"] = eventStatus
+	result["events-service"] = eventStatus
 
 	fightersStatus := h.ctrl.GetFightersServiceHealthStatus()
 	result["fighters-service"] = fightersStatus
