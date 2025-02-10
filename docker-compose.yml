@@ -110,6 +110,7 @@ services:
 
 networks:
   pickfighter_network:
+    name: pickfighter_network
     driver: bridge
 
 volumes:
