@@ -101,7 +101,7 @@ func setConfigDefaults() {
 	viper.SetDefault("app.run_date", time.Unix(version.RunDate, 0).Format(time.RFC1123))
 
 	// http server
-	viper.SetDefault("http.addr", "127.0.0.1:9092")
+	viper.SetDefault("http.addr", "127.0.0.1")
 	viper.SetDefault("http.port", "9092")
 	viper.SetDefault("http.ssl.enabled", false)
 

@@ -3,7 +3,6 @@ package service
 import (
 	"fmt"
 	"net"
-	"strings"
 
 	grpchandler "github.com/DoRightt/pickfighter-server/auth/internal/handler/grpc"
 	"github.com/DoRightt/pickfighter-server/auth/pkg/version"
@@ -49,17 +48,18 @@ func (s *ApiService) Init(h *grpchandler.Handler) error {
 func (s *ApiService) Run() error {
 	port := viper.GetString("http.port")
 	srvAddr := viper.GetString("http.addr")
-	if len(srvAddr) < 1 || !strings.Contains(srvAddr, ":") {
+
+	if len(srvAddr) < 1 || len(port) < 1 {
 		return fmt.Errorf("'%s' service address not specified", s.ServiceName)
 	}
 
-	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%v", port))
+	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%v", srvAddr, port))
 	if err != nil {
 		return err
 	}
 
 	logs.Infof("Start listen '%s' http: %s", s.ServiceName, srvAddr)
-	fmt.Printf("Server is listening at: %s\n", srvAddr)
+	fmt.Printf("Server is listening at: %s\n", fmt.Sprintf("%s:%v", srvAddr, port))
 
 	return s.Server.Serve(lis)
 }

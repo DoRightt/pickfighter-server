@@ -36,7 +36,7 @@ func TestInit(t *testing.T) {
 
 func TestRun(t *testing.T) {
 	viper.Set("http.port", "9090")
-	viper.Set("http.addr", "localhost:9090")
+	viper.Set("http.addr", "localhost")
 
 	apiService := New()
 
