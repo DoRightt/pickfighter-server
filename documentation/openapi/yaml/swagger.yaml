@@ -464,6 +464,9 @@ components:
         cont_contest:
           type: boolean
           example: false
+        is_draw:
+          type: boolean
+          example: false
     AddResultResponse:
       type: object
       properties:

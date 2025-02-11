@@ -156,6 +156,10 @@ message FightResultRequest {
     int32 fightId = 1;
     int32 winnerId = 2;
     bool notContest = 3;
+    bool isCanceled = 4;
+    bool isDraw = 5;
+    string method = 6;
+    int32 round = 7;
 }
 
 message FightResultResponse {
