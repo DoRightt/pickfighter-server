@@ -98,6 +98,7 @@ func setConfigDefaults() {
 	viper.SetDefault("app.name", version.Name)
 	viper.SetDefault("app.version", version.DevVersion)
 	viper.SetDefault("app.run_date", time.Unix(version.RunDate, 0).Format(time.RFC1123))
+	viper.SetDefault("app.fighters_path", "../data/fighters.json")
 
 	// http server
 	viper.SetDefault("http.addr", "127.0.0.1")

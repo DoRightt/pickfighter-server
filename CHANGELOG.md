@@ -6,6 +6,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] v0.3.3
 
+## 12 Feb 2025
+
+### Changed
+
+-   Changed config file path for tests
+-   Config new field for fighters data path
+
+## 11 Feb 2025
+
+### Add 
+
+-   CreateFightResult method
+
+### Changed
+
+-   SearchEvents method
+-   SetFightResult method now called SetFightIsDone
+-   FightResultRequest and corresponding protobuf model
+-   DB init files
+-   Swagger doc
+
 ## 10 Feb 2025
 
 ### Added
