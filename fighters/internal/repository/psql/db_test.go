@@ -334,7 +334,7 @@ func initTestConfig() {
 	env := os.Getenv("APP_ENV")
 
 	if env == "local" {
-		viper.SetConfigName("config")
+		viper.SetConfigName("config.dev")
 		viper.AddConfigPath("../../../configs")
 		if err := viper.ReadInConfig(); err != nil {
 			log.Fatalf("Error reading config file: %s\n", err)
