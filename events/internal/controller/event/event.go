@@ -48,6 +48,7 @@ func (c *Controller) GetEvents(ctx context.Context) (*model.EventsResponse, erro
 
 		return nil, intErr
 	}
+	
 	if count == 0 {
 		intErr := internalErr.NewDefault(internalErr.EventsNoRows, 902)
 		return nil, intErr

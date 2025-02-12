@@ -45,8 +45,6 @@ func (c *Controller) handleEventCreation(ctx context.Context, tx pgx.Tx, req *ev
 			EventId:       eventId,
 			FighterRedId:  f.FighterRedId,
 			FighterBlueId: f.FighterBlueId,
-			IsDone:        false,
-			IsCanceled:    false,
 		}
 
 		if err := c.repo.TxCreateEventFight(ctx, tx, fight); err != nil {

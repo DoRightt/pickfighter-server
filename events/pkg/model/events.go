@@ -30,7 +30,11 @@ type FullEventResponse struct {
 
 // FightResultRequest represents a request for fight result with fight id, winner id and not contest flag.
 type FightResultRequest struct {
-	FightId    int32 `json:"fight_id"`
-	WinnerId   int32 `json:"winner_id"`
-	NotContest bool  `json:"not_contest"`
+	FightId    int32  `json:"fight_id"`
+	WinnerId   int32  `json:"winner_id"`
+	IsCanceled bool   `json:"is_canceled"`
+	IsDraw     bool   `json:"is_draw"`
+	NotContest bool   `json:"not_contest"`
+	Method     string `json:"method"`
+	Round      int    `json:"round"`
 }

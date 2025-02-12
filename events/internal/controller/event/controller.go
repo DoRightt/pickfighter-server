@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/DoRightt/pickfighter-server/events/pkg/model"
 	eventmodel "github.com/DoRightt/pickfighter-server/events/pkg/model"
 	"github.com/DoRightt/pickfighter-server/events/pkg/version"
 	"github.com/DoRightt/pickfighter-server/pkg/pgxs"
@@ -27,7 +26,8 @@ type eventRepository interface {
 	TxCreateBet(ctx context.Context, tx pgx.Tx, req *eventmodel.Bet) (int32, error)
 	SearchBetsCount(ctx context.Context, userId int32) (int32, error)
 	SearchBets(ctx context.Context, userId int32) ([]*eventmodel.Bet, error)
-	SetFightResult(ctx context.Context, tx pgx.Tx, fr *eventmodel.FightResultRequest) error
+	CreateFightResult(ctx context.Context, tx pgx.Tx, req *eventmodel.FightResultRequest) error
+	SetFightIsDone(ctx context.Context, tx pgx.Tx, fight_id int) error
 	GetEventId(ctx context.Context, tx pgx.Tx, fightId int32) (int32, error)
 	GetUndoneFightsCount(ctx context.Context, tx pgx.Tx, eventId int32) (int, error)
 	SetEventDone(ctx context.Context, tx pgx.Tx, eventId int32) error
@@ -48,8 +48,8 @@ func New(repo eventRepository) *Controller {
 // HealthCheck returns the current health status of the application.
 // It includes information such as the app version, start time, uptime,
 // and a message indicating the application's health.
-func (c *Controller) HealthCheck() *model.HealthStatus {
-	return &model.HealthStatus{
+func (c *Controller) HealthCheck() *eventmodel.HealthStatus {
+	return &eventmodel.HealthStatus{
 		AppDevVersion: version.DevVersion,
 		AppName:       version.Name,
 		Timestamp:     time.Now().Format(time.RFC1123),

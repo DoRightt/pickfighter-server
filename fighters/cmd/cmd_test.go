@@ -204,8 +204,9 @@ func initTestConfig() {
 	env := os.Getenv("APP_ENV")
 
 	if env == "local" {
-		viper.SetConfigName("config")
 		viper.AddConfigPath("../configs")
+		viper.SetConfigName("config.dev")
+		viper.SetConfigType("yaml")
 		if err := viper.ReadInConfig(); err != nil {
 			log.Fatalf("Error reading config file: %s\n", err)
 		}

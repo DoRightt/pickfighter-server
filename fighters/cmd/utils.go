@@ -16,13 +16,13 @@ import (
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/spf13/viper"
 )
 
 // ReadFighterData reads fighter data from a JSON file and returns a slice of model.Fighter.
 // The file path is set to "../../scraper/collection/fighters.json".
 func ReadFighterData() ([]model.Fighter, error) {
-	// TODO: tricky path
-	filePath := "./data/fighters.json"
+	filePath := viper.GetString("app.fighters_path")
 
 	jsonData, err := os.ReadFile(filePath)
 	if err != nil {

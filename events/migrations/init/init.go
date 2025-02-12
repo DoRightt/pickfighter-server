@@ -21,7 +21,7 @@ func InitEventsSchema(ctx context.Context, r *psql.Repository) error {
 	queries := [][]string{
 		{
 			// Queries to create Schema
-			`CREATE SCHEMA IF NOT EXISTS auth;`,
+			`CREATE SCHEMA IF NOT EXISTS events;`,
 		},
 		{
 			// Queries to create tables
@@ -34,13 +34,18 @@ func InitEventsSchema(ctx context.Context, r *psql.Repository) error {
 			);`,
 			`CREATE TABLE IF NOT EXISTS events.events (
 				event_id integer NOT NULL,
-				name character varying(255) NOT NULL
+				name character varying(255) NOT NULL,
+				is_done boolean DEFAULT false
 			);`,
 			`CREATE TABLE IF NOT EXISTS events.fight_results (
 				result_id integer NOT NULL,
 				fight_id integer,
 				winner_id integer,
-				not_contest boolean DEFAULT false
+				not_contest boolean DEFAULT false,
+				is_draw boolean DEFAULT false,
+				round smallint,
+				method VARCHAR(50),
+				created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 			);`,
 			`CREATE TABLE IF NOT EXISTS events.fights (
 				fight_id integer NOT NULL,
@@ -50,7 +55,6 @@ func InitEventsSchema(ctx context.Context, r *psql.Repository) error {
 				created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
 				fight_date timestamp without time zone,
 				is_canceled boolean DEFAULT false,
-				result integer DEFAULT '-1'::integer,
 				event_id integer
 			);`,
 		},

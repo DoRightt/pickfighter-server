@@ -29,7 +29,6 @@ func FightsFromProto(p []*gen.Fight) []Fight {
 			FighterBlueId: v.FighterBlueId,
 			IsDone:        v.IsDone,
 			IsCanceled:    v.IsCanceled,
-			Result:        v.Result,
 			CreatedAt:     v.CreatedAt,
 			FightDate:     int(v.FightDate),
 		}
@@ -141,6 +140,10 @@ func FightResultFromProto(p *gen.FightResultRequest) *FightResultRequest {
 		FightId:    p.FightId,
 		WinnerId:   p.WinnerId,
 		NotContest: p.NotContest,
+		IsCanceled: p.IsCanceled,
+		IsDraw:     p.IsDraw,
+		Round:      int(p.Round),
+		Method:     p.Method,
 	}
 }
 
@@ -149,6 +152,10 @@ func FightResultToProto(req *FightResultRequest) *gen.FightResultRequest {
 		FightId:    req.FightId,
 		WinnerId:   req.WinnerId,
 		NotContest: req.NotContest,
+		IsCanceled: req.IsCanceled,
+		IsDraw:     req.IsDraw,
+		Round:      int32(req.Round),
+		Method:     req.Method,
 	}
 }
 
