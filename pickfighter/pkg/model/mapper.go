@@ -39,7 +39,7 @@ func ServiceEventToGatewayEvent(event *eventmodel.Event, fightersList map[int32]
 			IsDone:      v.IsDone,
 			IsCanceled:  v.IsCanceled,
 			NotContest:  v.NotContest,
-			Result:      v.Result,
+			Winner_id:   v.WinnerId,
 			CreatedAt:   v.CreatedAt,
 			FightDate:   v.FightDate,
 		}

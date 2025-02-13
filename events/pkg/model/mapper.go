@@ -1,6 +1,9 @@
 package model
 
 import (
+	"database/sql"
+	"time"
+
 	"github.com/DoRightt/pickfighter-server/gen"
 )
 
@@ -22,6 +25,14 @@ func FightsFromProto(p []*gen.Fight) []Fight {
 	fights := make([]Fight, len(p))
 
 	for i, v := range p {
+		var fightDate sql.NullTime
+
+		if v.FightDate == 0 {
+			fightDate = sql.NullTime{Valid: false}
+		} else {
+			fightDate = sql.NullTime{Time: time.Unix(v.FightDate, 0).UTC(), Valid: true}
+		}
+
 		fights[i] = Fight{
 			FightId:       v.FightId,
 			EventId:       v.EventId,
@@ -29,8 +40,8 @@ func FightsFromProto(p []*gen.Fight) []Fight {
 			FighterBlueId: v.FighterBlueId,
 			IsDone:        v.IsDone,
 			IsCanceled:    v.IsCanceled,
-			CreatedAt:     v.CreatedAt,
-			FightDate:     int(v.FightDate),
+			CreatedAt:     time.Unix(v.CreatedAt, 0).UTC(),
+			FightDate:     fightDate,
 		}
 	}
 
@@ -41,6 +52,14 @@ func FightsToProto(fights []Fight) []*gen.Fight {
 	protoFights := make([]*gen.Fight, len(fights))
 
 	for i, v := range fights {
+		var fightDate int64
+
+		if !v.FightDate.Valid {
+			fightDate = 0
+		} else {
+			fightDate = v.FightDate.Time.Unix()
+		}
+
 		protoFights[i] = &gen.Fight{
 			FightId:       v.FightId,
 			EventId:       v.EventId,
@@ -48,9 +67,9 @@ func FightsToProto(fights []Fight) []*gen.Fight {
 			FighterBlueId: v.FighterBlueId,
 			IsDone:        v.IsDone,
 			IsCanceled:    v.IsCanceled,
-			Result:        v.Result,
-			CreatedAt:     v.CreatedAt,
-			FightDate:     int64(v.FightDate),
+			WinnerId:      v.WinnerId,
+			CreatedAt:     v.CreatedAt.Unix(),
+			FightDate:     fightDate,
 		}
 	}
 

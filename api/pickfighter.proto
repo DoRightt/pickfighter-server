@@ -173,10 +173,11 @@ message Fight {
     int32 fighterBlueId = 4;
     bool isDone = 5;
     bool isCanceled = 6;
-    bool notContest = 7;
-    int32 result = 8;
-    int64 createdAt = 9;
-    int64 fightDate = 10;
+    bool isDraw = 7;
+    bool notContest = 8;
+    int32 winner_id = 9;
+    int64 createdAt = 10;
+    int64 fightDate = 11;
 }
 
 message Event {
