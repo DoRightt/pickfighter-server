@@ -679,19 +679,24 @@ components:
         is_canceled:
           type: boolean
           example: false
+        is_draw:
+          type: boolean
+          example: false
         not_contest:
           type: boolean
           example: false
-        result:
+        winner_id:
           type: integer
           example: 1
         created_at:
-          type: integer
-          format: int64
-          example: 1672531200
+          type: string
+          format: date-time
+          example: "2023-12-31T00:00:00Z"
         fight_date:
-          type: integer
-          example: 1672617600
+          type: string
+          format: date-time
+          nullable: true
+          example: "2023-12-31T15:00:00Z"
           
     SuccessfulResult:
       type: object
