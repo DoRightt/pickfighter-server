@@ -85,8 +85,9 @@ func (r *Repository) SearchEvents(ctx context.Context) ([]*eventmodel.Event, err
 	SELECT
 		e.event_id, e.name, e.is_done AS is_event_done, 
 		f.fight_id, f.is_done AS is_fight_done, f.created_at, f.fight_date,
-		f.fighter_red_id, f.fighter_blue_id, f.is_canceled
-		r.not_contest, r.is_draw
+		f.fighter_red_id, f.fighter_blue_id, f.is_canceled,
+		COALESCE(r.not_contest, false) AS not_contest, 
+    	COALESCE(r.is_draw, false) AS is_draw
 	FROM
 		filtered_events e
 	LEFT JOIN
@@ -111,9 +112,9 @@ func (r *Repository) SearchEvents(ctx context.Context) ([]*eventmodel.Event, err
 
 		if err := rows.Scan(
 			&event.EventId, &event.Name, &event.IsDone,
-			&fight.FightId, &fight.IsDone, &fight.NotContest,
-			&fight.CreatedAt, &fight.FightDate, &fight.Result,
-			&fight.FighterRedId, &fight.FighterBlueId,
+			&fight.FightId, &fight.IsDone, &fight.CreatedAt, &fight.FightDate,
+			&fight.FighterRedId, &fight.FighterBlueId, &fight.IsCanceled,
+			&fight.NotContest, &fight.IsDraw,
 		); err != nil {
 			return nil, r.DebugLogSqlErr(q, err)
 		}
