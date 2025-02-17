@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] v0.3.3
+# Released [v0.4.0] - 17 Feb 2025
 
 ## 13 Feb 2025
 
@@ -332,8 +332,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   .gitignore changed
 -   GetUndoneFights method name has been changed to GetUndoneFightsCount
 
-[Unreleased](https://github.com/DoRightt/fb-app/v0.3.0...main)
+[Unreleased](https://github.com/DoRightt/fb-app/v0.4.0...main)
 
+[v0.4.0]: https://github.com/DoRightt/fb-app/compare/v0.3.2...v0.4.0
 [v0.3.2]: https://github.com/DoRightt/fb-app/compare/v0.3.0...v0.3.2
 [v0.3.0]: https://github.com/DoRightt/fb-app/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/DoRightt/fb-app/compare/v0.1.0...v0.2.0
