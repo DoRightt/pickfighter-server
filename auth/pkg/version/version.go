@@ -3,7 +3,7 @@ package version
 import "time"
 
 const (
-	DevVersion = "v0.3.2"
+	DevVersion = "v0.4.0"
 	Name       = "auth-service"
 )
 
