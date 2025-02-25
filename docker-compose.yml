@@ -1,28 +1,4 @@
 services:
-  db:
-    container_name: pickfighter-db
-    build:
-      context: .
-      dockerfile: migrations/init/Dockerfile
-    volumes:
-      - postgres:/var/lib/postgresql/data/pgdata
-    expose:
-      - "5432"
-    environment:
-      PGDATA: "/var/lib/postgresql/data/pgdata"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: ${DB_PASS}
-      POSTGRES_DB: "pickfighter"
-      POSTGRES_HOST_AUTH_METHOD: "trust"
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
-    networks:
-      - pickfighter_network
-
   redis:
     image: redis
     container_name: dev-redis
@@ -41,6 +17,8 @@ services:
       - redis
     environment:
       - REDIS_URL=redis:6379
+    ports:
+      - "9091:9091"
     networks:
       - pickfighter_network
 
@@ -52,10 +30,9 @@ services:
       dockerfile: auth/Dockerfile
     depends_on:
       - redis
-      - db
     environment:
       - REDIS_URL=redis:6379
-      - DB_URL=postgres://postgres@db:5432/pickfighter
+      - DB_URL=postgres://postgres:greedisgood@172.17.0.1:5432/pickfighter_db
     expose:
       - "9092"
     networks:
@@ -70,10 +47,9 @@ services:
       dockerfile: fighters/Dockerfile
     depends_on:
       - redis
-      - db
     environment:
       - REDIS_URL=redis:6379
-      - DB_URL=postgres://postgres@db:5432/pickfighter
+      - DB_URL=postgres://postgres:greedisgood@172.17.0.1:5432/pickfighter_db
     expose:
       - "9093"
     networks:
@@ -87,10 +63,9 @@ services:
       dockerfile: events/Dockerfile
     depends_on:
       - redis
-      - db
     environment:
       - REDIS_URL=redis:6379
-      - DB_URL=postgres://postgres@db:5432/pickfighter
+      - DB_URL=postgres://postgres:greedisgood@172.17.0.1:5432/pickfighter_db
     expose:
       - "9094"
     networks:
@@ -102,7 +77,7 @@ services:
     volumes:
       - ./nginx/nginx.local.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - "8081:80"
+      - "8081:8081"
     depends_on:
       - pickfighter-gateway-service
     networks:
@@ -112,6 +87,3 @@ networks:
   pickfighter_network:
     name: pickfighter_network
     driver: bridge
-
-volumes:
-  postgres:

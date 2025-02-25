@@ -1,0 +1,9 @@
+services:
+  pickfighter-gateway-service:
+    command: ["serve", "gateway", "--env", "dev"]
+  auth-service:
+    command: ["serve", "auth", "--env", "dev"]
+  fighters-service:
+    command: ["serve", "fighters", "--env", "dev"]
+  events-service:
+    command: ["serve", "events", "--env", "dev"]
