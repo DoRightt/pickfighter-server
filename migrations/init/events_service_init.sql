@@ -15,17 +15,6 @@ CREATE TABLE IF NOT EXISTS events.events (
     is_done boolean DEFAULT false
 );
 
-CREATE TABLE IF NOT EXISTS events.fight_results (
-    result_id integer NOT NULL,
-    fight_id integer,
-    winner_id integer,
-    not_contest boolean DEFAULT false,
-    is_draw boolean DEFAULT false,
-    round smallint,
-    method VARCHAR(50),
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-);
-
 CREATE TABLE IF NOT EXISTS events.fights (
     fight_id integer NOT NULL,
     fighter_red_id integer NOT NULL,
@@ -35,6 +24,17 @@ CREATE TABLE IF NOT EXISTS events.fights (
     fight_date timestamp without time zone,
     is_canceled boolean DEFAULT false,
     event_id integer
+);
+
+CREATE TABLE IF NOT EXISTS events.fight_results (
+    result_id integer NOT NULL,
+    fight_id integer,
+    winner_id integer,
+    not_contest boolean DEFAULT false,
+    is_draw boolean DEFAULT false,
+    round smallint,
+    method VARCHAR(50),
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Queries to create sequences
