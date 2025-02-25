@@ -6,9 +6,9 @@ import (
 	"log"
 	"time"
 
+	"github.com/DoRightt/pickfighter-server/auth/pkg/model"
 	"github.com/mailgun/mailgun-go/v4"
 	"github.com/spf13/viper"
-	"github.com/DoRightt/pickfighter-server/auth/pkg/model"
 )
 
 // HandleEmailEvent processes different email events based on the provided EmailData.
@@ -53,7 +53,13 @@ func getVerificationMessage(data *model.EmailData, host, port string) *mailgun.M
 	sender := viper.GetString("mail.sender_address")
 	subject := "Please, Verify your email."
 	recipient := data.Recipient.Email
-	body := fmt.Sprintf("Hello, here is your verification link: %s:%s/register/confirm?token=%s", host, port, data.Token)
+	var body string
+
+	if port == "" {
+		body = fmt.Sprintf("Hello, here is your verification link: %s/register/confirm?token=%s", host, data.Token)
+	} else {
+		body = fmt.Sprintf("Hello, here is your verification link: %s:%s/register/confirm?token=%s", host, port, data.Token)
+	}
 
 	message := mailgun.NewMessage(sender, subject, body, recipient)
 
@@ -69,7 +75,13 @@ func getPasswordRecoveryMessage(data *model.EmailData, host, port string) *mailg
 	sender := viper.GetString("mail.sender_address")
 	subject := "Please, Set a new password"
 	recipient := data.Recipient.Email
-	body := fmt.Sprintf("Hello, here you can change your password: %s:%s/password/recover?token=%s", host, port, data.Token)
+	var body string
+
+	if port == "" {
+		body = fmt.Sprintf("Hello, here you can change your password: %s/password/recover?token=%s", host, data.Token)
+	} else {
+		body = fmt.Sprintf("Hello, here you can change your password: %s:%s/password/recover?token=%s", host, port, data.Token)
+	}
 
 	message := mailgun.NewMessage(sender, subject, body, recipient)
 
