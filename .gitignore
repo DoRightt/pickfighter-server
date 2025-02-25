@@ -2,6 +2,7 @@
 
 .env
 config.yaml
+server_startup_config.sh
 
 coverage.out
 
