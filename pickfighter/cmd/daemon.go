@@ -75,7 +75,7 @@ func runServe(cmd *cobra.Command, args []string) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	if viper.GetString("app.env") == "prod" {
+	if viper.GetString("app.env") == "prod" || viper.GetString("app.env") == "dev" {
 		hostName = serviceName
 	} else {
 		hostName = "localhost"

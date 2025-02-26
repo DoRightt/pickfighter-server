@@ -330,6 +330,7 @@ func (h *Handler) CreateEvent(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		// TODO handle errors from service
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
+		return
 	}
 
 	result := httplib.SuccessfulResult()
@@ -345,6 +346,7 @@ func (h *Handler) GetEvents(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		// TODO handle errors from service
 		httplib.ErrorResponseJSON(w, http.StatusBadRequest, internalErr.Events, err)
+		return
 	}
 
 	httplib.ResponseJSON(w, httplib.ListResult{

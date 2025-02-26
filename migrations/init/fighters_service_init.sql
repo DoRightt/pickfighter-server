@@ -1,4 +1,4 @@
-\c pickfighter
+\c pickfighter;
 
 -- Create tables
 CREATE TABLE IF NOT EXISTS fighters.divisions (

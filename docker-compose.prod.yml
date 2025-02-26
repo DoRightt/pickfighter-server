@@ -1,4 +1,4 @@
-  services:
+services:
   db:
     container_name: pickfighter-db
     build:

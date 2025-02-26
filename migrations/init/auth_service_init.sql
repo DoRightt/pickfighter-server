@@ -1,4 +1,4 @@
-\c pickfighter
+\c pickfighter;
 
 -- Create the users table
 CREATE TABLE IF NOT EXISTS auth.users (
