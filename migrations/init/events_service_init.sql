@@ -1,4 +1,4 @@
-\c pickfighter
+\c pickfighter;
 
 -- Queries to create tables
 CREATE TABLE IF NOT EXISTS events.bets (
