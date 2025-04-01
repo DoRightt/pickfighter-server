@@ -2,6 +2,8 @@ module github.com/DoRightt/pickfighter-server
 
 go 1.23.0
 
+toolchain go1.24.1
+
 require (
 	github.com/PuerkitoBio/goquery v1.10.2
 	github.com/ethereum/go-ethereum v1.15.3
@@ -16,7 +18,7 @@ require (
 	github.com/jackc/pgx/v5 v5.7.2
 	github.com/joho/godotenv v1.5.1
 	github.com/lestrrat-go/jwx/v2 v2.1.4
-	github.com/mailgun/mailgun-go/v4 v4.22.1
+	github.com/mailgun/mailgun-go/v4 v4.23.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.10.0
@@ -41,7 +43,7 @@ require (
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
-	github.com/go-chi/chi/v5 v5.2.0 // indirect
+	github.com/go-chi/chi/v5 v5.2.1 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
