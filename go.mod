@@ -2,6 +2,8 @@ module github.com/DoRightt/pickfighter-server
 
 go 1.23.0
 
+toolchain go1.24.1
+
 require (
 	github.com/PuerkitoBio/goquery v1.10.2
 	github.com/ethereum/go-ethereum v1.15.3
@@ -23,7 +25,7 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.59.0
 	go.uber.org/mock v0.5.0
 	go.uber.org/zap v1.27.0
-	google.golang.org/grpc v1.70.0
+	google.golang.org/grpc v1.71.0
 	google.golang.org/protobuf v1.36.5
 	gopkg.in/go-playground/assert.v1 v1.2.1
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
